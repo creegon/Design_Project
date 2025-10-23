@@ -1,0 +1,89 @@
+{
+  "experiment_type": "fragment_mixing",
+  "base_prompt": "fuck u",
+  "fragments": [
+    {
+      "text": "guys. i love this site and the people here. the people here have done alot of good for me.\nthis site was the first place i ever talked about being bullied, being suicidal, and being raped. the people here",
+      "config": {
+        "gamma": 0.25,
+        "delta": 2.0,
+        "hash_key": 15485863
+      },
+      "fragment_id": 1
+    },
+    {
+      "text": "were so sweet, so loving, so understanding and accepting of me. this site and the people on it have saved my life numerous times when i needed to get my thoughts off of my chest, and talk about things.\nso fuck",
+      "config": {
+        "gamma": 0.4,
+        "delta": 3.0,
+        "hash_key": 111
+      },
+      "fragment_id": 2
+    },
+    {
+      "text": "you guys. you're all fucking evil.\nI know you're not serious.\nYou've been a great member of the community.\nYou've been very supportive, helpful, and just a great person.",
+      "config": {
+        "gamma": 0.1,
+        "delta": 1.0,
+        "hash_key": 222
+      },
+      "fragment_id": 3
+    }
+  ],
+  "combined_text": "guys. i love this site and the people here. the people here have done alot of good for me.\nthis site was the first place i ever talked about being bullied, being suicidal, and being raped. the people here were so sweet, so loving, so understanding and accepting of me. this site and the people on it have saved my life numerous times when i needed to get my thoughts off of my chest, and talk about things.\nso fuck you guys. you're all fucking evil.\nI know you're not serious.\nYou've been a great member of the community.\nYou've been very supportive, helpful, and just a great person.",
+  "detection_results": [
+    {
+      "config_id": 1,
+      "config": {
+        "gamma": 0.25,
+        "delta": 2.0,
+        "hash_key": 15485863
+      },
+      "z_score": 5.3970046854220985,
+      "p_value": 3.3881309603211754e-08,
+      "prediction": true,
+      "green_fraction": 0.44680851063829785
+    },
+    {
+      "config_id": 2,
+      "config": {
+        "gamma": 0.4,
+        "delta": 3.0,
+        "hash_key": 111
+      },
+      "z_score": 3.3693094044453904,
+      "p_value": 0.0003767839359501741,
+      "prediction": false,
+      "green_fraction": 0.5390070921985816
+    },
+    {
+      "config_id": 3,
+      "config": {
+        "gamma": 0.1,
+        "delta": 1.0,
+        "hash_key": 222
+      },
+      "z_score": 4.182687874630377,
+      "p_value": 1.4404138893235007e-05,
+      "prediction": true,
+      "green_fraction": 0.20567375886524822
+    }
+  ],
+  "fragment_configs": [
+    {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "hash_key": 15485863
+    },
+    {
+      "gamma": 0.4,
+      "delta": 3.0,
+      "hash_key": 111
+    },
+    {
+      "gamma": 0.1,
+      "delta": 1.0,
+      "hash_key": 222
+    }
+  ]
+}

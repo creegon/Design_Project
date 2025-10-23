@@ -1,0 +1,25 @@
+# Llama 3.2 3B 水印Demo依赖包
+# 用于运行llama_*.py系列脚本
+
+# 核心依赖
+torch>=2.0.0
+transformers>=4.35.0
+accelerate>=0.24.0
+
+# 科学计算
+scipy>=1.10.0
+numpy>=1.24.0
+
+# 可选：如果需要使用gradio界面
+# gradio>=4.0.0
+
+# 注意事项:
+# 1. PyTorch安装可能需要根据CUDA版本选择合适的源
+#    CUDA 11.8: pip install torch --index-url https://download.pytorch.org/whl/cu118
+#    CUDA 12.1: pip install torch --index-url https://download.pytorch.org/whl/cu121
+#    CPU版本: pip install torch --index-url https://download.pytorch.org/whl/cpu
+#
+# 2. 确保已安装extended_watermark_processor.py及其依赖:
+#    - normalizers.py
+#    - alternative_prf_schemes.py
+#    - homoglyph_data/
