@@ -2,6 +2,11 @@
 混合水印交互式实验界面
 允许用户自定义实验参数并实时查看结果
 支持通过模型昵称（nickname）指定模型
+
+包含功能：
+1. 混合水印实验 (片段混合、种子混合、参数混合、密钥共享)
+2. 跨模型共享密钥实验
+3. 统计评估实验 (滑动窗口、窗口敏感性、最小长度分析)
 """
 
 import os
@@ -10,7 +15,16 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import argparse
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+from typing import Dict, List, Optional
+from datetime import datetime
+from tqdm import tqdm
+import json
+
 from hybrid_watermark_experiment import HybridWatermarkExperiment
+from extended_watermark_processor import WatermarkDetector
 
 # 动态导入 model_config_manager
 llama_demos_path = os.path.join(os.path.dirname(__file__), '..', 'llama_demos')
@@ -90,240 +104,217 @@ class InteractiveHybridExperiment:
         print("="*80)
         
         while True:
-            print("\n请选择实验类型:")
-            print("  1 - 片段级混合水印")
-            print("  2 - 种子混合实验")
-            print("  3 - 参数混合实验")
-            print("  4 - 密钥共享实验 (单模型)")
-            print("  5 - 跨模型共享密钥实验 (多模型)")
-            print("  6 - 自定义实验")
-            print("  7 - 查看实验说明")
+            print("\n" + "="*80)
+            print("实验类型菜单:")
+            print("="*80)
+            print("\n【混合水印实验】")
+            print("  1 - 混合配置实验 (片段级/参数级)")
+            print("  2 - 密钥交叉检测实验 (种子混合/密钥共享)")
+            print("  3 - 跨模型共享密钥实验")
+            print("\n【统计评估实验】")
+            print("  4 - 滑动窗口检测")
+            print("  5 - 窗口敏感性分析")
+            print("  6 - 最小可检测长度分析")
+            print("  7 - 完整统计评估")
+            print("\n【其他】")
+            print("  h - 查看实验说明")
             print("  q - 退出")
-            print()
+            print("="*80)
             
-            choice = input("请输入选择 (1-7/q): ").strip().lower()
+            choice = input("\n请输入选择 (1-7/h/q): ").strip().lower()
             
             if choice == 'q':
                 print("\n退出实验系统。\n")
                 break
             
             elif choice == '1':
-                self.run_fragment_mixing()
+                self.run_hybrid_config_experiment()
             
             elif choice == '2':
-                self.run_seed_mixing()
+                self.run_key_cross_detection_experiment()
             
             elif choice == '3':
-                self.run_parameter_mixing()
-            
-            elif choice == '4':
-                self.run_key_sharing()
-            
-            elif choice == '5':
                 self.run_cross_model_key_sharing()
             
+            elif choice == '4':
+                self.run_sliding_window_detection()
+            
+            elif choice == '5':
+                self.run_window_sensitivity_analysis()
+            
             elif choice == '6':
-                self.run_custom_experiment()
+                self.run_minimum_length_analysis()
             
             elif choice == '7':
+                self.run_complete_statistical_evaluation()
+            
+            elif choice == 'h':
                 self.show_experiment_info()
             
             else:
                 print("\n无效的选择，请重试。\n")
     
-    def run_fragment_mixing(self):
-        """运行片段级混合实验"""
+    
+    # ========== 混合水印实验方法 ==========
+    
+    def run_hybrid_config_experiment(self):
+        """运行混合配置实验（合并片段混合和参数混合）"""
         print("\n" + "-"*80)
-        print("实验1: 片段级混合水印")
+        print("实验1: 混合配置实验")
         print("-"*80 + "\n")
+        print("此实验支持两种模式：")
+        print("  a) 片段级混合 - 手动为每个片段指定不同配置")
+        print("  b) 参数网格混合 - 自动生成gamma×delta的所有组合\n")
         
-        # 获取提示词
-        prompt = input("输入基础提示词 (回车使用默认): ").strip()
+        mode = input("选择模式 (a=片段级, b=参数网格, 默认a): ").strip().lower()
+        mode = mode if mode in ['a', 'b'] else 'a'
+        
+        prompt = input("\n输入基础提示词 (回车使用默认): ").strip()
         if not prompt:
             prompt = "The future of artificial intelligence is"
         
-        # 获取片段数量
-        num_fragments = input("输入片段数量 (默认3): ").strip()
-        num_fragments = int(num_fragments) if num_fragments else 3
-        
-        # 配置每个片段
-        fragment_configs = []
-        print(f"\n配置 {num_fragments} 个片段:")
-        
-        # 设定好三组默认参数以供参考
-        default_params = [
-            {'gamma': 0.25, 'delta': 2.0, 'hash_key': 15485863},
-            {'gamma': 0.5, 'delta': 1.5, 'hash_key': 32452843},
-            {'gamma': 0.1, 'delta': 3.0, 'hash_key': 49979687}
-        ]
-        
-        for i in range(num_fragments):
-            print(f"\n片段 {i+1}:")
-            gamma_input = input(f"  输入Gamma值 (默认{default_params[i % len(default_params)]['gamma']}): ").strip()
-            gamma = float(gamma_input) if gamma_input else default_params[i % len(default_params)]['gamma']
+        if mode == 'a':
+            # 片段级混合模式
+            num_fragments = input("输入片段数量 (默认3): ").strip()
+            num_fragments = int(num_fragments) if num_fragments else 3
             
-            delta_input = input(f"  输入Delta值 (默认{default_params[i % len(default_params)]['delta']}): ").strip()
-            delta = float(delta_input) if delta_input else default_params[i % len(default_params)]['delta']
+            fragment_configs = []
+            print(f"\n配置 {num_fragments} 个片段:")
             
-            hash_key_input = input(f"  输入Hash Key (默认{default_params[i % len(default_params)]['hash_key']}): ").strip()
-            hash_key = int(hash_key_input) if hash_key_input else default_params[i % len(default_params)]['hash_key']
+            default_params = [
+                {'gamma': 0.25, 'delta': 2.0, 'hash_key': 15485863},
+                {'gamma': 0.5, 'delta': 1.5, 'hash_key': 32452843},
+                {'gamma': 0.1, 'delta': 3.0, 'hash_key': 49979687}
+            ]
             
-            fragment_configs.append({
-                'gamma': gamma,
-                'delta': delta,
-                'hash_key': hash_key
-            })
+            for i in range(num_fragments):
+                print(f"\n片段 {i+1}:")
+                gamma_input = input(f"  Gamma (默认{default_params[i % 3]['gamma']}): ").strip()
+                gamma = float(gamma_input) if gamma_input else default_params[i % 3]['gamma']
+                
+                delta_input = input(f"  Delta (默认{default_params[i % 3]['delta']}): ").strip()
+                delta = float(delta_input) if delta_input else default_params[i % 3]['delta']
+                
+                hash_key_input = input(f"  Hash Key (默认{default_params[i % 3]['hash_key']}): ").strip()
+                hash_key = int(hash_key_input) if hash_key_input else default_params[i % 3]['hash_key']
+                
+                fragment_configs.append({
+                    'gamma': gamma,
+                    'delta': delta,
+                    'hash_key': hash_key
+                })
             
+            print("\n开始实验...")
+            result = self.experiment.experiment_fragment_mixing(
+                base_prompt=prompt,
+                fragment_configs=fragment_configs,
+                tokens_per_fragment=50
+            )
         
-        # 运行实验
-        print("\n开始实验...")
-        result = self.experiment.experiment_fragment_mixing(
-            base_prompt=prompt,
-            fragment_configs=fragment_configs,
-            tokens_per_fragment=50
-        )
+        else:
+            # 参数网格模式
+            gamma_input = input("\n输入Gamma值列表 (逗号分隔, 默认0.25,0.5): ").strip()
+            gamma_values = [float(x.strip()) for x in gamma_input.split(',')] if gamma_input else [0.25, 0.5]
+            
+            delta_input = input("输入Delta值列表 (逗号分隔, 默认1.5,2.5): ").strip()
+            delta_values = [float(x.strip()) for x in delta_input.split(',')] if delta_input else [1.5, 2.5]
+            
+            print(f"\n将生成 {len(gamma_values) * len(delta_values)} 个参数组合")
+            
+            print("\n开始实验...")
+            result = self.experiment.experiment_parameter_mixing(
+                prompt=prompt,
+                gamma_values=gamma_values,
+                delta_values=delta_values,
+                tokens_per_config=40
+            )
         
         # 显示结果
         self.experiment.print_summary(result)
         
-        # 询问是否保存
-        save = input("\n是否保存结果? (y/n): ").strip().lower()
-        if save == 'y':
-            filename = self.experiment.save_results(result)
-            print(f"结果已保存到: {filename}")
-    
-    def run_seed_mixing(self):
-        """运行种子混合实验"""
-        print("\n" + "-"*80)
-        print("实验2: 种子混合")
-        print("-"*80 + "\n")
-        
-        prompt = input("输入提示词 (回车使用默认): ").strip()
-        if not prompt:
-            prompt = "Write a short story about robots:"
-        
-        num_variations = input("输入变体数量 (默认3): ").strip()
-        num_variations = int(num_variations) if num_variations else 3
-        
-        print("\n开始实验...")
-        result = self.experiment.experiment_seed_mixing(
-            prompt=prompt,
-            num_variations=num_variations,
-            max_new_tokens=100
-        )
-        
-        self.experiment.print_summary(result)
-        
-        # 显示交叉检测详情
-        print("\n交叉检测详细结果:")
-        print("-"*80)
-        for cd in result['cross_detection']:
-            print(f"\n文本 {cd['text_id']} (Hash Key: {cd['text_key']}):")
-            for det in cd['detections']:
-                status = "✓" if det['prediction'] else "✗"
-                print(f"  {status} 检测器 (Key: {det['detector_key']}): z={det['z_score']:.2f}")
-        
         save = input("\n是否保存结果? (y/n): ").strip().lower()
         if save == 'y':
             self.experiment.save_results(result)
     
-    def run_parameter_mixing(self):
-        """运行参数混合实验"""
+    def run_key_cross_detection_experiment(self):
+        """运行密钥交叉检测实验（合并种子混合和密钥共享）"""
         print("\n" + "-"*80)
-        print("实验3: 参数混合")
+        print("实验2: 密钥交叉检测实验")
         print("-"*80 + "\n")
+        print("此实验支持两种模式：")
+        print("  a) 种子变体 - 同一提示词用不同hash_key生成多个变体")
+        print("  b) 密钥共享 - 不同提示词，部分用共享密钥，部分用独立密钥\n")
         
-        prompt = input("输入提示词 (回车使用默认): ").strip()
-        if not prompt:
-            prompt = "Explain quantum computing:"
+        mode = input("选择模式 (a=种子变体, b=密钥共享, 默认a): ").strip().lower()
+        mode = mode if mode in ['a', 'b'] else 'a'
         
-        # 获取gamma值
-        gamma_input = input("输入Gamma值列表，逗号分隔 (默认0.25,0.5): ").strip()
-        if gamma_input:
-            gamma_values = [float(x.strip()) for x in gamma_input.split(',')]
-        else:
-            gamma_values = [0.25, 0.5]
-        
-        # 获取delta值
-        delta_input = input("输入Delta值列表，逗号分隔 (默认1.5,2.5): ").strip()
-        if delta_input:
-            delta_values = [float(x.strip()) for x in delta_input.split(',')]
-        else:
-            delta_values = [1.5, 2.5]
-        
-        print(f"\n将生成 {len(gamma_values) * len(delta_values)} 个参数组合")
-        
-        print("\n开始实验...")
-        result = self.experiment.experiment_parameter_mixing(
-            prompt=prompt,
-            gamma_values=gamma_values,
-            delta_values=delta_values,
-            tokens_per_config=40
-        )
-        
-        self.experiment.print_summary(result)
-        
-        # 显示生成的文本片段
-        print("\n生成的文本片段:")
-        print("-"*80)
-        for frag in result['fragments']:
-            print(f"\n片段 {frag['fragment_id']} (γ={frag['gamma']}, δ={frag['delta']}):")
-            print(f"  {frag['text'][:100]}...")
-        
-        save = input("\n是否保存结果? (y/n): ").strip().lower()
-        if save == 'y':
-            self.experiment.save_results(result)
-    
-    def run_key_sharing(self):
-        """运行密钥共享实验"""
-        print("\n" + "-"*80)
-        print("实验4: 密钥共享")
-        print("-"*80 + "\n")
-        
-        # 获取提示词数量
-        num_prompts = input("输入文本数量 (默认4): ").strip()
-        num_prompts = int(num_prompts) if num_prompts else 4
-        
-        # 获取每个提示词
-        prompts = []
-        print(f"\n输入 {num_prompts} 个提示词:")
-        for i in range(num_prompts):
-            prompt = input(f"  提示词 {i+1}: ").strip()
+        if mode == 'a':
+            # 种子变体模式
+            prompt = input("\n输入提示词 (回车使用默认): ").strip()
             if not prompt:
-                # 使用默认提示词
-                default_prompts = [
-                    "The benefits of renewable energy include",
-                    "In the year 2050, technology will",
-                    "Climate change is affecting",
-                    "Space exploration has led to"
-                ]
-                prompt = default_prompts[i % len(default_prompts)]
-            prompts.append(prompt)
+                prompt = "Write a short story about robots:"
+            
+            num_variations = input("输入变体数量 (默认3): ").strip()
+            num_variations = int(num_variations) if num_variations else 3
+            
+            print("\n开始实验...")
+            result = self.experiment.experiment_seed_mixing(
+                prompt=prompt,
+                num_variations=num_variations,
+                max_new_tokens=100
+            )
+            
+            self.experiment.print_summary(result)
+            
+            # 显示交叉检测详情
+            print("\n交叉检测矩阵:")
+            print("-"*80)
+            for cd in result['cross_detection']:
+                print(f"\n文本 {cd['text_id']} (Key: {cd['text_key']}):")
+                for det in cd['detections']:
+                    status = "✓" if det['prediction'] else "✗"
+                    print(f"  {status} 检测器 (Key: {det['detector_key']}): z={det['z_score']:.2f}")
         
-        # 获取共享密钥
-        shared_key = input("\n输入共享Hash Key (默认15485863): ").strip()
-        shared_key = int(shared_key) if shared_key else 15485863
-        
-        print("\n开始实验...")
-        result = self.experiment.experiment_key_sharing(
-            prompts=prompts,
-            shared_key=shared_key,
-            max_new_tokens=60
-        )
-        
-        self.experiment.print_summary(result)
-        
-        # 显示详细的文本和检测结果
-        print("\n详细结果:")
-        print("-"*80)
-        for text_info, det_info in zip(result['texts'], result['individual_detections']):
-            print(f"\n文本 {text_info['text_id']} ({text_info['key_type']}, Key={text_info['hash_key']}):")
-            print(f"  提示: {text_info['prompt']}")
-            print(f"  文本: {text_info['text'][:80]}...")
-            print(f"  正确密钥检测: z={det_info['correct_key_detection']['z_score']:.2f}, "
-                  f"结果={det_info['correct_key_detection']['prediction']}")
-            print(f"  共享密钥检测: z={det_info['shared_key_detection']['z_score']:.2f}, "
-                  f"结果={det_info['shared_key_detection']['prediction']}")
+        else:
+            # 密钥共享模式
+            num_prompts = input("\n输入文本数量 (默认4): ").strip()
+            num_prompts = int(num_prompts) if num_prompts else 4
+            
+            prompts = []
+            print(f"\n输入 {num_prompts} 个提示词:")
+            default_prompts = [
+                "The benefits of renewable energy include",
+                "In the year 2050, technology will",
+                "Climate change is affecting",
+                "Space exploration has led to"
+            ]
+            
+            for i in range(num_prompts):
+                prompt = input(f"  提示词 {i+1} (回车使用默认): ").strip()
+                prompts.append(prompt if prompt else default_prompts[i % 4])
+            
+            shared_key = input("\n输入共享Hash Key (默认15485863): ").strip()
+            shared_key = int(shared_key) if shared_key else 15485863
+            
+            print("\n开始实验...")
+            result = self.experiment.experiment_key_sharing(
+                prompts=prompts,
+                shared_key=shared_key,
+                max_new_tokens=60
+            )
+            
+            self.experiment.print_summary(result)
+            
+            # 显示详细结果
+            print("\n详细检测结果:")
+            print("-"*80)
+            for text_info, det_info in zip(result['texts'], result['individual_detections']):
+                print(f"\n文本 {text_info['text_id']} ({text_info['key_type']}, Key={text_info['hash_key']}):")
+                print(f"  提示: {text_info['prompt'][:50]}...")
+                print(f"  正确密钥: z={det_info['correct_key_detection']['z_score']:.2f}, "
+                      f"检测={'✓' if det_info['correct_key_detection']['prediction'] else '✗'}")
+                print(f"  共享密钥: z={det_info['shared_key_detection']['z_score']:.2f}, "
+                      f"检测={'✓' if det_info['shared_key_detection']['prediction'] else '✗'}")
         
         save = input("\n是否保存结果? (y/n): ").strip().lower()
         if save == 'y':
@@ -513,30 +504,987 @@ class InteractiveHybridExperiment:
             }
             self.experiment.save_results(result_data)
     
-    def run_custom_experiment(self):
-        """运行自定义实验"""
+    
+    # ========== 统计评估实验方法 ==========
+    
+    def _create_detector(self, watermark_config: Dict) -> WatermarkDetector:
+        """创建水印检测器（共用方法）"""
+        # 构造包含hash_key的seeding_scheme
+        hash_key = watermark_config.get('hash_key', 15485863)
+        seeding_scheme = watermark_config.get('seeding_scheme', 'selfhash')
+        
+        # 如果使用的是预定义scheme但需要自定义hash_key，使用freeform格式
+        if seeding_scheme == 'selfhash' and hash_key != 15485863:
+            # selfhash = anchored_minhash_prf-4-True-hash_key
+            seeding_scheme = f"ff-anchored_minhash_prf-4-True-{hash_key}"
+        elif seeding_scheme == 'lefthash' and hash_key != 15485863:
+            # lefthash = additive_prf-1-False-hash_key
+            seeding_scheme = f"ff-additive_prf-1-False-{hash_key}"
+        
+        return WatermarkDetector(
+            vocab=list(self.experiment.tokenizer.get_vocab().values()),
+            gamma=watermark_config.get('gamma', 0.5),
+            seeding_scheme=seeding_scheme,
+            device=self.args.device,
+            tokenizer=self.experiment.tokenizer,
+            z_threshold=3.0  # 降低阈值从4.0到3.0，提高检测灵敏度
+        )
+    
+    def _get_watermark_config(self) -> Dict:
+        """获取水印配置（共用方法）"""
+        print("\n水印配置:")
+        
+        gamma = input("  Gamma值 (默认0.5): ").strip()
+        gamma = float(gamma) if gamma else 0.5
+        
+        delta = input("  Delta值 (默认2.0): ").strip()
+        delta = float(delta) if delta else 2.0
+        
+        hash_key = input("  Hash Key (默认15485863): ").strip()
+        hash_key = int(hash_key) if hash_key else 15485863
+        
+        return {
+            'gamma': gamma,
+            'delta': delta,
+            'seeding_scheme': 'selfhash',
+            'hash_key': hash_key
+        }
+    
+    def _generate_text_pair(
+        self,
+        prompt: str,
+        watermark_config: Dict,
+        max_tokens: int,
+        generate_unwatermarked: bool = True
+    ):
+        """生成带水印和无水印文本对（共用方法）"""
+        # 创建水印处理器
+        processor = self.experiment.create_watermark_processor(**watermark_config)
+        
+        # 生成带水印文本
+        print("  生成带水印文本...")
+        watermarked_text = self.experiment.generate_with_watermark(
+            prompt, processor, max_tokens
+        )
+        print(f"  ✓ 完成 ({len(watermarked_text)} 字符)")
+        
+        unwatermarked_text = None
+        if generate_unwatermarked:
+            gen_unwm = input("\n是否生成无水印对照文本? (y/n, 默认y): ").strip().lower()
+            if gen_unwm != 'n':
+                print("  生成无水印文本...")
+                # 生成无水印文本
+                inputs = self.experiment.tokenizer(prompt, return_tensors="pt").to(self.args.device)
+                with torch.no_grad():
+                    output_tokens = self.experiment.model.generate(
+                        **inputs,
+                        max_new_tokens=max_tokens,
+                        do_sample=True,
+                        temperature=0.7,
+                        pad_token_id=self.experiment.tokenizer.pad_token_id,
+                        eos_token_id=self.experiment.tokenizer.eos_token_id
+                    )
+                generated_tokens = output_tokens[:, inputs["input_ids"].shape[-1]:]
+                unwatermarked_text = self.experiment.tokenizer.batch_decode(
+                    generated_tokens,
+                    skip_special_tokens=True
+                )[0]
+                print(f"  ✓ 完成 ({len(unwatermarked_text)} 字符)")
+        
+        return watermarked_text, unwatermarked_text
+    
+    def run_sliding_window_detection(self):
+        """滑动窗口检测"""
         print("\n" + "-"*80)
-        print("自定义实验")
+        print("实验6: 滑动窗口检测")
         print("-"*80 + "\n")
+        print("此实验在文本上滑动固定大小的窗口，计算每个窗口的z-score。\n")
         
-        print("请选择基础实验类型:")
-        print("  1 - 基于片段混合")
-        print("  2 - 基于种子混合")
-        print("  3 - 基于参数混合")
-        print("  4 - 基于密钥共享")
+        # 获取参数
+        prompt = input("输入生成提示词 (默认: The impact of AI): ").strip()
+        prompt = prompt if prompt else "The impact of artificial intelligence"
         
-        exp_type = input("\n选择 (1-4): ").strip()
+        max_tokens = input("生成token数 (默认200): ").strip()
+        max_tokens = int(max_tokens) if max_tokens else 200
         
-        if exp_type == '1':
-            self.run_fragment_mixing()
-        elif exp_type == '2':
-            self.run_seed_mixing()
-        elif exp_type == '3':
-            self.run_parameter_mixing()
-        elif exp_type == '4':
-            self.run_key_sharing()
+        watermark_config = self._get_watermark_config()
+        
+        # 生成文本
+        print("\n生成文本...")
+        watermarked_text, _ = self._generate_text_pair(
+            prompt, watermark_config, max_tokens, generate_unwatermarked=False
+        )
+        
+        # 窗口参数
+        print("\n滑动窗口参数:")
+        window_size = input("  窗口大小 (tokens, 默认100): ").strip()
+        window_size = int(window_size) if window_size else 100
+        
+        stride = input("  滑动步长 (tokens, 默认25): ").strip()
+        stride = int(stride) if stride else 25
+        
+        # 创建检测器
+        detector = self._create_detector(watermark_config)
+        
+        # 执行滑动窗口检测
+        print("\n执行滑动窗口检测...")
+        tokens = self.experiment.tokenizer.encode(watermarked_text, add_special_tokens=False)
+        text_length = len(tokens)
+        
+        window_positions = []
+        z_scores = []
+        predictions = []
+        green_fractions = []
+        
+        for start_pos in tqdm(range(0, text_length - window_size + 1, stride),
+                             desc="滑动窗口"):
+            end_pos = start_pos + window_size
+            window_tokens = tokens[start_pos:end_pos]
+            window_text = self.experiment.tokenizer.decode(window_tokens, skip_special_tokens=True)
+            
+            result = detector.detect(window_text)
+            
+            window_positions.append(start_pos)
+            z_scores.append(result['z_score'])
+            predictions.append(result['prediction'])
+            green_fractions.append(result['green_fraction'])
+        
+        # 显示结果
+        print("\n" + "="*80)
+        print("检测结果")
+        print("="*80)
+        print(f"\n窗口大小: {window_size} tokens")
+        print(f"窗口数量: {len(window_positions)}")
+        print(f"平均 Z-score: {np.mean(z_scores):.4f} ± {np.std(z_scores):.4f}")
+        print(f"检测率: {np.mean(predictions)*100:.1f}%")
+        print(f"平均绿色token比例: {np.mean(green_fractions):.4f}")
+        
+        # 保存结果
+        save = input("\n是否保存结果? (y/n): ").strip().lower()
+        if save == 'y':
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            results_dir = "hybrid_watermark_results"
+            os.makedirs(results_dir, exist_ok=True)
+            
+            result_file = os.path.join(results_dir, f"sliding_window_{timestamp}.json")
+            
+            # 整体检测结果
+            full_detection = detector.detect(watermarked_text)
+            
+            results = {
+                'experiment_type': 'sliding_window_detection',
+                'prompt': prompt,
+                'watermark_config': watermark_config,
+                'generated_text': {
+                    'text': watermarked_text,
+                    'length_chars': len(watermarked_text),
+                    'length_tokens': len(tokens),
+                    'full_detection': {
+                        'z_score': float(full_detection['z_score']),
+                        'p_value': float(full_detection['p_value']),
+                        'prediction': bool(full_detection['prediction']),
+                        'green_fraction': float(full_detection['green_fraction'])
+                    }
+                },
+                'sliding_window_params': {
+                    'window_size': window_size,
+                    'stride': stride,
+                    'num_windows': len(window_positions)
+                },
+                'results': {
+                    'avg_z_score': float(np.mean(z_scores)),
+                    'std_z_score': float(np.std(z_scores)),
+                    'detection_rate': float(np.mean(predictions)),
+                    'avg_green_fraction': float(np.mean(green_fractions))
+                },
+                'detailed_results': [
+                    {
+                        'window_id': i,
+                        'start_position': int(pos),
+                        'z_score': float(z),
+                        'prediction': bool(p),
+                        'green_fraction': float(gf)
+                    }
+                    for i, (pos, z, p, gf) in enumerate(zip(window_positions, z_scores, predictions, green_fractions))
+                ]
+            }
+            
+            with open(result_file, 'w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            
+            print(f"✓ 结果已保存: {result_file}")
+        
+        # 绘图
+        plot = input("\n是否生成可视化图表? (y/n): ").strip().lower()
+        if plot == 'y':
+            self._plot_sliding_window(
+                window_positions, z_scores, predictions, green_fractions, window_size
+            )
+    
+    def run_window_sensitivity_analysis(self):
+        """窗口敏感性分析"""
+        print("\n" + "-"*80)
+        print("实验7: 窗口敏感性分析")
+        print("-"*80 + "\n")
+        print("此实验测试不同窗口大小对检测效果的影响。\n")
+        
+        # 获取参数
+        prompt = input("输入生成提示词 (默认: The impact of AI): ").strip()
+        prompt = prompt if prompt else "The impact of artificial intelligence"
+        
+        max_tokens = input("生成token数 (默认300): ").strip()
+        max_tokens = int(max_tokens) if max_tokens else 300
+        
+        watermark_config = self._get_watermark_config()
+        
+        # 生成文本
+        print("\n生成文本...")
+        watermarked_text, unwatermarked_text = self._generate_text_pair(
+            prompt, watermark_config, max_tokens, generate_unwatermarked=True
+        )
+        
+        # 窗口大小范围
+        print("\n窗口大小范围:")
+        sizes_input = input("  输入窗口大小列表 (逗号分隔, 默认: 25,50,75,100,150,200): ").strip()
+        if sizes_input:
+            window_sizes = [int(s.strip()) for s in sizes_input.split(',')]
         else:
-            print("无效选择")
+            window_sizes = [25, 50, 75, 100, 150, 200]
+        
+        # 创建检测器
+        detector = self._create_detector(watermark_config)
+        
+        # 执行分析
+        print("\n执行窗口敏感性分析...")
+        avg_z_scores = []
+        std_z_scores = []
+        detection_rates = []
+        false_positive_rates = []
+        
+        for window_size in tqdm(window_sizes, desc="窗口敏感性分析"):
+            stride = max(1, int(window_size * 0.5))
+            
+            # 检测带水印文本
+            tokens = self.experiment.tokenizer.encode(watermarked_text, add_special_tokens=False)
+            z_scores_wm = []
+            predictions_wm = []
+            
+            for start_pos in range(0, len(tokens) - window_size + 1, stride):
+                window_tokens = tokens[start_pos:start_pos + window_size]
+                window_text = self.experiment.tokenizer.decode(window_tokens, skip_special_tokens=True)
+                result = detector.detect(window_text)
+                z_scores_wm.append(result['z_score'])
+                predictions_wm.append(result['prediction'])
+            
+            avg_z_scores.append(np.mean(z_scores_wm))
+            std_z_scores.append(np.std(z_scores_wm))
+            detection_rates.append(np.mean(predictions_wm))
+            
+            # 如果有无水印文本，计算假阳性率
+            if unwatermarked_text:
+                tokens_unwm = self.experiment.tokenizer.encode(unwatermarked_text, add_special_tokens=False)
+                predictions_unwm = []
+                
+                for start_pos in range(0, len(tokens_unwm) - window_size + 1, stride):
+                    window_tokens = tokens_unwm[start_pos:start_pos + window_size]
+                    window_text = self.experiment.tokenizer.decode(window_tokens, skip_special_tokens=True)
+                    result = detector.detect(window_text)
+                    predictions_unwm.append(result['prediction'])
+                
+                false_positive_rates.append(np.mean(predictions_unwm))
+            else:
+                false_positive_rates.append(0.0)
+        
+        # 显示结果
+        print("\n" + "="*80)
+        print("分析结果")
+        print("="*80)
+        print(f"\n测试窗口范围: {min(window_sizes)} - {max(window_sizes)} tokens")
+        
+        optimal_idx = avg_z_scores.index(max(avg_z_scores))
+        print(f"最优窗口大小: {window_sizes[optimal_idx]} tokens")
+        print(f"最高平均 Z-score: {avg_z_scores[optimal_idx]:.4f}")
+        print(f"最高检测率: {max(detection_rates)*100:.1f}%")
+        
+        print("\n各窗口大小详情:")
+        for i, size in enumerate(window_sizes):
+            print(f"  {size:3d} tokens: Z={avg_z_scores[i]:6.3f} ± {std_z_scores[i]:5.3f}, "
+                  f"检测率={detection_rates[i]*100:5.1f}%, "
+                  f"假阳性={false_positive_rates[i]*100:5.1f}%")
+        
+        # 保存结果
+        save = input("\n是否保存结果? (y/n): ").strip().lower()
+        if save == 'y':
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            results_dir = "hybrid_watermark_results"
+            os.makedirs(results_dir, exist_ok=True)
+            
+            result_file = os.path.join(results_dir, f"window_sensitivity_{timestamp}.json")
+            
+            # 整体检测结果
+            watermarked_detection = detector.detect(watermarked_text)
+            unwatermarked_detection = detector.detect(unwatermarked_text) if unwatermarked_text else None
+            
+            results = {
+                'experiment_type': 'window_sensitivity_analysis',
+                'prompt': prompt,
+                'watermark_config': watermark_config,
+                'generated_texts': {
+                    'watermarked': {
+                        'text': watermarked_text,
+                        'length_chars': len(watermarked_text),
+                        'length_tokens': len(self.experiment.tokenizer.encode(watermarked_text, add_special_tokens=False)),
+                        'full_detection': {
+                            'z_score': float(watermarked_detection['z_score']),
+                            'p_value': float(watermarked_detection['p_value']),
+                            'prediction': bool(watermarked_detection['prediction']),
+                            'green_fraction': float(watermarked_detection['green_fraction'])
+                        }
+                    },
+                    'unwatermarked': {
+                        'text': unwatermarked_text,
+                        'length_chars': len(unwatermarked_text) if unwatermarked_text else None,
+                        'length_tokens': len(self.experiment.tokenizer.encode(unwatermarked_text, add_special_tokens=False)) if unwatermarked_text else None,
+                        'full_detection': {
+                            'z_score': float(unwatermarked_detection['z_score']) if unwatermarked_detection else None,
+                            'p_value': float(unwatermarked_detection['p_value']) if unwatermarked_detection else None,
+                            'prediction': bool(unwatermarked_detection['prediction']) if unwatermarked_detection else None,
+                            'green_fraction': float(unwatermarked_detection['green_fraction']) if unwatermarked_detection else None
+                        } if unwatermarked_detection else None
+                    } if unwatermarked_text else None
+                },
+                'tested_window_sizes': window_sizes,
+                'optimal_window': {
+                    'size': window_sizes[optimal_idx],
+                    'avg_z_score': float(avg_z_scores[optimal_idx]),
+                    'detection_rate': float(detection_rates[optimal_idx])
+                },
+                'detailed_results': [
+                    {
+                        'window_size': size,
+                        'avg_z_score': float(avg_z),
+                        'std_z_score': float(std_z),
+                        'detection_rate': float(det_rate),
+                        'false_positive_rate': float(fp_rate)
+                    }
+                    for size, avg_z, std_z, det_rate, fp_rate in zip(
+                        window_sizes, avg_z_scores, std_z_scores, detection_rates, false_positive_rates
+                    )
+                ]
+            }
+            
+            with open(result_file, 'w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            
+            print(f"✓ 结果已保存: {result_file}")
+        
+        # 绘图
+        plot = input("\n是否生成可视化图表? (y/n): ").strip().lower()
+        if plot == 'y':
+            self._plot_window_sensitivity(
+                window_sizes, avg_z_scores, std_z_scores, 
+                detection_rates, false_positive_rates
+            )
+    
+    def run_minimum_length_analysis(self):
+        """最小可检测长度分析"""
+        print("\n" + "-"*80)
+        print("实验8: 最小可检测长度分析")
+        print("-"*80 + "\n")
+        print("此实验找出可靠检测水印所需的最小文本长度。\n")
+        
+        # 获取参数
+        prompt = input("输入生成提示词 (默认: The impact of AI): ").strip()
+        prompt = prompt if prompt else "The impact of artificial intelligence"
+        
+        max_tokens = input("生成token数 (默认300): ").strip()
+        max_tokens = int(max_tokens) if max_tokens else 300
+        
+        watermark_config = self._get_watermark_config()
+        
+        # 生成文本
+        print("\n生成文本...")
+        watermarked_text, _ = self._generate_text_pair(
+            prompt, watermark_config, max_tokens, generate_unwatermarked=False
+        )
+        
+        # 长度范围
+        print("\n测试长度范围:")
+        min_len = input("  最小长度 (tokens, 默认20): ").strip()
+        min_len = int(min_len) if min_len else 20
+        
+        max_len = input("  最大长度 (tokens, 默认250): ").strip()
+        max_len = int(max_len) if max_len else 250
+        
+        step = input("  步长 (tokens, 默认10): ").strip()
+        step = int(step) if step else 10
+        
+        length_range = list(range(min_len, max_len + 1, step))
+        
+        num_samples = input("  每个长度采样次数 (默认3): ").strip()
+        num_samples = int(num_samples) if num_samples else 3
+        
+        # 创建检测器
+        detector = self._create_detector(watermark_config)
+        
+        # 执行分析
+        print("\n执行最小长度分析...")
+        tokens = self.experiment.tokenizer.encode(watermarked_text, add_special_tokens=False)
+        
+        text_lengths = []
+        z_scores = []
+        predictions = []
+        green_fractions = []
+        
+        for length in tqdm(length_range, desc="最小长度分析"):
+            if length > len(tokens):
+                continue
+            
+            length_z_scores = []
+            length_predictions = []
+            length_green_fractions = []
+            
+            for _ in range(num_samples):
+                if len(tokens) - length > 0:
+                    start_pos = np.random.randint(0, len(tokens) - length + 1)
+                else:
+                    start_pos = 0
+                
+                sample_tokens = tokens[start_pos:start_pos + length]
+                sample_text = self.experiment.tokenizer.decode(sample_tokens, skip_special_tokens=True)
+                
+                result = detector.detect(sample_text)
+                
+                length_z_scores.append(result['z_score'])
+                length_predictions.append(result['prediction'])
+                length_green_fractions.append(result['green_fraction'])
+            
+            text_lengths.append(length)
+            z_scores.append(np.mean(length_z_scores))
+            predictions.append(np.mean(length_predictions) >= 0.5)
+            green_fractions.append(np.mean(length_green_fractions))
+        
+        # 找出最小可靠检测长度
+        min_reliable_length = None
+        for i, (length, pred) in enumerate(zip(text_lengths, predictions)):
+            if pred and i + 2 < len(predictions) and all(predictions[i:i+3]):
+                min_reliable_length = length
+                break
+        
+        # 显示结果
+        print("\n" + "="*80)
+        print("分析结果")
+        print("="*80)
+        
+        if min_reliable_length:
+            print(f"\n✓ 最小可靠检测长度: {min_reliable_length} tokens")
+        else:
+            print(f"\n✗ 未找到可靠检测长度")
+        
+        print(f"\n测试长度范围: {min(length_range)} - {max(length_range)} tokens")
+        
+        success_lengths = [l for l, p in zip(text_lengths, predictions) if p]
+        if success_lengths:
+            print(f"最短成功检测: {min(success_lengths)} tokens")
+        
+        print("\n部分长度详情:")
+        step_show = max(1, len(text_lengths) // 10)
+        for i in range(0, len(text_lengths), step_show):
+            length = text_lengths[i]
+            z = z_scores[i]
+            p = predictions[i]
+            status = "✓" if p else "✗"
+            print(f"  {status} {length:3d} tokens: Z={z:6.3f}, Green={green_fractions[i]:.3f}")
+        
+        # 保存结果
+        save = input("\n是否保存结果? (y/n): ").strip().lower()
+        if save == 'y':
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            results_dir = "hybrid_watermark_results"
+            os.makedirs(results_dir, exist_ok=True)
+            
+            result_file = os.path.join(results_dir, f"minimum_length_{timestamp}.json")
+            
+            # 整体检测结果
+            full_detection = detector.detect(watermarked_text)
+            
+            results = {
+                'experiment_type': 'minimum_length_analysis',
+                'prompt': prompt,
+                'watermark_config': watermark_config,
+                'generated_text': {
+                    'text': watermarked_text,
+                    'length_chars': len(watermarked_text),
+                    'length_tokens': len(tokens),
+                    'full_detection': {
+                        'z_score': float(full_detection['z_score']),
+                        'p_value': float(full_detection['p_value']),
+                        'prediction': bool(full_detection['prediction']),
+                        'green_fraction': float(full_detection['green_fraction'])
+                    }
+                },
+                'test_parameters': {
+                    'min_length': min_len,
+                    'max_length': max_len,
+                    'step_size': step,
+                    'num_samples_per_length': num_samples
+                },
+                'summary': {
+                    'min_reliable_length': min_reliable_length,
+                    'min_success_length': min(success_lengths) if success_lengths else None,
+                    'num_success_lengths': len(success_lengths),
+                    'success_rate': float(np.mean(predictions))
+                },
+                'detailed_results': [
+                    {
+                        'length': int(length),
+                        'avg_z_score': float(z),
+                        'prediction': bool(p),
+                        'avg_green_fraction': float(gf)
+                    }
+                    for length, z, p, gf in zip(text_lengths, z_scores, predictions, green_fractions)
+                ]
+            }
+            
+            with open(result_file, 'w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            
+            print(f"✓ 结果已保存: {result_file}")
+        
+        # 绘图
+        plot = input("\n是否生成可视化图表? (y/n): ").strip().lower()
+        if plot == 'y':
+            self._plot_minimum_length(
+                text_lengths, z_scores, predictions, 
+                green_fractions, min_reliable_length
+            )
+    
+    def run_complete_statistical_evaluation(self):
+        """运行完整统计评估"""
+        print("\n" + "-"*80)
+        print("实验9: 完整统计评估")
+        print("-"*80 + "\n")
+        print("此实验将执行全部三项统计分析。\n")
+        
+        # 获取参数
+        prompt = input("输入生成提示词 (默认: The impact of AI): ").strip()
+        prompt = prompt if prompt else "The impact of artificial intelligence"
+        
+        max_tokens = input("生成token数 (默认300): ").strip()
+        max_tokens = int(max_tokens) if max_tokens else 300
+        
+        watermark_config = self._get_watermark_config()
+        
+        # 生成文本
+        print("\n生成文本...")
+        watermarked_text, unwatermarked_text = self._generate_text_pair(
+            prompt, watermark_config, max_tokens, generate_unwatermarked=True
+        )
+        
+        detector = self._create_detector(watermark_config)
+        tokens = self.experiment.tokenizer.encode(watermarked_text, add_special_tokens=False)
+        
+        # 1. 滑动窗口检测
+        print("\n[1/3] 执行滑动窗口检测...")
+        window_size = 100
+        stride = 25
+        
+        window_positions = []
+        z_scores_sw = []
+        predictions_sw = []
+        green_fractions_sw = []
+        
+        for start_pos in tqdm(range(0, len(tokens) - window_size + 1, stride),
+                             desc="滑动窗口", leave=False):
+            window_tokens = tokens[start_pos:start_pos + window_size]
+            window_text = self.experiment.tokenizer.decode(window_tokens, skip_special_tokens=True)
+            result = detector.detect(window_text)
+            
+            window_positions.append(start_pos)
+            z_scores_sw.append(result['z_score'])
+            predictions_sw.append(result['prediction'])
+            green_fractions_sw.append(result['green_fraction'])
+        
+        print(f"  ✓ 完成 ({len(window_positions)} 个窗口)")
+        
+        # 2. 窗口敏感性分析
+        print("\n[2/3] 执行窗口敏感性分析...")
+        window_sizes = [25, 50, 75, 100, 150, 200]
+        avg_z_scores = []
+        std_z_scores = []
+        detection_rates = []
+        
+        for ws in tqdm(window_sizes, desc="窗口敏感性", leave=False):
+            stride = max(1, int(ws * 0.5))
+            z_scores_ws = []
+            predictions_ws = []
+            
+            for start_pos in range(0, len(tokens) - ws + 1, stride):
+                window_tokens = tokens[start_pos:start_pos + ws]
+                window_text = self.experiment.tokenizer.decode(window_tokens, skip_special_tokens=True)
+                result = detector.detect(window_text)
+                z_scores_ws.append(result['z_score'])
+                predictions_ws.append(result['prediction'])
+            
+            avg_z_scores.append(np.mean(z_scores_ws))
+            std_z_scores.append(np.std(z_scores_ws))
+            detection_rates.append(np.mean(predictions_ws))
+        
+        print(f"  ✓ 完成 (测试了 {len(window_sizes)} 个窗口大小)")
+        
+        # 3. 最小长度分析
+        print("\n[3/3] 执行最小长度分析...")
+        length_range = list(range(20, min(len(tokens), 250), 10))
+        text_lengths = []
+        z_scores_ml = []
+        predictions_ml = []
+        
+        for length in tqdm(length_range, desc="最小长度", leave=False):
+            if length > len(tokens):
+                continue
+            
+            start_pos = 0 if len(tokens) - length <= 0 else np.random.randint(0, len(tokens) - length + 1)
+            sample_tokens = tokens[start_pos:start_pos + length]
+            sample_text = self.experiment.tokenizer.decode(sample_tokens, skip_special_tokens=True)
+            
+            result = detector.detect(sample_text)
+            
+            text_lengths.append(length)
+            z_scores_ml.append(result['z_score'])
+            predictions_ml.append(result['prediction'])
+        
+        print(f"  ✓ 完成 (测试了 {len(length_range)} 个长度)")
+        
+        # 显示摘要
+        print("\n" + "="*80)
+        print("完整统计评估摘要")
+        print("="*80)
+        
+        print("\n1. 滑动窗口检测:")
+        print(f"   平均 Z-score: {np.mean(z_scores_sw):.4f} ± {np.std(z_scores_sw):.4f}")
+        print(f"   检测率: {np.mean(predictions_sw)*100:.1f}%")
+        
+        print("\n2. 窗口敏感性分析:")
+        optimal_idx = avg_z_scores.index(max(avg_z_scores))
+        print(f"   最优窗口大小: {window_sizes[optimal_idx]} tokens")
+        print(f"   最高平均 Z-score: {avg_z_scores[optimal_idx]:.4f}")
+        
+        print("\n3. 最小长度分析:")
+        success_lengths = [l for l, p in zip(text_lengths, predictions_ml) if p]
+        if success_lengths:
+            print(f"   最短成功检测: {min(success_lengths)} tokens")
+        
+        # 保存结果
+        save = input("\n是否保存结果? (y/n): ").strip().lower()
+        if save == 'y':
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            results_dir = "hybrid_watermark_results"
+            os.makedirs(results_dir, exist_ok=True)
+            
+            result_file = os.path.join(results_dir, f"complete_statistical_eval_{timestamp}.json")
+            
+            # 计算带水印文本的检测结果
+            watermarked_detection = detector.detect(watermarked_text)
+            
+            # 计算不带水印文本的检测结果（如果存在）
+            unwatermarked_detection = None
+            if unwatermarked_text:
+                unwatermarked_detection = detector.detect(unwatermarked_text)
+            
+            results = {
+                'prompt': prompt,
+                'watermark_config': watermark_config,
+                'generated_texts': {
+                    'watermarked': {
+                        'text': watermarked_text,
+                        'length_chars': len(watermarked_text),
+                        'length_tokens': len(tokens),
+                        'detection': {
+                            'z_score': float(watermarked_detection['z_score']),
+                            'p_value': float(watermarked_detection['p_value']),
+                            'prediction': bool(watermarked_detection['prediction']),
+                            'green_fraction': float(watermarked_detection['green_fraction'])
+                        }
+                    },
+                    'unwatermarked': {
+                        'text': unwatermarked_text if unwatermarked_text else None,
+                        'length_chars': len(unwatermarked_text) if unwatermarked_text else None,
+                        'length_tokens': len(self.experiment.tokenizer.encode(unwatermarked_text, add_special_tokens=False)) if unwatermarked_text else None,
+                        'detection': {
+                            'z_score': float(unwatermarked_detection['z_score']) if unwatermarked_detection else None,
+                            'p_value': float(unwatermarked_detection['p_value']) if unwatermarked_detection else None,
+                            'prediction': bool(unwatermarked_detection['prediction']) if unwatermarked_detection else None,
+                            'green_fraction': float(unwatermarked_detection['green_fraction']) if unwatermarked_detection else None
+                        } if unwatermarked_detection else None
+                    }
+                },
+                'sliding_window': {
+                    'window_size': window_size,
+                    'stride': stride,
+                    'num_windows': len(window_positions),
+                    'avg_z_score': float(np.mean(z_scores_sw)),
+                    'std_z_score': float(np.std(z_scores_sw)),
+                    'detection_rate': float(np.mean(predictions_sw)),
+                    'avg_green_fraction': float(np.mean(green_fractions_sw))
+                },
+                'window_sensitivity': {
+                    'window_sizes': window_sizes,
+                    'avg_z_scores': [float(x) for x in avg_z_scores],
+                    'std_z_scores': [float(x) for x in std_z_scores],
+                    'detection_rates': [float(x) for x in detection_rates],
+                    'optimal_window_size': window_sizes[optimal_idx],
+                    'optimal_z_score': float(avg_z_scores[optimal_idx])
+                },
+                'minimum_length': {
+                    'test_range': [min(length_range), max(length_range)],
+                    'step_size': 10,
+                    'num_tests': len(text_lengths),
+                    'min_success_length': min(success_lengths) if success_lengths else None,
+                    'all_success_lengths': success_lengths if success_lengths else []
+                }
+            }
+            
+            with open(result_file, 'w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            
+            print(f"✓ 结果已保存: {result_file}")
+        
+        # 生成所有图表
+        plot = input("\n是否生成所有可视化图表? (y/n): ").strip().lower()
+        if plot == 'y':
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            results_dir = "hybrid_watermark_results"
+            
+            print("\n生成图表...")
+            
+            self._plot_sliding_window(
+                window_positions, z_scores_sw, predictions_sw, 
+                green_fractions_sw, window_size,
+                save_path=f"{results_dir}/sliding_window_{timestamp}.png"
+            )
+            
+            self._plot_window_sensitivity(
+                window_sizes, avg_z_scores, std_z_scores, 
+                detection_rates, [0.0] * len(window_sizes),
+                save_path=f"{results_dir}/window_sensitivity_{timestamp}.png"
+            )
+            
+            # 找最小可靠长度
+            min_reliable = None
+            for i, (length, pred) in enumerate(zip(text_lengths, predictions_ml)):
+                if pred and i + 2 < len(predictions_ml) and all(predictions_ml[i:i+3]):
+                    min_reliable = length
+                    break
+            
+            self._plot_minimum_length(
+                text_lengths, z_scores_ml, predictions_ml,
+                [0.5] * len(text_lengths), min_reliable,
+                save_path=f"{results_dir}/minimum_length_{timestamp}.png"
+            )
+            
+            print("✓ 所有图表已生成")
+    
+    # ========== 可视化辅助方法 ==========
+    
+    def _plot_sliding_window(
+        self,
+        window_positions: List[int],
+        z_scores: List[float],
+        predictions: List[bool],
+        green_fractions: List[float],
+        window_size: int,
+        save_path: Optional[str] = None
+    ):
+        """绘制滑动窗口结果"""
+        fig, axes = plt.subplots(3, 1, figsize=(12, 10))
+        
+        # Z-score曲线
+        axes[0].plot(window_positions, z_scores, marker='o', linestyle='-', linewidth=2, markersize=4)
+        axes[0].axhline(y=3.0, color='r', linestyle='--', label='Threshold (z=3)')
+        axes[0].set_xlabel('Window Start Position (tokens)')
+        axes[0].set_ylabel('Z-score')
+        axes[0].set_title('Z-score Distribution')
+        axes[0].legend()
+        axes[0].grid(True, alpha=0.3)
+        
+        # 绿色token比例
+        axes[1].plot(window_positions, green_fractions, marker='s', linestyle='-', 
+                    linewidth=2, markersize=4, color='green')
+        axes[1].axhline(y=0.5, color='gray', linestyle='--', label='Expected (γ=0.5)')
+        axes[1].set_xlabel('Window Start Position (tokens)')
+        axes[1].set_ylabel('Green Token Fraction')
+        axes[1].set_title('Green Token Fraction Distribution')
+        axes[1].legend()
+        axes[1].grid(True, alpha=0.3)
+        
+        # 检测结果
+        detection_map = [1 if pred else 0 for pred in predictions]
+        axes[2].bar(window_positions, detection_map, width=window_size * 0.8, 
+                   color='blue', alpha=0.6)
+        axes[2].set_xlabel('Window Start Position (tokens)')
+        axes[2].set_ylabel('Detection (1=Yes, 0=No)')
+        axes[2].set_title('Detection Results')
+        axes[2].set_ylim(-0.1, 1.1)
+        axes[2].grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"✓ 图表已保存: {save_path}")
+        else:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            save_path = f"hybrid_watermark_results/sliding_window_{timestamp}.png"
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"✓ 图表已保存: {save_path}")
+        
+        plt.close()
+    
+    def _plot_window_sensitivity(
+        self,
+        window_sizes: List[int],
+        avg_z_scores: List[float],
+        std_z_scores: List[float],
+        detection_rates: List[float],
+        false_positive_rates: List[float],
+        save_path: Optional[str] = None
+    ):
+        """绘制窗口敏感性结果"""
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+        
+        # 平均Z-score
+        axes[0, 0].errorbar(window_sizes, avg_z_scores, yerr=std_z_scores, 
+                           marker='o', capsize=5, linewidth=2, markersize=8)
+        axes[0, 0].axhline(y=3.0, color='r', linestyle='--', label='Threshold (z=3)')
+        axes[0, 0].set_xlabel('Window Size (tokens)')
+        axes[0, 0].set_ylabel('Average Z-score')
+        axes[0, 0].set_title('Average Z-score vs Window Size')
+        axes[0, 0].legend()
+        axes[0, 0].grid(True, alpha=0.3)
+        
+        # 检测率
+        axes[0, 1].plot(window_sizes, detection_rates, marker='s', 
+                       linewidth=2, markersize=8, color='green')
+        axes[0, 1].axhline(y=0.95, color='gray', linestyle='--', label='95% threshold')
+        axes[0, 1].set_xlabel('Window Size (tokens)')
+        axes[0, 1].set_ylabel('Detection Rate')
+        axes[0, 1].set_title('Detection Rate vs Window Size')
+        axes[0, 1].set_ylim(0, 1.05)
+        axes[0, 1].legend()
+        axes[0, 1].grid(True, alpha=0.3)
+        
+        # Z-score标准差
+        axes[1, 0].plot(window_sizes, std_z_scores, marker='^', 
+                       linewidth=2, markersize=8, color='orange')
+        axes[1, 0].set_xlabel('Window Size (tokens)')
+        axes[1, 0].set_ylabel('Z-score Std Dev')
+        axes[1, 0].set_title('Z-score Stability vs Window Size')
+        axes[1, 0].grid(True, alpha=0.3)
+        
+        # 假阳性率
+        if any(false_positive_rates):
+            axes[1, 1].plot(window_sizes, false_positive_rates, marker='D', 
+                           linewidth=2, markersize=8, color='red')
+            axes[1, 1].axhline(y=0.05, color='gray', linestyle='--', label='5% threshold')
+            axes[1, 1].set_xlabel('Window Size (tokens)')
+            axes[1, 1].set_ylabel('False Positive Rate')
+            axes[1, 1].set_title('False Positive Rate vs Window Size')
+            axes[1, 1].legend()
+            axes[1, 1].grid(True, alpha=0.3)
+        else:
+            axes[1, 1].text(0.5, 0.5, 'No unwatermarked text',
+                           ha='center', va='center', transform=axes[1, 1].transAxes)
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"✓ 图表已保存: {save_path}")
+        else:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            save_path = f"hybrid_watermark_results/window_sensitivity_{timestamp}.png"
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"✓ 图表已保存: {save_path}")
+        
+        plt.close()
+    
+    def _plot_minimum_length(
+        self,
+        text_lengths: List[int],
+        z_scores: List[float],
+        predictions: List[bool],
+        green_fractions: List[float],
+        min_reliable_length: Optional[int],
+        save_path: Optional[str] = None
+    ):
+        """绘制最小长度分析结果"""
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+        
+        # Z-score vs 长度
+        axes[0, 0].plot(text_lengths, z_scores, marker='o', linewidth=2, markersize=6)
+        axes[0, 0].axhline(y=3.0, color='r', linestyle='--', label='Threshold (z=3)')
+        if min_reliable_length:
+            axes[0, 0].axvline(x=min_reliable_length, color='g', linestyle='--',
+                              label=f'Min: {min_reliable_length}')
+        axes[0, 0].set_xlabel('Text Length (tokens)')
+        axes[0, 0].set_ylabel('Z-score')
+        axes[0, 0].set_title('Z-score vs Text Length')
+        axes[0, 0].legend()
+        axes[0, 0].grid(True, alpha=0.3)
+        
+        # 绿色token比例
+        axes[0, 1].plot(text_lengths, green_fractions, marker='s', 
+                       linewidth=2, markersize=6, color='green')
+        axes[0, 1].axhline(y=0.5, color='gray', linestyle='--', label='Expected (γ=0.5)')
+        if min_reliable_length:
+            axes[0, 1].axvline(x=min_reliable_length, color='g', linestyle='--')
+        axes[0, 1].set_xlabel('Text Length (tokens)')
+        axes[0, 1].set_ylabel('Green Token Fraction')
+        axes[0, 1].set_title('Green Token Fraction vs Text Length')
+        axes[0, 1].legend()
+        axes[0, 1].grid(True, alpha=0.3)
+        
+        # 检测成功/失败
+        colors = ['green' if pred else 'red' for pred in predictions]
+        axes[1, 0].scatter(text_lengths, z_scores, c=colors, s=100, 
+                          alpha=0.6, edgecolors='black')
+        axes[1, 0].axhline(y=3.0, color='r', linestyle='--', linewidth=2)
+        if min_reliable_length:
+            axes[1, 0].axvline(x=min_reliable_length, color='g', linestyle='--', linewidth=2)
+        axes[1, 0].set_xlabel('Text Length (tokens)')
+        axes[1, 0].set_ylabel('Z-score')
+        axes[1, 0].set_title('Detection Success (Green) / Failure (Red)')
+        axes[1, 0].grid(True, alpha=0.3)
+        
+        # 检测率累积
+        detection_rate_cumulative = []
+        for i in range(len(predictions)):
+            detection_rate_cumulative.append(np.mean(predictions[:i+1]))
+        
+        axes[1, 1].plot(text_lengths, detection_rate_cumulative, marker='^',
+                       linewidth=2, markersize=6, color='purple')
+        axes[1, 1].axhline(y=0.95, color='gray', linestyle='--', label='95% threshold')
+        if min_reliable_length:
+            axes[1, 1].axvline(x=min_reliable_length, color='g', linestyle='--')
+        axes[1, 1].set_xlabel('Text Length (tokens)')
+        axes[1, 1].set_ylabel('Cumulative Detection Rate')
+        axes[1, 1].set_title('Cumulative Detection Rate vs Length')
+        axes[1, 1].set_ylim(0, 1.05)
+        axes[1, 1].legend()
+        axes[1, 1].grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"✓ 图表已保存: {save_path}")
+        else:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            save_path = f"hybrid_watermark_results/minimum_length_{timestamp}.png"
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"✓ 图表已保存: {save_path}")
+        
+        plt.close()
     
     def show_experiment_info(self):
         """显示实验说明"""
@@ -544,31 +1492,58 @@ class InteractiveHybridExperiment:
         print("实验说明")
         print("="*80 + "\n")
         
-        print("实验1: 片段级混合水印")
-        print("-"*40)
-        print("在同一段落中，不同片段使用不同的水印配置（gamma, delta, hash_key）")
-        print("目的: 研究混合水印的检测特性和鲁棒性")
-        print()
+        print("【混合水印实验】")
+        print("-"*80)
         
-        print("实验2: 种子混合")
-        print("-"*40)
-        print("同一模型使用不同的hash_key生成多个文本变体")
-        print("目的: 研究不同种子之间的相互检测能力")
-        print()
+        print("\n实验1: 混合配置实验")
+        print("  - 模式 a: 片段级自定义配置")
+        print("    · 在同一段落中，不同片段使用不同的水印配置（gamma, delta, hash_key）")
+        print("    · 目的: 研究混合水印的检测特性和鲁棒性")
+        print("  - 模式 b: 参数网格扫描")
+        print("    · 使用不同的 gamma 和 delta 组合生成文本片段")
+        print("    · 目的: 系统性研究不同参数配置的混合效果")
         
-        print("实验3: 参数混合")
-        print("-"*40)
-        print("使用不同的gamma和delta组合生成文本片段")
-        print("目的: 研究不同参数配置的混合效果")
-        print()
+        print("\n实验2: 密钥交叉检测实验")
+        print("  - 模式 a: 种子变体分析")
+        print("    · 同一模型使用不同的 hash_key 生成多个文本变体")
+        print("    · 研究不同种子之间的交叉检测能力和误检率")
+        print("  - 模式 b: 密钥共享策略")
+        print("    · 部分文本使用共享密钥，部分使用独立密钥")
+        print("    · 目的: 研究密钥共享对检测性能的影响")
         
-        print("实验4: 密钥共享")
-        print("-"*40)
-        print("部分文本使用共享密钥，部分使用独立密钥")
-        print("目的: 研究密钥共享对检测的影响")
-        print()
+        print("\n实验3: 跨模型共享密钥实验")
+        print("  - 多个不同模型使用相同密钥生成连贯文本")
+        print("  - 目的: 研究跨模型水印信号的兼容性和检测强度")
+        print("  - 适用场景: 多模型协作场景的水印设计")
         
-        print("="*80 + "\n")
+        print("\n" + "="*80)
+        print("\n【统计评估实验】")
+        print("-"*80)
+        
+        print("\n实验4: 滑动窗口检测")
+        print("  - 将文本分成连续的固定大小窗口")
+        print("  - 在每个窗口上单独计算 z-score")
+        print("  - 输出 z-score 曲线，反映水印信号随位置变化")
+        print("  - 适用场景: 检测文本中水印分布的均匀性")
+        
+        print("\n实验5: 窗口敏感性分析")
+        print("  - 系统地改变窗口大小 (如 25→50→100→200)")
+        print("  - 观察检测稳定性与噪声变化")
+        print("  - 绘制窗口长度 vs 平均 z-score 或检测准确率曲线")
+        print("  - 适用场景: 确定最优检测窗口大小")
+        
+        print("\n实验6: 最小可检测长度分析")
+        print("  - 找出在什么文本长度下能达到可靠检测")
+        print("  - 目标: FP/FN < 5%")
+        print("  - 输出图表或表格展示 z-score 与长度关系")
+        print("  - 适用场景: 确定水印系统的实际使用阈值")
+        
+        print("\n实验7: 完整统计评估")
+        print("  - 执行上述全部三项统计分析")
+        print("  - 生成完整的分析报告和图表")
+        print("  - 适用场景: 全面评估水印系统性能")
+        
+        print("\n" + "="*80 + "\n")
 
 
 def main():

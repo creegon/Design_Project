@@ -1,0 +1,109 @@
+{
+  "prompt": "The impact of artificial intelligence",
+  "watermark_config": {
+    "gamma": 0.5,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863
+  },
+  "generated_texts": {
+    "watermarked": {
+      "text": " (AI) on the future of work, particularly in the field of medicine, continues to be a topic of great interest and debate. With the advancements in computer science and machine learning, the potential for AI to revolutionize healthcare is becoming more and more evident. However, there are also many challenges and ethical concerns that need to be addressed, as AI systems may have the power to make or break careers.\nIn this article, we will delve into the potential impact of AI on medicine and healthcare, exploring how AI systems may change the way healthcare professionals work, the ethical challenges posed by these systems, and the potential for AI to reshape the future of medicine.\nImpact of AI on Medicine\nThe potential impact of AI on medicine is immense. AI systems have the ability to analyze vast amounts of data, identify patterns and correlations, and make decisions autonomously, enabling healthcare professionals to focus on more complex tasks. AI systems have also shown great potential in areas such as diagnosis, treatment planning, and patient monitoring, potentially improving the accuracy, speed, and efficiency of medical care.\nAI systems have the potential to revolutionize healthcare by improving the accuracy, speed, and efficiency of medical care.\nAI systems have the ability to analyze vast amounts of data, identify patterns and correlations, and make decisions autonomously, enabling healthcare professionals to focus on more complex tasks.\nAI systems have also shown great potential in areas such as diagnosis, treatment planning, and patient monitoring, potentially improving the accuracy, speed, and efficiency of medical care",
+      "length_chars": 1660,
+      "length_tokens": 300,
+      "detection": {
+        "z_score": 6.720557909691094,
+        "p_value": 9.05150341122386e-12,
+        "prediction": true,
+        "green_fraction": 0.728110599078341
+      }
+    },
+    "unwatermarked": {
+      "text": " on the future of work and society is one of the most important issues of our time. It is crucial to understand the implications of this technology on various aspects of human life, including employment and social relations.\nOne of the most significant effects of AI on employment is the potential for automation. As AI becomes more sophisticated, it can perform tasks that were once the domain of human workers, such as data entry, customer service, and even certain types of creative work. This has the potential to have a significant impact on the labor market, with some experts predicting that up to 50% of current jobs could be replaced by AI in the coming decades.\nHowever, the impact of AI on employment is not solely negative. AI can also have a positive impact on employment by improving productivity and efficiency, allowing workers to focus on more complex tasks that require human ingenuity and creativity. Additionally, AI can help to create new jobs in fields such as cybersecurity, data analytics, and robotics, which may require new skills and qualifications.\nAnother important aspect of the impact of AI on employment is the potential for job displacement. As AI becomes more widespread, some workers may find themselves out of a job due to automation. However, it is important to note that AI can also create new jobs, especially in fields where human creativity and judgment are required.\nThe impact of AI on employment is a complex and multifaceted issue. It is crucial to understand the potential benefits and challenges of this technology in order to ensure that it is used",
+      "length_chars": 1596,
+      "length_tokens": 300,
+      "detection": {
+        "z_score": -2.4634512493170497,
+        "p_value": 0.9931196696346827,
+        "prediction": false,
+        "green_fraction": 0.4259927797833935
+      }
+    }
+  },
+  "sliding_window": {
+    "window_size": 100,
+    "stride": 100,
+    "num_windows": 9,
+    "avg_z_score": 4.051582067264779,
+    "std_z_score": 0.6382225546554668,
+    "detection_rate": 1.0,
+    "avg_green_fraction": 0.7165813776683458
+  },
+  "window_sensitivity": {
+    "window_sizes": [
+      25,
+      50,
+      75,
+      100,
+      150,
+      200
+    ],
+    "avg_z_scores": [
+      2.0183750260852222,
+      2.8754305627243117,
+      3.5723577383332605,
+      4.039013720576973,
+      4.832895175223645,
+      5.51609168903802
+    ],
+    "std_z_scores": [
+      0.8157701308810025,
+      0.6664024616647555,
+      0.49483383757694505,
+      0.442505998170984,
+      0.7761074568116035,
+      0.6667485343150972
+    ],
+    "detection_rates": [
+      0.08695652173913043,
+      0.36363636363636365,
+      0.8571428571428571,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "optimal_window_size": 200,
+    "optimal_z_score": 5.51609168903802
+  },
+  "minimum_length": {
+    "test_range": [
+      20,
+      240
+    ],
+    "step_size": 10,
+    "num_tests": 23,
+    "min_success_length": 30,
+    "all_success_lengths": [
+      30,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240
+    ]
+  }
+}
