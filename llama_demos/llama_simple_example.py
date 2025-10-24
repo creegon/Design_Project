@@ -1,6 +1,7 @@
 """
-Llama 3.2 3B 简单示例
+Llama 简单示例
 最简单的使用示例，快速上手
+支持通过模型昵称（nickname）指定模型
 """
 
 import os
@@ -11,31 +12,50 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, LogitsProcessorList
 from extended_watermark_processor import WatermarkLogitsProcessor, WatermarkDetector
+from model_config_manager import ModelConfigManager
 
 
-def simple_example(model_name="meta-llama/Llama-2-7b-hf"):
+def simple_example(model_nickname="llama-2-7b"):
     """简单示例：生成并检测水印文本
     
     Args:
-        model_name: 模型名称，支持的模型包括：
-                   - meta-llama/Llama-2-7b-hf (默认)
-                   - meta-llama/Llama-2-13b-hf
-                   - meta-llama/Llama-3.2-1B
-                   - meta-llama/Llama-3.2-3B
-                   - 或任何兼容的Llama模型
+        model_nickname: 模型昵称，支持的模型包括（在 model_config.json 中配置）：
+                       - llama-2-7b (默认)
+                       - llama-2-13b
+                       - llama-2-7b-chat
+                       - llama-3.2-1b
+                       - llama-3.2-3b
+                       - deepseek-v3
+                       - deepseek-chat
+                       等等
     """
     
     print("\n" + "="*80)
     print("Llama 水印简单示例")
     print("="*80 + "\n")
     
-    # 1. 设置
+    # 1. 通过配置管理器解析模型
+    config_manager = ModelConfigManager()
+    model_info = config_manager.get_model_info_by_nickname(model_nickname)
+    
+    if not model_info:
+        print(f"❌ 错误: 找不到模型 '{model_nickname}'")
+        print(f"\n可用的模型:")
+        for name in config_manager.list_model_names():
+            print(f"  • {name}")
+        return
+    
+    model_name = model_info["model_identifier"]
+    
+    # 2. 设置
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
-    print(f"设备: {device}")
-    print(f"模型: {model_name}\n")
+    print(f"模型昵称: {model_nickname}")
+    print(f"模型标识: {model_name}")
+    print(f"API提供商: {model_info['model_config'].get('api_provider')}")
+    print(f"设备: {device}\n")
     
-    # 2. 加载模型和tokenizer
+    # 3. 加载模型和tokenizer
     print("加载模型...")
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     
@@ -161,11 +181,14 @@ def simple_example(model_name="meta-llama/Llama-2-7b-hf"):
 if __name__ == "__main__":
     import sys
     
-    # 支持命令行参数指定模型
+    # 支持命令行参数指定模型（使用昵称）
     if len(sys.argv) > 1:
-        model_name = sys.argv[1]
-        print(f"使用指定模型: {model_name}\n")
-        simple_example(model_name)
+        model_nickname = sys.argv[1]
+        print(f"使用指定模型: {model_nickname}\n")
+        simple_example(model_nickname)
     else:
         # 默认使用 Llama 2 7B
+        print("提示: 可以通过命令行参数指定模型，例如:")
+        print("  python llama_simple_example.py deepseek-v3")
+        print("  python llama_simple_example.py llama-2-13b\n")
         simple_example()

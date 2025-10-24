@@ -1,0 +1,39 @@
+{
+  "experiment_type": "cross_model_key_sharing",
+  "initial_prompt": "The future of artificial intelligence",
+  "continuation_tokens": 20,
+  "models": [
+    "llama-3.2-3b",
+    "llama-3.2-1b",
+    "llama-3.2-3b"
+  ],
+  "shared_config": {
+    "gamma": 0.5,
+    "delta": 2.0,
+    "hash_key": 12345
+  },
+  "fragments": [
+    {
+      "model": "llama-3.2-3b",
+      "prompt": "The future of artificial intelligence",
+      "new_tokens": " (AI) might not be as dystopian as the science fiction we’ve come to expect. As our world grows more interconnected and our lives become more digital, the need for AI is rising. AI’s role in the future of business and society could be immense, and it’s clear that the […]\n"
+    },
+    {
+      "model": "llama-3.2-1b",
+      "prompt": "is rising. AI’s role in the future of business and society could be immense, and it’s clear that the […]",
+      "new_tokens": " The future of business is driven by Artificial Intelligence (AI). What is the role of Artificial Intelligence in Business 2020? Artificial Intelligence and business will help companies become more efficient and improve their competitiveness. Artificial Intelligence in Business: A Guide for Beginners 1. For some time now, we have all"
+    },
+    {
+      "model": "llama-3.2-3b",
+      "prompt": "and improve their competitiveness. Artificial Intelligence in Business: A Guide for Beginners 1. For some time now, we have all",
+      "new_tokens": " been hearing a lot about the business of Artificial Intelligence (AI). For example, in the retail industry, AI has already been successfully used for personalized recommendation systems to attract more customers. Artificial Intelligence in Business: A Guide for Beginners 1. This is a huge leap from what we know today and a"
+    }
+  ],
+  "mixed_text": "The future of artificial intelligence  (AI) might not be as dystopian as the science fiction we’ve come to expect. As our world grows more interconnected and our lives become more digital, the need for AI is rising. AI’s role in the future of business and society could be immense, and it’s clear that the […]\n  The future of business is driven by Artificial Intelligence (AI). What is the role of Artificial Intelligence in Business 2020? Artificial Intelligence and business will help companies become more efficient and improve their competitiveness. Artificial Intelligence in Business: A Guide for Beginners 1. For some time now, we have all  been hearing a lot about the business of Artificial Intelligence (AI). For example, in the retail industry, AI has already been successfully used for personalized recommendation systems to attract more customers. Artificial Intelligence in Business: A Guide for Beginners 1. This is a huge leap from what we know today and a",
+  "detection": {
+    "z_score": 7.0149342352998145,
+    "p_value": 1.1502857038672575e-12,
+    "prediction": true,
+    "green_fraction": 0.7674418604651163
+  }
+}

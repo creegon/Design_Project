@@ -1,7 +1,7 @@
 """
 Llama Watermarking Demo
 支持多种Llama模型的水印生成和检测
-默认使用 Llama 2 7B 模型
+支持通过模型昵称（nickname）指定模型
 """
 
 import os
@@ -16,12 +16,13 @@ from transformers import (
     LogitsProcessorList
 )
 from extended_watermark_processor import WatermarkLogitsProcessor, WatermarkDetector
+from model_config_manager import ModelConfigManager
 
 
 class LlamaWatermarkDemo:
     def __init__(
         self,
-        model_name: str = "meta-llama/Llama-2-7b-hf",
+        model_nickname: str = "llama-2-7b",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         gamma: float = 0.25,
         delta: float = 2.0,
@@ -31,21 +32,41 @@ class LlamaWatermarkDemo:
         初始化Llama水印demo
         
         Args:
-            model_name: 模型名称或路径，支持的模型包括：
-                       - meta-llama/Llama-2-7b-hf (默认)
-                       - meta-llama/Llama-2-13b-hf
-                       - meta-llama/Llama-2-7b-chat-hf
-                       - meta-llama/Llama-3.2-1B
-                       - meta-llama/Llama-3.2-3B
-                       或任何兼容的Llama/HuggingFace模型
+            model_nickname: 模型昵称（在 model_config.json 中配置），支持的模型包括：
+                           - llama-2-7b (默认)
+                           - llama-2-13b
+                           - llama-2-7b-chat
+                           - llama-3.2-1b
+                           - llama-3.2-3b
+                           - deepseek-v3
+                           - deepseek-chat
+                           等等
             device: 运行设备 (cuda/cpu)
             gamma: 绿名单比例 (推荐 0.25)
             delta: 水印强度 (推荐 2.0)
             seeding_scheme: 种子方案 (推荐 selfhash)
         """
-        print(f"Loading model: {model_name}")
-        print(f"Device: {device}")
+        # 通过配置管理器解析模型
+        config_manager = ModelConfigManager()
+        model_info = config_manager.get_model_info_by_nickname(model_nickname)
         
+        if not model_info:
+            available_models = config_manager.list_model_names()
+            raise ValueError(
+                f"找不到模型 '{model_nickname}'。\n"
+                f"可用的模型: {', '.join(available_models)}"
+            )
+        
+        model_name = model_info["model_identifier"]
+        
+        print(f"模型昵称: {model_nickname}")
+        print(f"模型标识: {model_name}")
+        print(f"API提供商: {model_info['model_config'].get('api_provider')}")
+        print(f"设备: {device}")
+        
+        self.model_nickname = model_nickname
+        self.model_name = model_name
+        self.model_info = model_info
         self.device = device
         self.gamma = gamma
         self.delta = delta
@@ -244,29 +265,16 @@ class LlamaWatermarkDemo:
         return score_dict
 
 
-def main():
-    """主函数：演示水印生成和检测"""
+def main(demo):
+    """主函数：演示水印生成和检测
     
-    import sys
-    
-    # 支持命令行参数指定模型
-    model_name = "meta-llama/Llama-2-7b-hf"
-    if len(sys.argv) > 1:
-        model_name = sys.argv[1]
-        print(f"使用指定模型: {model_name}\n")
-    
+    Args:
+        demo: LlamaWatermarkDemo 实例
+    """
     print("=" * 80)
     print("Llama Watermarking Demo")
     print("=" * 80)
     print()
-    
-    # 初始化demo
-    demo = LlamaWatermarkDemo(
-        model_name=model_name,
-        gamma=0.25,
-        delta=2.0,
-        seeding_scheme="selfhash"
-    )
     
     # 测试提示
     test_prompts = [
@@ -305,4 +313,22 @@ def main():
 
 
 if __name__ == "__main__":
+    import sys
+    
+    # 支持命令行参数指定模型（使用昵称）
+    if len(sys.argv) > 1:
+        model_nickname = sys.argv[1]
+        print(f"使用指定模型: {model_nickname}\n")
+        
+        # 创建demo实例（使用指定模型）
+        demo = LlamaWatermarkDemo(model_nickname=model_nickname)
+    else:
+        print("提示: 可以通过命令行参数指定模型，例如:")
+        print("  python llama_watermark_demo.py deepseek-v3")
+        print("  python llama_watermark_demo.py llama-2-13b\n")
+        
+        # 使用默认模型
+        demo = LlamaWatermarkDemo()
+    
+    # 运行测试
     main()

@@ -1,7 +1,7 @@
 """
 Llama 批量测试脚本
 用于批量测试不同参数配置下的水印效果
-支持多种Llama模型，默认使用 Llama 2 7B
+支持通过模型昵称（nickname）指定模型
 """
 
 import os
@@ -20,6 +20,7 @@ from transformers import (
     LogitsProcessorList
 )
 from extended_watermark_processor import WatermarkLogitsProcessor, WatermarkDetector
+from model_config_manager import ModelConfigManager
 
 
 class LlamaBatchTester:
@@ -27,15 +28,35 @@ class LlamaBatchTester:
     
     def __init__(
         self,
-        model_name: str = "meta-llama/Llama-2-7b-hf",
+        model_nickname: str = "llama-2-7b",
         device: str = "cuda" if torch.cuda.is_available() else "cpu"
     ):
         print(f"\n{'='*80}")
         print("初始化批量测试器...")
         print(f"{'='*80}\n")
         
+        # 通过配置管理器解析模型
+        config_manager = ModelConfigManager()
+        model_info = config_manager.get_model_info_by_nickname(model_nickname)
+        
+        if not model_info:
+            available_models = config_manager.list_model_names()
+            raise ValueError(
+                f"找不到模型 '{model_nickname}'。\n"
+                f"可用的模型: {', '.join(available_models)}"
+            )
+        
+        model_name = model_info["model_identifier"]
+        
+        print(f"模型昵称: {model_nickname}")
+        print(f"模型标识: {model_name}")
+        print(f"API提供商: {model_info['model_config'].get('api_provider')}")
+        print(f"设备: {device}\n")
+        
         self.device = device
+        self.model_nickname = model_nickname
         self.model_name = model_name
+        self.model_info = model_info
         
         # 加载tokenizer
         print(f"加载tokenizer...")
@@ -317,11 +338,15 @@ def main():
     
     import sys
     
-    # 支持命令行参数指定模型
-    model_name = "meta-llama/Llama-2-7b-hf"
+    # 支持命令行参数指定模型（使用昵称）
+    model_nickname = "llama-2-7b"
     if len(sys.argv) > 1:
-        model_name = sys.argv[1]
-        print(f"使用指定模型: {model_name}\n")
+        model_nickname = sys.argv[1]
+        print(f"使用指定模型: {model_nickname}\n")
+    else:
+        print("提示: 可以通过命令行参数指定模型，例如:")
+        print("  python llama_batch_test.py deepseek-v3")
+        print("  python llama_batch_test.py llama-2-13b\n")
     
     # 测试提示词
     test_prompts = [
@@ -334,7 +359,7 @@ def main():
     
     # 初始化测试器
     tester = LlamaBatchTester(
-        model_name=model_name
+        model_nickname=model_nickname
     )
     
     # 运行批量测试

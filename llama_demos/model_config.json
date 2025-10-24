@@ -1,0 +1,189 @@
+{
+  "api_providers": [
+    {
+      "name": "DeepSeek",
+      "base_url": "https://api.deepseek.com/v1",
+      "api_key": "sk-87ef37e15eaa403a81e2492fc0616d51",
+      "client_type": "openai",
+      "max_retry": 2,
+      "timeout": 30,
+      "retry_interval": 10
+    },
+    {
+      "name": "SiliconFlow",
+      "base_url": "https://api.siliconflow.cn/v1",
+      "api_key": "your-siliconflow-api-key-here",
+      "client_type": "openai",
+      "max_retry": 3,
+      "timeout": 60,
+      "retry_interval": 15
+    },
+    {
+      "name": "HuggingFace",
+      "base_url": "https://api-inference.huggingface.co/models",
+      "api_key": "auto",
+      "client_type": "openai",
+      "max_retry": 2,
+      "timeout": 120,
+      "retry_interval": 20,
+      "description": "HuggingFace API - 使用 'auto' 将从 ~/.cache/huggingface/token 自动读取"
+    },
+    {
+      "name": "LocalLLM",
+      "base_url": "http://localhost:11434/v1",
+      "api_key": "not-required",
+      "client_type": "openai",
+      "max_retry": 1,
+      "timeout": 300,
+      "retry_interval": 5,
+      "description": "本地部署的模型服务（如Ollama）"
+    }
+  ],
+  "models": [
+    {
+      "model_identifier": "deepseek-ai/DeepSeek-V3",
+      "name": "deepseek-v3",
+      "api_provider": "DeepSeek",
+      "price_in": 2.0,
+      "price_out": 8.0,
+      "context_length": 128000,
+      "description": "DeepSeek V3 - 高性能大语言模型"
+    },
+    {
+      "model_identifier": "deepseek-ai/DeepSeek-V3",
+      "name": "siliconflow-deepseek-v3",
+      "api_provider": "SiliconFlow",
+      "price_in": 2.0,
+      "price_out": 8.0,
+      "context_length": 128000,
+      "description": "通过SiliconFlow API访问DeepSeek V3"
+    },
+    {
+      "model_identifier": "deepseek-chat",
+      "name": "deepseek-chat",
+      "api_provider": "DeepSeek",
+      "price_in": 1.0,
+      "price_out": 2.0,
+      "context_length": 32000,
+      "description": "DeepSeek Chat - 对话优化模型"
+    },
+    {
+      "model_identifier": "meta-llama/Llama-2-7b-hf",
+      "name": "llama-2-7b",
+      "api_provider": "HuggingFace",
+      "price_in": 0.0,
+      "price_out": 0.0,
+      "context_length": 4096,
+      "description": "Llama 2 7B - Meta开源模型",
+      "requires_auth": true
+    },
+    {
+      "model_identifier": "meta-llama/Llama-2-13b-hf",
+      "name": "llama-2-13b",
+      "api_provider": "HuggingFace",
+      "price_in": 0.0,
+      "price_out": 0.0,
+      "context_length": 4096,
+      "description": "Llama 2 13B - 更大参数量版本",
+      "requires_auth": true
+    },
+    {
+      "model_identifier": "meta-llama/Llama-2-7b-chat-hf",
+      "name": "llama-2-7b-chat",
+      "api_provider": "HuggingFace",
+      "price_in": 0.0,
+      "price_out": 0.0,
+      "context_length": 4096,
+      "description": "Llama 2 7B Chat - 对话优化版本",
+      "requires_auth": true
+    },
+    {
+        "model_identifier": "meta-llama/Llama-3.1-8B",
+        "name": "llama-3.1-8b",
+        "api_provider": "HuggingFace",
+        "price_in": 0.0,
+        "price_out": 0.0,
+        "context_length": 8192,
+        "description": "Llama 3.1 8B - 大参数量模型",
+        "requires_auth": true
+    },
+    {
+      "model_identifier": "meta-llama/Llama-3.2-1B",
+      "name": "llama-3.2-1b",
+      "api_provider": "HuggingFace",
+      "price_in": 0.0,
+      "price_out": 0.0,
+      "context_length": 8192,
+      "description": "Llama 3.2 1B - 轻量级模型",
+      "requires_auth": true
+    },
+    {
+      "model_identifier": "meta-llama/Llama-3.2-3B",
+      "name": "llama-3.2-3b",
+      "api_provider": "HuggingFace",
+      "price_in": 0.0,
+      "price_out": 0.0,
+      "context_length": 8192,
+      "description": "Llama 3.2 3B - 中等参数量",
+      "requires_auth": true
+    },
+    {
+      "model_identifier": "llama2:7b",
+      "name": "local-llama-2-7b",
+      "api_provider": "LocalLLM",
+      "price_in": 0.0,
+      "price_out": 0.0,
+      "context_length": 4096,
+      "description": "本地运行的Llama 2 7B"
+    }
+  ],
+  "watermark_configs": {
+    "default": {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "strong": {
+      "gamma": 0.5,
+      "delta": 3.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "weak": {
+      "gamma": 0.2,
+      "delta": 1.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "balanced": {
+      "gamma": 0.3,
+      "delta": 2.5,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    }
+  },
+  "generation_configs": {
+    "default": {
+      "max_new_tokens": 200,
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": 50,
+      "do_sample": true
+    },
+    "creative": {
+      "max_new_tokens": 300,
+      "temperature": 1.2,
+      "top_p": 0.9,
+      "top_k": 100,
+      "do_sample": true
+    },
+    "precise": {
+      "max_new_tokens": 150,
+      "temperature": 0.7,
+      "top_p": 0.85,
+      "top_k": 30,
+      "do_sample": true
+    }
+  }
+}

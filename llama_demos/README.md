@@ -10,7 +10,42 @@
 | `llama_watermark_demo.py` | 完整功能演示 | ⭐⭐ |
 | `llama_interactive_demo.py` | 交互式命令行界面 | ⭐⭐⭐ |
 | `llama_batch_test.py` | 批量参数测试 | ⭐⭐⭐⭐ |
-| `llama_model_config.py` | 模型配置管理 | ⭐⭐ |
+| `model_config.json` | 模型和API配置文件 | ⭐⭐ |
+| `model_config_manager.py` | 配置管理工具 | ⭐⭐ |
+
+## ⚙️ 模型配置
+
+所有模型和API提供商配置都在 `model_config.json` 中管理。
+
+### 查看配置
+
+```powershell
+# 查看所有配置摘要
+python model_config_manager.py --summary
+
+# 列出所有API提供商
+python model_config_manager.py --list-providers
+
+# 列出所有模型
+python model_config_manager.py --list-models
+
+# 查看特定模型详情
+python model_config_manager.py --model deepseek-v3
+
+# 列出所有水印配置
+python model_config_manager.py --list-watermark
+
+# 列出所有生成配置
+python model_config_manager.py --list-generation
+```
+
+### 配置文件结构
+
+`model_config.json` 包含：
+- **api_providers**: API服务提供商配置（DeepSeek, SiliconFlow, HuggingFace等）
+- **models**: 模型配置（包括标识符、价格、上下文长度等）
+- **watermark_configs**: 水印参数预设（default, strong, weak, balanced）
+- **generation_configs**: 生成参数预设（default, creative, precise）
 
 ## 🚀 快速开始
 

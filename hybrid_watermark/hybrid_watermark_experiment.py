@@ -17,6 +17,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, LogitsProcessorList
 from extended_watermark_processor import WatermarkLogitsProcessor, WatermarkDetector
+
+# 动态导入 model_config_manager
+llama_demos_path = os.path.join(os.path.dirname(__file__), '..', 'llama_demos')
+sys.path.insert(0, os.path.abspath(llama_demos_path))
+from model_config_manager import ModelConfigManager
+
 from typing import List, Dict, Tuple
 import json
 from datetime import datetime
@@ -28,25 +34,45 @@ class HybridWatermarkExperiment:
     
     def __init__(
         self,
-        model_name: str = "meta-llama/Llama-2-7b-hf",
+        model_nickname: str = "llama-2-7b",
         device: str = "cuda" if torch.cuda.is_available() else "cpu"
     ):
         """
         初始化实验环境
         
         Args:
-            model_name: 模型名称
+            model_nickname: 模型昵称（在 model_config.json 中配置）
             device: 运行设备
         """
         print(f"\n{'='*80}")
         print("混合水印实验系统初始化")
         print(f"{'='*80}\n")
         
+        # 通过配置管理器解析模型
+        config_manager = ModelConfigManager()
+        model_info = config_manager.get_model_info_by_nickname(model_nickname)
+        
+        if not model_info:
+            available_models = config_manager.list_model_names()
+            raise ValueError(
+                f"找不到模型 '{model_nickname}'。\n"
+                f"可用的模型: {', '.join(available_models)}"
+            )
+        
+        model_name = model_info["model_identifier"]
+        
+        print(f"模型昵称: {model_nickname}")
+        print(f"模型标识: {model_name}")
+        print(f"API提供商: {model_info['model_config'].get('api_provider')}")
+        print(f"设备: {device}\n")
+        
         self.device = device
+        self.model_nickname = model_nickname
         self.model_name = model_name
+        self.model_info = model_info
         
         # 加载模型
-        print(f"加载模型: {model_name}")
+        print(f"加载模型...")
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name,
             trust_remote_code=True
@@ -629,14 +655,26 @@ class HybridWatermarkExperiment:
 def main():
     """运行所有混合水印实验"""
     
+    import sys
+    
+    # 支持命令行参数指定模型（使用昵称）
+    model_nickname = "llama-2-7b"
+    if len(sys.argv) > 1:
+        model_nickname = sys.argv[1]
+        print(f"使用指定模型: {model_nickname}\n")
+    else:
+        print("提示: 可以通过命令行参数指定模型，例如:")
+        print("  python hybrid_watermark_experiment.py deepseek-v3")
+        print("  python hybrid_watermark_experiment.py llama-2-13b\n")
+    
     print("\n" + "="*80)
     print("混合水印实验系统")
-    print("基于 Llama 2 7B 模型")
+    print(f"模型: {model_nickname}")
     print("="*80 + "\n")
     
     # 初始化实验环境
     experiment = HybridWatermarkExperiment(
-        model_name="meta-llama/Llama-2-7b-hf"
+        model_nickname=model_nickname
     )
     
     # ========== 实验1: 片段级混合 ==========

@@ -1,23 +1,40 @@
 """
 混合水印交互式实验界面
 允许用户自定义实验参数并实时查看结果
+支持通过模型昵称（nickname）指定模型
 """
+
+import os
+import sys
+# 添加项目根目录到路径
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import argparse
 from hybrid_watermark_experiment import HybridWatermarkExperiment
+
+# 动态导入 model_config_manager
+llama_demos_path = os.path.join(os.path.dirname(__file__), '..', 'llama_demos')
+sys.path.insert(0, os.path.abspath(llama_demos_path))
+from model_config_manager import ModelConfigManager
+
 import json
 
 
 def parse_args():
+    # 加载可用模型列表
+    config_manager = ModelConfigManager()
+    available_models = config_manager.list_model_names()
+    
     parser = argparse.ArgumentParser(
-        description="混合水印交互式实验"
+        description="混合水印交互式实验 - 支持模型昵称"
     )
     
     parser.add_argument(
-        "--model_name",
+        "--model",
         type=str,
-        default="meta-llama/Llama-2-7b-hf",
-        help="模型名称"
+        default="llama-3.2-3b",
+        help=f"模型昵称 (默认: llama-3.2-3b)\n"
+             f"可用模型: {', '.join(available_models[:5])}..."
     )
     
     parser.add_argument(
@@ -36,8 +53,31 @@ class InteractiveHybridExperiment:
     
     def __init__(self, args):
         self.args = args
+        
+        # 通过配置管理器解析模型
+        config_manager = ModelConfigManager()
+        model_info = config_manager.get_model_info_by_nickname(args.model)
+        
+        if not model_info:
+            available_models = config_manager.list_model_names()
+            raise ValueError(
+                f"找不到模型 '{args.model}'。\n"
+                f"可用的模型: {', '.join(available_models)}"
+            )
+        
+        model_name = model_info["model_identifier"]
+        
+        print(f"\n模型昵称: {args.model}")
+        print(f"模型标识: {model_name}")
+        print(f"API提供商: {model_info['model_config'].get('api_provider')}\n")
+        
+        self.model_nickname = args.model
+        self.model_name = model_name
+        self.model_info = model_info
+        
+        # 初始化实验
         self.experiment = HybridWatermarkExperiment(
-            model_name=args.model_name,
+            model_nickname=args.model,
             device=args.device
         )
     
@@ -46,7 +86,7 @@ class InteractiveHybridExperiment:
         
         print("\n" + "="*80)
         print("混合水印交互式实验系统")
-        print(f"模型: {self.args.model_name}")
+        print(f"模型: {self.model_nickname} ({self.model_name})")
         print("="*80)
         
         while True:
@@ -54,13 +94,14 @@ class InteractiveHybridExperiment:
             print("  1 - 片段级混合水印")
             print("  2 - 种子混合实验")
             print("  3 - 参数混合实验")
-            print("  4 - 密钥共享实验")
-            print("  5 - 自定义实验")
-            print("  6 - 查看实验说明")
+            print("  4 - 密钥共享实验 (单模型)")
+            print("  5 - 跨模型共享密钥实验 (多模型)")
+            print("  6 - 自定义实验")
+            print("  7 - 查看实验说明")
             print("  q - 退出")
             print()
             
-            choice = input("请输入选择 (1-6/q): ").strip().lower()
+            choice = input("请输入选择 (1-7/q): ").strip().lower()
             
             if choice == 'q':
                 print("\n退出实验系统。\n")
@@ -79,9 +120,12 @@ class InteractiveHybridExperiment:
                 self.run_key_sharing()
             
             elif choice == '5':
-                self.run_custom_experiment()
+                self.run_cross_model_key_sharing()
             
             elif choice == '6':
+                self.run_custom_experiment()
+            
+            elif choice == '7':
                 self.show_experiment_info()
             
             else:
@@ -106,22 +150,30 @@ class InteractiveHybridExperiment:
         fragment_configs = []
         print(f"\n配置 {num_fragments} 个片段:")
         
+        # 设定好三组默认参数以供参考
+        default_params = [
+            {'gamma': 0.25, 'delta': 2.0, 'hash_key': 15485863},
+            {'gamma': 0.5, 'delta': 1.5, 'hash_key': 32452843},
+            {'gamma': 0.1, 'delta': 3.0, 'hash_key': 49979687}
+        ]
+        
         for i in range(num_fragments):
             print(f"\n片段 {i+1}:")
-            gamma = input(f"  Gamma (默认0.25): ").strip()
-            gamma = float(gamma) if gamma else 0.25
+            gamma_input = input(f"  输入Gamma值 (默认{default_params[i % len(default_params)]['gamma']}): ").strip()
+            gamma = float(gamma_input) if gamma_input else default_params[i % len(default_params)]['gamma']
             
-            delta = input(f"  Delta (默认2.0): ").strip()
-            delta = float(delta) if delta else 2.0
+            delta_input = input(f"  输入Delta值 (默认{default_params[i % len(default_params)]['delta']}): ").strip()
+            delta = float(delta_input) if delta_input else default_params[i % len(default_params)]['delta']
             
-            hash_key = input(f"  Hash Key (默认15485863): ").strip()
-            hash_key = int(hash_key) if hash_key else 15485863
+            hash_key_input = input(f"  输入Hash Key (默认{default_params[i % len(default_params)]['hash_key']}): ").strip()
+            hash_key = int(hash_key_input) if hash_key_input else default_params[i % len(default_params)]['hash_key']
             
             fragment_configs.append({
                 'gamma': gamma,
                 'delta': delta,
                 'hash_key': hash_key
             })
+            
         
         # 运行实验
         print("\n开始实验...")
@@ -276,6 +328,190 @@ class InteractiveHybridExperiment:
         save = input("\n是否保存结果? (y/n): ").strip().lower()
         if save == 'y':
             self.experiment.save_results(result)
+    
+    def run_cross_model_key_sharing(self):
+        """运行跨模型共享密钥实验"""
+        print("\n" + "-"*80)
+        print("实验5: 跨模型共享密钥")
+        print("-"*80 + "\n")
+        print("此实验使用多个模型，用相同的密钥生成文本，然后检测混合效果\n")
+        
+        # 列出可用模型
+        config_manager = ModelConfigManager()
+        available_models = config_manager.list_model_names()
+        
+        print("可用模型:")
+        for i, model in enumerate(available_models, 1):
+            print(f"  {i}. {model}")
+        
+        # 选择模型
+        num_models = input(f"\n选择模型数量 (默认2，当前已加载1个): ").strip()
+        num_models = int(num_models) if num_models else 2
+        
+        selected_models = [self.model_nickname]  # 已加载的模型
+        print(f"\n已加载模型: {self.model_nickname}")
+        
+        # 选择额外的模型
+        for i in range(1, num_models):
+            model_input = input(f"输入第{i+1}个模型昵称: ").strip()
+            if model_input and model_input in available_models:
+                selected_models.append(model_input)
+            else:
+                print(f"  警告: 模型'{model_input}'不可用，跳过")
+        
+        if len(selected_models) < 2:
+            print("\n需要至少2个模型，实验取消")
+            return
+        
+        print(f"\n将使用 {len(selected_models)} 个模型: {', '.join(selected_models)}")
+        
+        # 共享密钥配置
+        shared_key = input("\n输入共享Hash Key (默认12345): ").strip()
+        shared_key = int(shared_key) if shared_key else 12345
+        
+        gamma = input("输入Gamma值 (默认0.5): ").strip()
+        gamma = float(gamma) if gamma else 0.5
+        
+        delta = input("输入Delta值 (默认2.0): ").strip()
+        delta = float(delta) if delta else 2.0
+        
+        shared_config = {
+            'gamma': gamma,
+            'delta': delta,
+            'hash_key': shared_key
+        }
+        
+        print(f"\n共享配置: gamma={gamma}, delta={delta}, key={shared_key}")
+        
+        # 获取初始提示词
+        default_prompt = "The future of artificial intelligence"
+        initial_prompt = input(f"\n输入初始提示词 (回车使用默认): ").strip()
+        initial_prompt = initial_prompt if initial_prompt else default_prompt
+        
+        # 链接长度配置
+        continuation_tokens = input("每个模型使用前序文本的最后多少个token作为提示 (默认20): ").strip()
+        continuation_tokens = int(continuation_tokens) if continuation_tokens else 20
+        
+        # 加载额外的模型并生成
+        print("\n开始实验...")
+        fragments = []
+        experiments = {}
+        cumulative_text = initial_prompt  # 累积文本，从初始prompt开始
+        
+        # 使用已加载的模型生成第一个片段
+        print(f"\n[1/{len(selected_models)}] 使用 {selected_models[0]} 生成...")
+        print(f"  提示词: {initial_prompt}")
+        processor = self.experiment.create_watermark_processor(**shared_config)
+        new_tokens = self.experiment.generate_with_watermark(
+            prompt=initial_prompt,
+            watermark_processor=processor,
+            max_new_tokens=60
+        )
+        fragments.append({
+            'model': selected_models[0],
+            'prompt': initial_prompt,
+            'new_tokens': new_tokens
+        })
+        cumulative_text = cumulative_text + " " + new_tokens  # 追加新生成的tokens
+        print(f"  ✓ 生成完成: {new_tokens[:60]}...")
+        
+        # 加载并使用其他模型
+        for i, model_nick in enumerate(selected_models[1:], 2):
+            print(f"\n[{i}/{len(selected_models)}] 加载模型 {model_nick}...")
+            
+            try:
+                exp = HybridWatermarkExperiment(
+                    model_nickname=model_nick,
+                    device=self.args.device
+                )
+                experiments[model_nick] = exp
+                
+                # 从前一个文本的末尾提取continuation prompt
+                tokens = cumulative_text.split()
+                continuation_prompt = ' '.join(tokens[-continuation_tokens:])
+                print(f"  提示词 (续接): ...{continuation_prompt}")
+                
+                processor = exp.create_watermark_processor(**shared_config)
+                new_tokens = exp.generate_with_watermark(
+                    prompt=continuation_prompt,
+                    watermark_processor=processor,
+                    max_new_tokens=60
+                )
+                
+                fragments.append({
+                    'model': model_nick,
+                    'prompt': continuation_prompt,
+                    'new_tokens': new_tokens
+                })
+                
+                # 追加新生成的tokens到累积文本
+                cumulative_text = cumulative_text + " " + new_tokens
+                print(f"  ✓ 生成完成: {new_tokens[:60]}...")
+                print(f"  ✓ 生成完成: {generated_text[-60:] if len(generated_text) > 60 else generated_text}...")
+            except Exception as e:
+                print(f"  ✗ 错误: {e}")
+        
+        # 混合文本就是最终的累积文本
+        mixed_text = cumulative_text
+        
+        # 使用共享密钥检测
+        print("\n使用共享密钥检测混合文本...")
+        detector = self.experiment.create_watermark_detector(
+            gamma=shared_config['gamma'],
+            seeding_scheme='selfhash',
+            hash_key=shared_config['hash_key']
+        )
+        result = detector.detect(mixed_text)
+        
+        # 显示结果
+        print("\n" + "="*80)
+        print("实验结果")
+        print("="*80)
+        
+        print(f"\n初始提示词: {initial_prompt}")
+        print(f"使用的模型: {', '.join(selected_models)}")
+        print(f"共享配置: γ={gamma}, δ={delta}, key={shared_key}")
+        print(f"续接token数: {continuation_tokens}")
+        
+        print("\n各模型生成过程:")
+        for i, frag in enumerate(fragments, 1):
+            print(f"\n片段 {i} - 模型: {frag['model']}")
+            print(f"  提示: {frag['prompt'][:80]}...")
+            print(f"  新生成: {frag['new_tokens'][:100]}...")
+        
+        print(f"\n最终混合文本 (长度: {len(mixed_text)} 字符):")
+        print(f"  开头: {mixed_text[:150]}...")
+        if len(mixed_text) > 300:
+            print(f"  结尾: ...{mixed_text[-150:]}")
+        
+        print(f"\n混合文本检测结果:")
+        print(f"  Z-score: {result['z_score']:.4f}")
+        print(f"  P-value: {result['p_value']:.6f}")
+        print(f"  检测结果: {'✓ 检测到水印' if result['prediction'] else '✗ 未检测到水印'}")
+        print(f"  绿色token比例: {result['green_fraction']:.4f}")
+        
+        # 清理额外加载的模型
+        for exp in experiments.values():
+            del exp
+        
+        save = input("\n是否保存结果? (y/n): ").strip().lower()
+        if save == 'y':
+            result_data = {
+                'experiment_type': 'cross_model_key_sharing',
+                'initial_prompt': initial_prompt,
+                'continuation_tokens': continuation_tokens,
+                'models': selected_models,
+                'shared_config': shared_config,
+                'fragments': fragments,
+                'mixed_text': mixed_text,
+                'detection': {
+                    'z_score': float(result['z_score']),
+                    'p_value': float(result['p_value']),
+                    'prediction': bool(result['prediction']),
+                    'green_fraction': float(result['green_fraction'])
+                }
+            }
+            self.experiment.save_results(result_data)
     
     def run_custom_experiment(self):
         """运行自定义实验"""

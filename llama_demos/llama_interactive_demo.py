@@ -1,7 +1,7 @@
 """
 Llama 交互式水印Demo
 支持用户通过命令行界面进行交互式文本生成和水印检测
-支持多种Llama模型，默认使用 Llama 2 7B
+支持通过模型昵称（nickname）指定模型
 """
 
 import os
@@ -17,21 +17,25 @@ from transformers import (
     LogitsProcessorList
 )
 from extended_watermark_processor import WatermarkLogitsProcessor, WatermarkDetector
+from model_config_manager import ModelConfigManager
 
 
 def parse_args():
     """解析命令行参数"""
+    # 加载可用模型列表
+    config_manager = ModelConfigManager()
+    available_models = config_manager.list_model_names()
+    
     parser = argparse.ArgumentParser(
-        description="Llama Interactive Watermarking Demo - 支持多种Llama模型"
+        description="Llama Interactive Watermarking Demo - 支持多种模型"
     )
     
     parser.add_argument(
-        "--model_name",
+        "--model",
         type=str,
-        default="meta-llama/Llama-2-7b-hf",
-        help="Llama模型名称或路径 (默认: Llama-2-7b-hf)\n"
-             "支持的模型: Llama-2-7b-hf, Llama-2-13b-hf, Llama-2-7b-chat-hf, "
-             "Llama-3.2-1B, Llama-3.2-3B 等"
+        default="llama-2-7b",
+        help=f"模型昵称 (默认: llama-2-7b)\n"
+             f"可用的模型: {', '.join(available_models)}"
     )
     
     parser.add_argument(
@@ -94,14 +98,36 @@ class InteractiveLlamaWatermark:
         self.args = args
         self.device = args.device
         
+        # 通过配置管理器解析模型
+        config_manager = ModelConfigManager()
+        model_info = config_manager.get_model_info_by_nickname(args.model)
+        
+        if not model_info:
+            available_models = config_manager.list_model_names()
+            raise ValueError(
+                f"找不到模型 '{args.model}'。\n"
+                f"可用的模型: {', '.join(available_models)}"
+            )
+        
+        model_name = model_info["model_identifier"]
+        
+        print(f"\n模型昵称: {args.model}")
+        print(f"模型标识: {model_name}")
+        print(f"API提供商: {model_info['model_config'].get('api_provider')}")
+        print(f"设备: {self.device}\n")
+        
+        self.model_nickname = args.model
+        self.model_name = model_name
+        self.model_info = model_info
+        
         print("\n" + "="*80)
         print("正在加载模型...")
         print("="*80 + "\n")
         
         # 加载tokenizer
-        print(f"加载tokenizer: {args.model_name}")
+        print(f"加载tokenizer: {model_name}")
         self.tokenizer = AutoTokenizer.from_pretrained(
-            args.model_name,
+            model_name,
             trust_remote_code=True
         )
         
@@ -112,7 +138,7 @@ class InteractiveLlamaWatermark:
         # 加载模型
         print(f"加载模型到设备: {self.device}")
         self.model = AutoModelForCausalLM.from_pretrained(
-            args.model_name,
+            model_name,
             torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
             device_map="auto" if self.device == "cuda" else None,
             trust_remote_code=True
