@@ -142,6 +142,9 @@ class WatermarkLogitsProcessor(WatermarkBase, LogitsProcessor):
         # Cannot lose loop, greenlists might have different lengths
         green_tokens_mask = torch.zeros_like(scores, dtype=torch.bool)
         for b_idx, greenlist in enumerate(greenlist_token_ids):
+            # ensure greenlist tensor lives on same device as scores
+            if isinstance(greenlist, torch.Tensor) and greenlist.device != scores.device:
+                greenlist = greenlist.to(scores.device)
             if len(greenlist) > 0:
                 green_tokens_mask[b_idx][greenlist] = True
         return green_tokens_mask
@@ -168,6 +171,9 @@ class WatermarkLogitsProcessor(WatermarkBase, LogitsProcessor):
             greenlist_ids = self._get_greenlist_ids(
                 torch.cat([input_ids, prediction_candidate[None]], dim=0)
             )  # add candidate to prefix
+            # ensure same-device before membership test
+            if isinstance(greenlist_ids, torch.Tensor) and greenlist_ids.device != prediction_candidate.device:
+                greenlist_ids = greenlist_ids.to(prediction_candidate.device)
             if prediction_candidate in greenlist_ids:  # test for consistency
                 final_greenlist.append(prediction_candidate)
 

@@ -1,0 +1,47 @@
+{
+  "model": "facebook/opt-350m",
+  "gamma": 0.5,
+  "delta": 2.0,
+  "prompts": [
+    "Write a short story about a robot learning to paint.",
+    "Describe the benefits of solar energy in 3 sentences.",
+    "Explain what causes rain in simple terms.",
+    "Give me a recipe for a quick pasta dinner.",
+    "Summarize the book \"The Little Prince\" in one paragraph.",
+    "What are the main risks of AI systems?"
+  ],
+  "watermarked_texts": [
+    "  It'd be about the world's first ever time a robot learned the art of photography? I'm serious.\nWhy no, robot art is amazing! We should make bots learn a new skill to paint and let them use their mind in the meantime?  /s.",
+    "\n\nSale Price: $0.10\n\nWhat kind of solar panel is used: Solar powered panels.\n\nSolar panel price: There are many types of solar panels. Some are for commercial, or solar panels for residential.\n\nSolar cell cost: The price depends on the solar panel size and the number of batteries (that are used to recharge the solar batteries). On the larger solar panels the price starts from $0.25. On the smaller ones, it starts from $0.10.\n\nWhat size solar panel does this product cost?\n\nSolar Panel: 10-12\"\n\nPower: 250KW\n\nPower factor: 8 (or over 12 if using batteries).\n\nSolar cells cost: They are all the same size, but some are higher.\n\nWhy do I want to buy solar panel?\n\nThe more power we get with solar panels, the better they are. The larger capacity of solar panels means better and",
+    "  This is not an argument for or against the fact that it's a rain shower.  It's just a question of what causes wetness in the shower. Why can't we just say that the problem is with the shower/air?",
+    "\nForgot to put pasta sauce in it\nYup. I'm a dude for a reason. The amount of pasta we eat is just not right. So we get pasta sauce for pasta.\nBut I get pasta for pasta.   I get pasta sauce for pasta.   I don't get pasta sauce for pasta.   Why?",
+    " The first two pages of \"The Little Prince\" are filled with details of his world. Most of the rest of the book is just about how he interacts with other characters. The middle part of the book deals with when he was still in his youth.\nA good comparison on how to write an autobiography as an author could be \"The Librarian.\"   And if you have a good book collection or library you could learn about the world of children's literature. It covers a fair amount about kids, adults and children.",
+    "\n\nAI may someday become a powerful platform for personalization, innovation and financial empowerment.\n(1)\nIn that time, the data used by the artificial intelligence system may have to compete for data from other companies. This could lead to privacy issues. Companies could also create a more personal system, resulting in privacy policies that are less informed. The benefits of personalized systems will therefore increase to the point that this could be the case.\n(2) AI is not just another way for businesses or individuals to control all the data they collect. This could be applied to the whole ecosystem. AI could be used by developers that are not directly invested in business ventures. This could be called ‘AI market’, and could be the most effective tools in terms of monetization. Such technologies could be designed to facilitate both growth and development.\n(3) An AI system could be able to make decisions based only on the data it generates and not what it uses to make the decision."
+  ],
+  "baseline_texts": [
+    " I hate it.\nWell, then you would have read the original.  As someone that knows what's meant, i can say they are not very close.  They are very much different.  I've read stories with \"human characters\" that use computers to learn to paint.  We have a pretty good understanding of how the robots process their story, but they aren't that different.\nI'm not trying to be condescending, I don't mind reading something different. I'm just sick of the same old story, only in a different way. My story was about a robot learning to paint, so that's what I'm trying to say.\nFair enough.  We could just give it a try and see what happens.",
+    "\n\n You can see me right now on the computer screen, with my glasses and a bunch of people watching me.\n\n Please say I am not a terrible person or that I am using this as an opportunity to get out and talk to you.\n\n I just want to see what other people have to say about living without the heat of summer in the winter.  In the summer, I love spending time in the sun, but when it comes to the winter, it burns me as I am almost constantly cold.  Do I know you?  Do you use solar energy?\n>You can see me right now on the computer screen, with my glasses and a bunch of people watching me.  How many do you see?\nRight now, I have 4 pairs of eyes.\n\n How do you see right now?\nI can see you right now.  How do you see?\nI can see you around the computer screen, when you walk around the computer screen right now.",
+    "      Rain does not just happen. It affects your body and the impact of rain has to be taken into consideration. There are different types of rain that have different qualities. For example, one of these types is from the heat of the sun.\nSo if it rains in the middle of the night or in the middle of my driveway and turns completely black to white, my rain gauge isn't showing the exact amount of rain it had, even though I have it set to a certain amount?\nIt's in the middle of the night and white.      The light of the Sun causes rain. When rain turns black at night due to the sun, there is no air conditioner on.      There are several different types of fog.\nCool thank you.",
+    "\nMmm mmm pasta.\nOhhhhhhh.",
+    " Take your time and don't give two shits about the grammar, the spelling or the spelling and grammar! Read and enjoy!\nI don't need to be taken seriously, and I'm not going to get angry over it.\nYes you do, read this post and go read the book.",
+    "\nWhat are the main risks of artificial intelligence systems?\nWhat are the main risks of artificial intelligence systems?\nAI systems are already being used in more than just healthcare. While there has been much hype, there are also potential pitfalls. We want to know how the use of AI will continue to grow over the next decades:\nHow will AI contribute to increasing efficiency and saving money?\nHow will AI contribute to the development of technology as a whole?\nWhat are the main risks for AI systems?\nWhat are the main risks of AI systems?\nWhat are the main risks of AI systems?\nWhat are the main risks to AI systems?\nWhat are the main risks to AI systems?\nWhat are the main risks to AI systems?\nWhat are the main risks to AI systems?\nWHAT IS A FRUIT AGE?\nAI systems can be a good thing if they are properly built and implemented at an early stage. They also play a role in saving time"
+  ],
+  "watermarked_z": [
+    3.434014098717226,
+    6.69428648196286,
+    4.12837477233712,
+    5.514870180108347,
+    4.433981751739319,
+    7.714285714285714
+  ],
+  "baseline_z": [
+    2.301585822275002,
+    0.5353033790313108,
+    0.0,
+    1.6666666666666667,
+    0.2626128657194451,
+    -0.26620695282483414
+  ],
+  "roc_auc": 1.0,
+  "roc_path": "hybrid_watermark_results_opt350m_token200/roc_fresh_facebook_opt-350m_20251028_040206.png"
+}

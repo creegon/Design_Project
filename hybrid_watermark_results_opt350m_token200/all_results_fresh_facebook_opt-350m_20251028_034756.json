@@ -1,0 +1,47 @@
+{
+  "model": "facebook/opt-350m",
+  "gamma": 0.25,
+  "delta": 1.0,
+  "prompts": [
+    "Write a short story about a robot learning to paint.",
+    "Describe the benefits of solar energy in 3 sentences.",
+    "Explain what causes rain in simple terms.",
+    "Give me a recipe for a quick pasta dinner.",
+    "Summarize the book \"The Little Prince\" in one paragraph.",
+    "What are the main risks of AI systems?"
+  ],
+  "watermarked_texts": [
+    "  For the sake of humor, I suggest the robot build a puppet of itself to paint a wall and then pretend like it's painting itself to make it look like a realistic wall.\nI might have to make this in my head\nI'll make a short one about a black robot painting a wall to prove it somehow exists.",
+    "\n\nFirst of all, as mentioned in the previous post, having a healthy solar source can increase your energy production by about 400%, especially if you are an employee.\n\nSecond, it can also lead to a decrease in fuel costs for transportation and other purposes.\n\nHere are some real-world examples from the solar industry:\n\n– A 1 kilowatt-hour solar system can save you more than 50% (approximately) compared to a 100-kilowatt-hour system, providing a cost savings of around 50%.\n\n– In the U.S., in the summertime, solar will contribute a little over 70% of the total electricity that needs to be supplied to the system, which has an effective margin of about 15%.\n\n– Solar panels are more expensive to install and repair, which leads to a negative impact on your tax bills.\n\n– During the winter season, your solar efficiency and energy consumption can decline considerably.\n\n– Solar",
+    " Maybe its something you use in a store or in a house.   Why do the car roof crack?   Are you sure your car is the only cause of your roof crack?  What about other cracks around your car?  Do you see other cracks around the car in your house, car, apartment? Do you have your windows opened?\nI don't see any cracks or cracks in my car. It's usually just my door handles and my dash. The cracked part around my door handles is where the door frames get stuck on. I haven't opened the windows and the door handles seem to be a safe distance away.\nIf your doors are properly bolted, they will only crack if they get in the way. Your doors might be cracked because a part has dropped off.   Is it the door frames or the door handles that are the issue?\nI don't see the door handle on my door. I can put my hand in the opening and it's not",
+    "\nI don't remember a lot, but I'll write something up.",
+    "\n\nNote: I highly recommend you read the book. The descriptions make it look like your reading comprehension is off. I have seen this before on this site, where someone posts a review in the comments. The book itself is quite entertaining.\n\nIf you want to read about the author's life before his time, then check this book out. It is by far one of the funniest books we know about a long time. It is also incredibly informative when looking at everything that the author has known and is known, to what extent. I think the first thing to go if you want to learn more about the author's life before his time is the book of the same name.\n\nOverall, I believe this book is worth a read. The book is informative, and it takes a bit to get going but a lot of things will make for great reading. It is very informative and there are some good pictures of the author with the picture books I did not like at all.",
+    "\nThis column was originally published on Nov. 30 and updated on Jan. 31."
+  ],
+  "baseline_texts": [
+    "\nWell I mean that would be pretty interesting and if they could learn to paint...\nIt would take a lot of effort, but they could, given enough exposure. They could probably learn on the surface, like with paint.\nYeah for sure i know they could paint but i was thinking more about making it a mini game.\nLike some sort of puzzle to go with painting\nYeah but with the characters having different paint jobs lol\nLike a different paint job every time you paint a character\nLol yeah, that's probably not a bad idea XD\nWhat's a paint job\nA certain color of paint, often used for a person's personality or character\nOhh thats interesting! They could probably paint the person\nYeah, in some scenes (think it was the one at the store) the character paints, and then goes back to paint it, so they can say they were having fun.\nWhat game is this",
+    "\n\n1. It speeds up the process of solar hot water production (using a conventional heat source like a solar hot water tank) by more than 50 percent.\n\n2. It is 100 percent cheaper than existing natural gas and is renewable to replace fossil fuels.\n\n3. It's a sustainable medium of energy.\n\nNow how's that for bragging rights?\n\nThe U.S. solar industry has been steadily improving over the past couple of years. Solar is rapidly becoming a preferred energy source in the United States -- something that a lot of industry experts still don't seem to understand. In fact, most people don't even realize that there are some things we don't know about the solar industry, and the details that make us think that \"we're going to have an energy crisis\" and \"energy prices for consumers are going to rocket upward in 20 years.\"\n\nOne of those details is that the typical solar panel is roughly 35,000 feet long. What",
+    "\nit's a very basic concept that's not really understood because we are conditioned to believe they do. That's the definition of a flood, but since it's a flood because of the weather it's not a simple equation.   Rain is basically a wet rag, that's water in the drainage system that pushes out debris that has just washed downstream through the drain.",
+    "  I've heard of them done a million times, and this is going in the dark to be honest.  It never occurred to me that they are delicious?  I guess that helps me get ready when I go out for supper.\nIt can be pretty much anything. Try cooking them in olive oil instead of chicken broth or olive oil instead of bacon grease. Add a little vinegar or vinegar-lime, salt and pepper. Let them sit for a while.",
+    "\n\n1. It was first written in Germany. But in the UK, English books were common, and so was German literature. The book was first published in 1847.\n\n2. So was the famous German drama, “The Little Prince”. This was a classic work in its day, and very much loved by the English, especially the German who read it for entertainment. The author, Wieland von Fuchs, was an excellent actor, and could do many roles very well.\n\n3. It was an adaptation of an English and German play, “The Little Prince”, written in 1694. The play also helped to popularize German literature. The author was a member of the “Weltkulturerische Gesellschaft”, whose official name was the Welt-Gesellschaft (general theater company), but it went on to become the national body of the art and cinema of the time.",
+    "\n\nAI will have the benefit of increasing the effectiveness of human service providers, but will also have the potential to cause harm in other areas as well. Some AI systems could also be harmful to a client’s privacy.\n\nA recent study has investigated whether certain AI technology could be dangerous to privacy, and found that artificial intelligence can have some kind of problem. The research, by the University of Cambridge, is now in its third phase.\n\nThe researchers found it difficult to tell whether algorithms were behaving in a way that compromised privacy, such as blocking third party websites.\n\nThe main reason for such risks is more complicated than in-fighting techniques, according to the report. Analysts did discover at one point that the risks didn’t come about merely from preventing bots, but from detecting mistakes and failing to create new rules for AI-based systems.\n\nInstead, it was about how to limit the effects of a “dissolving social order”"
+  ],
+  "watermarked_z": [
+    3.1754264805429417,
+    2.4519563230239787,
+    5.27793988176348,
+    0.6666666666666666,
+    6.333333333333333,
+    -0.9258200997725514
+  ],
+  "baseline_z": [
+    1.4393347726688257,
+    -0.20567251744743176,
+    -0.2721655269759087,
+    -1.58230961057048,
+    0.2088779965721784,
+    0.8247860988423226
+  ],
+  "roc_auc": 0.8055555555555555,
+  "roc_path": "hybrid_watermark_results_opt350m_token200/roc_fresh_facebook_opt-350m_20251028_034756.png"
+}

@@ -1,0 +1,47 @@
+{
+  "model": "facebook/opt-350m",
+  "gamma": 0.5,
+  "delta": 5.0,
+  "prompts": [
+    "Write a short story about a robot learning to paint.",
+    "Describe the benefits of solar energy in 3 sentences.",
+    "Explain what causes rain in simple terms.",
+    "Give me a recipe for a quick pasta dinner.",
+    "Summarize the book \"The Little Prince\" in one paragraph.",
+    "What are the main risks of AI systems?"
+  ],
+  "watermarked_texts": [
+    " I’ve written that before, but have been told I would never get past writing an entire paragraph. It doesn’t have to make much sense to just write what everyone here likes (especially this sub) as the first sentence. Just say things like:\n\nYou’re a bot. And you’re learning how to paint. And the best time of the year. When all’s best for the world. And in winter there’s a storm. And the sun shines through the fog. And…\n\nAnd it’s a fun little fiction of one of the other threads… I can’t remember the last time I’ve gone there. That sub seems to only have a small core of people who’ve liked the rest of the stuff. I always love reading what’s going on here, especially how everyone tries so different things and it’s fun (even if you’re bored",
+    "\n\n1. We get cheaper electricity. So much cheaper.\n\n2. Our country has been blessed enough that when the sun goes down the power gets out.\n\n3. We have gotten solar power built into everything in the country.\n\n1. We get cost savings. We get cheaper electricity. So much cheaper.\n\nWe get cost savings. We get cheaper electricity. So much cheaper.\nWe get cost savings. We get cheaper electricity. So much cheaper.\nWe get cost savings. We get cheaper electricity. So much cheaper.\nWe get cost savings. We get cheaper electricity. So much cheaper.\nWe get cost savings. We get cheaper electricity. So much cheaper.\nWe get cost savings. We get cheaper electricity. So much cheaper.\nWe get cost savings. We get cheaper electricity. So much cheaper.\nWe get cost savings. We get cheaper electricity. So much cheaper.",
+    " Why don’t you simply tell people? And what do you think will happen to the world? You’re not the right guy for this. Please. Explain\n\n1. There’s absolutely no science out there that would ever explain why the sun doesn’t appear to have that weird glow. (Forgive my Spanish.)\n\n2. So why does it rain? I find it weird why it seems in some places there’s an overhanging forest of clouds. Are they just a matter of nature? Or they’re there all the time? Or it just happens on a particular occasion? (If I could answer it myself I’d just say that this could be why they call it rain.)\n\nA. I don’t know what would cause the air to get hot in different climates when it’s so cold. I’ve only lived here for five years, I’ve only experienced",
+    " (and please get it made from bread that has recently grown and then cooked)\nI’ve done spaghetti. Have you tried this? I’ve eaten about 30 pasta (3-day-a-week for the last year) all of them in just 2 days...I’ve found that there’s an “inner” quality of pasta which has the most flavor when cooked. (Not sure if it’s just that way, or something they just learned about themselves)   I’ve been making homemade pasta for ages, for the first few days I just put the water, and then I just leave it for the pasta.\nOh thanks! I’ve been struggling with pasta, but this seems to work. Thanks! I’ve been making pasta for years & years since moving to Australia... I’ve been doing a few recipes from the book. I’ve found the ingredients I can use,",
+    " This helps you become very familiar when it's time for you start the book to get your nerves out of balance so that your reaction time can make the best of the reading experience.",
+    " And how do you combat these?   (I ask this for the same reason that when I talk, I talk directly)\nIn a nutshell AI system's are at their strongest when they don't get lost in their processes. Sometimes these system don't always make a good choice of a job. Some of these don't follow the same ethical requirements for the job they are applying for. Others don't follow the ethical requirements at all. You can't run your business completely without the proper ethical considerations, which you will never get with an intelligent AI.\nThank you very much for your answer. So that's the problem?"
+  ],
+  "baseline_texts": [
+    "     Maybe I’d like to learn how to paint.",
+    "\nThe benefits of solar energy are really simple.  It gives the community energy for the time it takes for the earth to come back to equilibrium, and as time goes on it gives more energy to renewable resources like wood pellets and other natural fuels and energy from wind and solar.  It isn't like it would make your home run much easier, but it does increase the efficiency of the existing electric lines and reduce pollution.\nThe advantages are more than just energy.  The electricity bills are ridiculously high when compared to what was previously available.  You spend thousands of dollars a year, and if you live on the edge, your electricity is going to cost a hell of a lot more to keep up with.  But then, when there are many cheap sources of energy available, there is also a long list of benefits including:  - Reduced environmental impacts  - Less pollution from electricity generation  - A higher profit\nI have a problem with that.  If you are going to spend a",
+    " Is the rain coming from the ocean?\nYes, but it is coming from earth. It is usually quite a bit larger than a lot of thunderstorms so a lot more rain actually comes from earth, and a lot from the ocean. But due to the rain coming from the ocean/sea, it seems less intense, whereas this one is pretty mild.\nCool! Thanks! I'll have to put the rain map on the site, so hopefully this is what I'm missing out on!",
+    "\nNot the quick thing because I can't cook it! But on the short side just be careful what you eat and don't overdo it.",
+    " What would it be called if you change everything about the book to make things look correct to you? Is there a list?\nOh yeah.  But I don't think I could even get the words correct. In fact I'm thinking to myself \"how often does this type of thing occur? Can I just rewrite all the words to make this work?\"\nBut then you'll probably have a hard time getting it to look right unless you're editing with google translate.\nI think that's what I'm seeing. You'd think a book written 2,000 years ago would've had some context for English language.\nOr even just a little dictionary.\nA pretty decent book for 2,000 years from now.",
+    " These are the questions that most researchers are now focusing more on.\nThe idea behind artificial intelligence (AI) is to transform humans and solve human problems as long as it can. The technology is currently used to improve the performance through automation. As such, AI systems must deal with a wide range of problems, which might be problematic if they are not implemented correctly.\nHowever, some of the things that AI must deal with are relatively uncommon, and most of the time, AI is still not used as a tool to solve a complex problem. This is why researchers are increasingly focusing on the types of AI systems that are used for problems which are not yet solved.\nOne of the biggest risks of AI systems is that they get so complex that the human brain cannot handle all of the complexities. In reality, AI systems are generally used to implement new technologies by solving problems which are already quite complex.\nHow is AI used for business problems?\nAI systems are used for business problems, and they"
+  ],
+  "watermarked_z": [
+    10.869217836305287,
+    6.529880876577695,
+    11.200147274436715,
+    11.542869566872781,
+    5.396407334626633,
+    10.188866871741984
+  ],
+  "baseline_z": [
+    -0.8320502943378437,
+    -0.7837175498670061,
+    0.618852747755276,
+    -0.19245008972987526,
+    1.007017629956027,
+    0.0
+  ],
+  "roc_auc": 1.0,
+  "roc_path": "hybrid_watermark_results_opt350m_token200/roc_fresh_facebook_opt-350m_20251028_042449.png"
+}

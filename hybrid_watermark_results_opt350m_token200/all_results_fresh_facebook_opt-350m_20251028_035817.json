@@ -1,0 +1,47 @@
+{
+  "model": "facebook/opt-350m",
+  "gamma": 0.25,
+  "delta": 2.0,
+  "prompts": [
+    "Write a short story about a robot learning to paint.",
+    "Describe the benefits of solar energy in 3 sentences.",
+    "Explain what causes rain in simple terms.",
+    "Give me a recipe for a quick pasta dinner.",
+    "Summarize the book \"The Little Prince\" in one paragraph.",
+    "What are the main risks of AI systems?"
+  ],
+  "watermarked_texts": [
+    "\nWhat's your story? I was told I could not write about the character of the robot learning paint from one of the images I created but I thought that might be the only way for someone to understand how it's supposed to work.  Do you have a link?",
+    "\n\nEnergy-efficient and renewable technology has been shown to improve health and improve the environment by saving money on heating and cooling costs. Solar panels are installed in a variety of different solar panels for various uses in different homes and communities. These solar panels are installed on wood planks that are made of wood for the solar panels are installed on wood planks for the solar panels are installed on wood planks for the solar panels are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood planks for the solar panel are installed on wood plan",
+    "\nA flood\nA shower?   I’m not asking for explanations I’m asking for how exactly the flood occurred and how it was caused.   I’m asking how in the world you’re planning to solve the problem of your water supply from the outside while your water supply comes up with the water in the air. You’re either asking water to just rain outside the city or you’re dealing with water that was flowing inside the city but due to the nature of a rain storm all the rainwater from the city is now leaving the city through the city’s pipes.\nYou’re thinking of the urbanization.  The city is actually just underground water and some outside sources are just pouring the water into the underground.\nYou’re thinking of the urbanization? You’re an idiot and I think you’re just the dumbest person ever. Sorry for the dumb questions it just",
+    "\nAdd some cheese and garlic to the sauce, pour some sugar/buttermilk and season about 2 cups. Cover and simmer for about an hour. Add the pasta and sauce and stir over medium fire for 15-20 minutes. Taste the sauce and season with salt & pepper then throw everything nice and dry. I make it the way I make it for friends and friends look at and I am not trying for the food style to have everything perfect - just the right amount of flavor.\n\nYou make your salad at the moment, what would you add to the sauce?\nAdd some vegetables for greens instead of a sauce, maybe some cheese, whatever you want? I used kale and carrots as the vegetables don’t feel too good cooked with, add spinach, zucchini and broccoli or even an extra slice of the cheese if I wanted.\n\nYou’re always making food, don’t forget to include in your food. That’s the challenge",
+    " Use the sentences from it to form the main part, make sure to break down the structure before starting a chapter and make sure it’s well organized by the end.",
+    " \nThere are no major security risks in any AI system I've ever seen and the main risks are just:\n\\- There's never any real time performance tests for the system, no way for system's to learn from the data (or even to learn from the data for the same kind of errors from the past) -- it just takes one day to get enough data (e.g., to test out performance with 2,000 customers who are running this sort of thing for the first time). If the data is used to validate the algorithm, then it makes things worse (bad data and no way to improve the test).\n\\- If you accidentally hit a single data object and the system crashes, it's hard not to find out the impact on productivity (it's just that the system has a limited amount of free memory it can store stuff).\n\nI wonder how the system works out if you've hit data objects in the environment but haven't hit their data in the environment?"
+  ],
+  "baseline_texts": [
+    "\nI'd be happy with that myself...\nI’d be very happy to be the one to draw it",
+    "\n\nPower generation. A huge difference from the fossil fuel based systems. With the recent surge in solar, I would like to talk about how this is now an economical and more convenient alternative to fossil fuel systems.\n\nI recently read an article from NASA that talked about how NASA was looking to figure out how to use the energy that solar energy has from the sun to create a stable and reliable grid system. I would like to elaborate in my short story with this article, and I hope I didn't sound like I'm being a jackass or a snob! I just wanted to hear how NASA was thinking of how they might incorporate solar energy into a new grid, and I know you can easily Google these ideas to help you visualize how they might work.\n\nWhile NASA is currently looking at solar energy to fill the gap that oil continues to pose, that doesn't mean the grid can't be used to store power. As a last resort and in case of catastrophic failure, the",
+    "\nYou just gotta know the word rain.\nWell, if I had to choose, I'd choose this. We can't have good weather without rain.",
+    " It's not a good idea but I'm starving.\nI wish you good luck my friend! It's hard.\nThank you.  I'm going to try.  There's actually some good ways to get started.  I started with this recipe and the rest will follow.",
+    " Tell us how that book works out for you.    If you're willing to take a moment to look at the links provided for a brief history, you may find something else that strikes your fancy.\nthanks! yeah it's a really good book, and a good read I will give it a try.",
+    "\nIn a very general sense, they're the same as any other research: you're always more risk on one side (e.g. the human) than you are on the other, while the human will always want to have more control, even if more control might not be quite the same as control.\nHow do we measure this?\nFor instance, I will always see more chance of failure than my computer and vice versa. However, I will always have less opportunity to learn and therefore have more control within a given computer (the human). I don't want to be the only person with less chance of failure, so I also have less chance of failure.\nFor another example, in a company where there is a lot of conflict, I will always have less opportunity to learn than my competition, with more control than I'll have over my competition.\nWhich one is a better option?\nIt's difficult to say. You can either pick one or the other.\n"
+  ],
+  "watermarked_z": [
+    6.72538245981366,
+    7.314694929028955,
+    10.256471702606701,
+    10.460262617023247,
+    4.898979485566357,
+    13.43709624716425
+  ],
+  "baseline_z": [
+    -1.1338934190276817,
+    1.4846149779161806,
+    0.3216337604513384,
+    0.0778498944161523,
+    0.8131433980500301,
+    -1.5538539445934898
+  ],
+  "roc_auc": 1.0,
+  "roc_path": "hybrid_watermark_results_opt350m_token200/roc_fresh_facebook_opt-350m_20251028_035817.png"
+}

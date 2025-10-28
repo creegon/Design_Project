@@ -1,0 +1,47 @@
+{
+  "model": "facebook/opt-350m",
+  "gamma": 0.5,
+  "delta": 1.0,
+  "prompts": [
+    "Write a short story about a robot learning to paint.",
+    "Describe the benefits of solar energy in 3 sentences.",
+    "Explain what causes rain in simple terms.",
+    "Give me a recipe for a quick pasta dinner.",
+    "Summarize the book \"The Little Prince\" in one paragraph.",
+    "What are the main risks of AI systems?"
+  ],
+  "watermarked_texts": [
+    "\nLol thats not even half the joke\nThat's funny?\nYou’re being sarcastic. I’m guessing you live in a world where anyone can invent everything\nIf I lived in a world where, for example, a woman could create cars that run and drive, I might not be that cynical.\nYes you’d be\nAnd that's fine. I respect your decision. But the fact remains, if I could do that, I certainly would.  But when I think of that, I think how awesome it would be to have all the knowledge, creativity, creativity of all the people of the world in one small space. And yet the universe would remain.\nBut that would never be what OP did\nWhat if OP did that?  I don’t know how exactly automating paint will work? I’d guess something like a robot doing a painting or a bunch of people drawing different characters on the canvas.\nI'm",
+    "\nSustainability  Environment (climate change, energy costs can be high, but overall you reap the benefits of solar)\nCan confirm.  Solar panels are huge for electricity as it's the only source of green power for most of the United States.",
+    "  There *are* more issues that have to do with the environment, not just those that are on the surface.\nDo you think OP has not understood the context of the question?",
+    " Don't judge me!\nIt's a great soup. I used to do it like that until  the time I got it I could still not wrap my head around the recipe. I'm still learning.\nI try to make my pasta as quick as possible - I have a bowl or two to myself for the pasta dinners though - I use the bowl as the lid. In the morning when I've finished making an afternoon dinner I will toss the bowl in the oven. I don't usually use the bowl as the lid.",
+    "\nYou don't want to know how I spent over a hundred grand on a book\nWell, I have spent over a hundred dollars on books.  And I'm well-educated, I've watched The Little Prince a dozen times at the movies.\n\"you don't want to know what I spent the money on\"  What? You think I didn't get my money's worth?  I don't think you're a terrible kid.\nAre you okay, dude?",
+    " You can review our infographic from 2017 on which of the best AI systems offer the most useful features. With the rise of artificial intelligence (AI) it is important for businesses to ensure their systems are optimised for optimal performance.\n\nIt’s an age-old debate that “the better the AI, the better the services” and that’s precisely the mindset of AI. The debate has been going on for decades – but the main issues and concerns with AI as a whole have been the potential for problems in certain industries or sectors.\n\nWhile AI may represent some significant advances that could help a wide variety of industries or sectors, here are some of the main risks of AI. And how to combat those risks at the latest development in the field?\n\nIt’s possible that artificial intelligence could be just the most basic form of software. This is because it is more complex, involving lots of functions and many different algorithms. To get a sense for how"
+  ],
+  "baseline_texts": [
+    "\nThat would be pretty awesome.\nI'd also like to know how to paint robot shapes. (And who would give a fucking shit, right?)",
+    "\n> solar energy  FTFY - you want to make a claim, not be a dumbass.\nI don't think anyone likes \"scary\".\nThey don't like your idea.",
+    "\nHow does one explain anything? The world is not flat or the air is humid? What I'm doing is understanding how the molecules that exist in the solar atmosphere interact with the water vapor in the sun - the first part is pretty obvious.\nYou need to explain how the molecules interact with the sun, then you can understand just part of what's going on.\nI'll definitely give that a go. Thanks!",
+    "  I have a question.  I've been making a chicken chicken quesadilla for dinner tonight with the bacon, green beans, bacon and eggs on my leftovers.  And today I feel like i really need to try a vegetarian or something, but i've never made a vegan or vegetarian meal.  Thanks\nI eat it like a slow cooker soup (with the rice with it as the main ingredient, if you have any leftovers) without the meat. I cook the protein in a rice cooker for about an hour, then transfer the leftovers into the freezer.  What's your current meal / budget?",
+    "\nI read all the books and this was my best guess.",
+    " - The Future Of Security Intelligence\nWhat are the main risks of AI systems? – The Future of Security Intelligence\nThis month, a group of 20 cybersecurity experts published a report for the IEEE on Cybersecurity and Privacy, titled \"The Future of Security Intelligence.\"\nAccording to their report, the technology to secure and control machine and AI systems is being rapidly developed by both cyber threat actors and government institutions.\nThey highlight that a huge chunk of the risk of cyber attacks — over $7 trillion a year — is now emerging from cybersecurity, and more importantly, from AI systems that operate outside the limits of the human experience and responsibility.\nThe experts have also highlighted the threat AI poses across the value chain, as well as to the economy — but specifically to the way the industry works and how it relates to cybersecurity:\nFor the first time since 2017, the global market for AI-enabled personal security products and services is set to grow more than six times by 2025, according to the latest Global"
+  ],
+  "watermarked_z": [
+    5.857142857142857,
+    2.7142857142857144,
+    3.5496478698597698,
+    3.4,
+    3.127716210856122,
+    4.0205656882593335
+  ],
+  "baseline_z": [
+    0.3779644730092272,
+    0.0,
+    0.8834522085987723,
+    0.1796053020267749,
+    0.0,
+    -1.0
+  ],
+  "roc_auc": 1.0,
+  "roc_path": "hybrid_watermark_results_opt350m_token200/roc_fresh_facebook_opt-350m_20251028_035550.png"
+}

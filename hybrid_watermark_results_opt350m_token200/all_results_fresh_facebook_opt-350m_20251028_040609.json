@@ -1,0 +1,47 @@
+{
+  "model": "facebook/opt-350m",
+  "gamma": 0.25,
+  "delta": 5.0,
+  "prompts": [
+    "Write a short story about a robot learning to paint.",
+    "Describe the benefits of solar energy in 3 sentences.",
+    "Explain what causes rain in simple terms.",
+    "Give me a recipe for a quick pasta dinner.",
+    "Summarize the book \"The Little Prince\" in one paragraph.",
+    "What are the main risks of AI systems?"
+  ],
+  "watermarked_texts": [
+    "   I think I got what I was aiming to get.",
+    "\n\nMost are solar panels plus they are built into your house – I've bought them for my house here – I just haven't yet used them for everything I do. But, these solar powered solar panel solar panel solar panel solar panel solar panel are quite effective – I've not been turned off by them yet! I just love to see what happens to solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel from the solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel solar panel",
+    " Why do I get up with an umbrella in the morning?  Am I going to get really hot in Spain tomorrow? Should I change my car after the weekend?  Am I going to have to buy a beer?  Why my phone charger?  Why my phone charger?  Am I going through three seasons?    I don’t get it",
+    "\nChicken soup?  With cheese?  With ranch seasoning??  I can do ranch seasoning!\nAnd salt & pepper, then I just get hot sauce in a sauce packet and I make up to half a cup and it’s almost half what it was from the store!",
+    " Then ask yourself the question I am asking here...Why I am posting? I am trying to find common ground between a book I like a lot while being skeptical, another I enjoy a great deal and another I don”t buy? So I would just say...Why? Why me? I am trying to explore the world in novelist style. Let”s say I am reading from your recommendation? Well what”s so special about your recommendation that I can”t buy it myself? I am not trying to find something I dislike or can”t buy from the internet....just trying to try my best here...So what”s so different? What am I reading? Why? Why me? I would say I am reading from your recommendation about a very different kind of world in question? So I would answer just like I say above here...You”re looking at the author”s first world war novel? Then ask yourself...Why?",
+    " - Expert on AI's ability to learn — for sure a few (maybe a lot). — AI's ability at breaking patterns — an ongoing conversation that I get with techies, including @TrentE_Tech and @ZigZags @Trente_Tech and many more who are on this thread! — Thanks for the questions! — We don't yet have the answers to those of the above! We are only two years past the conclusion — the full range of features have just come to the forefront! We are just starting to start making real work for the potential benefits! If you want more info — just click the @Techies icon on your chat! Or we'll tell some of you from the above! Good luck! — Please tell your friend about @ZigZags @Trente_Tech! He's the best man I've ever seen at this — he was talking yesterday for @CrazyTech and he's still talking today! If you want more"
+  ],
+  "baseline_texts": [
+    " This sounds more realistic than the idea from the movie.",
+    "\n\nThis is a poll. Don’t just answer. Tell us why…\n\nEnergy Storage\n\nEnergy Storage is one of the largest and fastest-growing sectors in the energy industry, which is becoming a major driver of the U.S.’ energy economy. Energy Storage is where we’ll use electricity to increase efficiency and generate electricity in the areas of: electricity generation, waste recycling, energy storage, and energy production. Energy storage will provide great opportunities for the transportation industry that, despite the recent decline in transportation emissions, is still very energy intensive for a lot of our cities and a lot of our towns. We will use energy stored in batteries and energy storage in our cities to meet our emissions.\n\nWe’ll use electricity from the power that we use to heat our homes and work from our cars to power the power plants that power the electricity we use to produce power (i.e. electricity in our car/vehicle). We�",
+    "\nA single drop of water that the water collects at the bottom of the lake. It is usually rain.",
+    " Maybe a pasta dip, a soup, and some kind of pasta dessert.  Also, what kind of pasta with tomato sauce?\nOh yeah, I know what you meant.  I don't think I've had a pasta with tomato sauce.  Maybe I'm just bad at pasta with tomato sauce.\nCereal pasta or pasta sauce with tomato.",
+    "\n\n2.\n\nAn illustration of a horse with a very large \"butt\" on its tail that looks just like a normal Pony.\n\n3.\n\nAn illustration of a horse riding a very large \"butt.\"\n\n4.\n\nAn illustration of a large \"butt\" like a pony.\n\n5.\n\nAn illustration of a large pony or elephant riding on a huge \"butt.\"\n\n6.\n\nAn illustration of a horse riding on a large \"butt.\"\n\n7.\n\nAn illustration of a large pony or elephant riding on a large \"butt.\"\n\n* See also: Big Butt Riding.\n\nSee also: Thoroughbred riding and the pony.\n\n7.\n\nAn illustration of a pony or elephant riding a large pony.\n\n8.\n\nAn illustration of a large horse or elephant riding on a large \"butt.\"\n\n9.\n\nAn illustrations of horses riding on \"",
+    "\nIn the beginning, AI systems are more vulnerable to security issues. In the middle of the day, AI systems are not as protected. The system would be vulnerable to attack because the system is being programmed by the human operator and has access to a lot of information, which means the human operator can easily give the machine the wrong data about the data that is needed.\nAlso read: Is AI a new weapon?\nHere is a quick overview of how each of the three types of systems may be vulnerable:\nSecurity vs. Safety\nSecurity and safety are two concepts that can go hand in hand. A security solution is meant to protect the data from being gained through the operation of the system. Another type of protection involves a safety mechanism, whereby the system can be prevented from being used without authorization by preventing it from getting access to the data. The latter protection would involve preventing the system from getting access to the data in the first place, but it doesn't have to be the exact same"
+  ],
+  "watermarked_z": [
+    4.74692883171144,
+    13.608276348795433,
+    11.162241191414049,
+    12.22243342333591,
+    21.141248330039097,
+    22.334397505707628
+  ],
+  "baseline_z": [
+    -0.8164965809277261,
+    -0.5402615627001988,
+    0.13245323570650439,
+    0.9169493006161777,
+    -1.7931043185249598,
+    2.4519563230239787
+  ],
+  "roc_auc": 1.0,
+  "roc_path": "hybrid_watermark_results_opt350m_token200/roc_fresh_facebook_opt-350m_20251028_040609.png"
+}

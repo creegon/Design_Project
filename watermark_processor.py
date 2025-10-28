@@ -85,9 +85,16 @@ class WatermarkLogitsProcessor(WatermarkBase, LogitsProcessor):
 
     def _calc_greenlist_mask(self, scores: torch.FloatTensor, greenlist_token_ids) -> torch.BoolTensor:
         # TODO lets see if we can lose this loop
-        green_tokens_mask = torch.zeros_like(scores)
+        # Ensure any greenlist tensors live on the same device as scores before indexing.
+        green_tokens_mask = torch.zeros_like(scores, dtype=torch.bool)
         for b_idx in range(len(greenlist_token_ids)):
-            green_tokens_mask[b_idx][greenlist_token_ids[b_idx]] = 1
+            greenlist = greenlist_token_ids[b_idx]
+            if isinstance(greenlist, torch.Tensor):
+                if greenlist.device != scores.device:
+                    greenlist = greenlist.to(scores.device)
+            # If greenlist is a python list/iterable the indexing below will work
+            if len(greenlist) > 0:
+                green_tokens_mask[b_idx][greenlist] = True
         final_mask = green_tokens_mask.bool()
         return final_mask
 
@@ -207,6 +214,9 @@ class WatermarkDetector(WatermarkBase):
             for idx in range(self.min_prefix_len, len(input_ids)):
                 curr_token = input_ids[idx]
                 greenlist_ids = self._get_greenlist_ids(input_ids[:idx])
+                # ensure same-device before membership test (calls torch.isin internally)
+                if isinstance(greenlist_ids, torch.Tensor) and greenlist_ids.device != curr_token.device:
+                    greenlist_ids = greenlist_ids.to(curr_token.device)
                 if curr_token in greenlist_ids:
                     green_token_count += 1
                     green_token_mask.append(True)
