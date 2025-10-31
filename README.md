@@ -92,10 +92,3 @@ done
 PYTHONPATH=. python3 experiments/make_table2_figure4.py --results_dir hybrid_watermark_results_opt350m_token200 --out_dir figs_tables_opt350m_token200
 ```
 
-If you want, I can:
-- Add this README into the repository (I can commit it),
-- Run the remaining grid cells (beam8 or multinomial) and regenerate figures, or
-- Increase `n` and re-run to produce statistically stable estimates.
-
-Contact / next steps
-If you want a PR with this README committed and the generation/aggregation scripts combined into one runnable workflow, tell me and I will create the patch and run a verification pass.
