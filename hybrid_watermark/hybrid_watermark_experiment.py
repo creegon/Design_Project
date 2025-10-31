@@ -15,6 +15,14 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import torch
+import torch.utils._pytree as _torch_pytree
+
+if not hasattr(_torch_pytree, 'register_pytree_node') and hasattr(_torch_pytree, '_register_pytree_node'):
+    def _compat_register_pytree_node(node_type, to_iterable, from_iterable, *, serialized_type_name=None, serialized_fullname=None):
+        return _torch_pytree._register_pytree_node(node_type, to_iterable, from_iterable)
+
+    _torch_pytree.register_pytree_node = _compat_register_pytree_node
+
 from transformers import AutoTokenizer, AutoModelForCausalLM, LogitsProcessorList
 from extended_watermark_processor import WatermarkLogitsProcessor, WatermarkDetector
 
@@ -93,7 +101,7 @@ class HybridWatermarkExperiment:
             self.model = self.model.to(device)
         
         self.model.eval()
-        print("✓ 模型加载完成\n")
+        print("[OK] 模型加载完成\n")
     
     def create_watermark_processor(
         self,
@@ -240,7 +248,7 @@ class HybridWatermarkExperiment:
             
             # 更新提示词（累积生成）
             current_prompt = current_prompt + " " + fragment
-            print(f"  ✓ 片段生成完成\n")
+            print(f"  [OK] 片段生成完成\n")
         
         # 组合所有片段
         combined_text = " ".join([f['text'] for f in fragments])
@@ -334,7 +342,7 @@ class HybridWatermarkExperiment:
                 'text': text
             })
             
-            print(f"  ✓ 变体生成完成\n")
+            print(f"  [OK] 变体生成完成\n")
         
         # 交叉检测：每个文本用所有检测器检测
         cross_detection = []
@@ -436,7 +444,7 @@ class HybridWatermarkExperiment:
             })
             
             current_prompt = current_prompt + " " + fragment
-            print(f"  ✓ 片段生成完成\n")
+            print(f"  [OK] 片段生成完成\n")
         
         # 组合文本
         combined_text = " ".join([f['text'] for f in fragments])
@@ -529,7 +537,7 @@ class HybridWatermarkExperiment:
                 'hash_key': key
             })
             
-            print(f"  ✓ 文本生成完成\n")
+            print(f"  [OK] 文本生成完成\n")
         
         # 组合所有文本
         combined_text = " ".join([t['text'] for t in texts])
@@ -602,7 +610,7 @@ class HybridWatermarkExperiment:
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         
-        print(f"\n✓ 结果已保存到: {filename}")
+        print(f"\n[OK] 结果已保存到: {filename}")
         
         return filename
     

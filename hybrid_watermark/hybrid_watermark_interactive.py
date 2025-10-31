@@ -18,7 +18,7 @@ import argparse
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 from tqdm import tqdm
 import json
@@ -96,67 +96,54 @@ class InteractiveHybridExperiment:
         )
     
     def run(self):
-        """运行交互式界面"""
-        
+        """Main interactive loop for launching experiments."""
         print("\n" + "="*80)
-        print("混合水印交互式实验系统")
-        print(f"模型: {self.model_nickname} ({self.model_name})")
+        print("Hybrid Watermark Interactive Suite")
+        print(f"Active model: {self.model_nickname} ({self.model_name})")
         print("="*80)
-        
+
         while True:
             print("\n" + "="*80)
-            print("实验类型菜单:")
+            print("Experiment Menu:")
             print("="*80)
-            print("\n【混合水印实验】")
-            print("  1 - 混合配置实验 (片段级/参数级)")
-            print("  2 - 密钥交叉检测实验 (种子混合/密钥共享)")
-            print("  3 - 跨模型共享密钥实验")
-            print("\n【统计评估实验】")
-            print("  4 - 滑动窗口检测")
-            print("  5 - 窗口敏感性分析")
-            print("  6 - 最小可检测长度分析")
-            print("  7 - 完整统计评估")
-            print("\n【其他】")
-            print("  h - 查看实验说明")
-            print("  q - 退出")
+            print("\n[Hybrid Watermark Experiments]")
+            print("  1 - Fragment / Parameter Mixing")
+            print("  2 - Seed / Key Cross Detection")
+            print("  3 - Cross-Model Key Experiments")
+            print("\n[Statistical Evaluations]")
+            print("  4 - Sliding Window Detection")
+            print("  5 - Window Sensitivity Analysis")
+            print("  6 - Minimum Detectable Length")
+            print("  7 - Complete Statistical Suite")
+            print("\n[Other]")
+            print("  h - Help / Show Experiment Info")
+            print("  q - Quit")
             print("="*80)
-            
-            choice = input("\n请输入选择 (1-7/h/q): ").strip().lower()
-            
+
+            choice = input("\nSelect an option (1-7/h/q): ").strip().lower()
+
             if choice == 'q':
-                print("\n退出实验系统。\n")
+                print("\nExiting interactive suite.\n")
                 break
-            
             elif choice == '1':
                 self.run_hybrid_config_experiment()
-            
             elif choice == '2':
                 self.run_key_cross_detection_experiment()
-            
             elif choice == '3':
-                self.run_cross_model_key_sharing()
-            
+                self.run_cross_model_key_experiments()
             elif choice == '4':
                 self.run_sliding_window_detection()
-            
             elif choice == '5':
                 self.run_window_sensitivity_analysis()
-            
             elif choice == '6':
                 self.run_minimum_length_analysis()
-            
             elif choice == '7':
                 self.run_complete_statistical_evaluation()
-            
             elif choice == 'h':
                 self.show_experiment_info()
-            
             else:
-                print("\n无效的选择，请重试。\n")
-    
-    
-    # ========== 混合水印实验方法 ==========
-    
+                print("\nInvalid option, please try again.\n")
+
     def run_hybrid_config_experiment(self):
         """运行混合配置实验（合并片段混合和参数混合）"""
         print("\n" + "-"*80)
@@ -213,11 +200,53 @@ class InteractiveHybridExperiment:
         
         else:
             # 参数网格模式
-            gamma_input = input("\n输入Gamma值列表 (逗号分隔, 默认0.25,0.5): ").strip()
-            gamma_values = [float(x.strip()) for x in gamma_input.split(',')] if gamma_input else [0.25, 0.5]
-            
-            delta_input = input("输入Delta值列表 (逗号分隔, 默认1.5,2.5): ").strip()
-            delta_values = [float(x.strip()) for x in delta_input.split(',')] if delta_input else [1.5, 2.5]
+            print("\n参数配置方式：")
+            print("  1. 手动输入列表 (默认)")
+            print("  2. 自动生成等间距网格")
+            param_mode = input("请选择 (1/2): ").strip()
+            param_mode = param_mode if param_mode in ['1', '2'] else '1'
+
+            if param_mode == '2':
+                def parse_range(prompt_text: str, default_range: Tuple[float, float, int]):
+                    user_input = input(prompt_text).strip()
+                    if not user_input:
+                        return default_range
+
+                    parts = [p.strip() for p in user_input.split(',')]
+                    if len(parts) != 3:
+                        print("格式错误，使用默认设置。")
+                        return default_range
+                    try:
+                        start = float(parts[0])
+                        end = float(parts[1])
+                        count = int(parts[2])
+                        if count < 2:
+                            raise ValueError
+                        return (start, end, count)
+                    except ValueError:
+                        print("解析失败，使用默认设置。")
+                        return default_range
+
+                gamma_range = parse_range(
+                    "\n请输入Gamma范围和数量 (格式: 起始,结束,数量；默认0.1,0.6,4): ",
+                    (0.1, 0.6, 4)
+                )
+                delta_range = parse_range(
+                    "请输入Delta范围和数量 (格式: 起始,结束,数量；默认1.0,3.0,4): ",
+                    (1.0, 3.0, 4)
+                )
+
+                gamma_values = [round(x, 4) for x in np.linspace(*gamma_range)]
+                delta_values = [round(x, 4) for x in np.linspace(*delta_range)]
+
+                print(f"\n自动生成Gamma列表: {gamma_values}")
+                print(f"自动生成Delta列表: {delta_values}")
+            else:
+                gamma_input = input("\n输入Gamma值列表 (逗号分隔, 默认0.25,0.5): ").strip()
+                gamma_values = [float(x.strip()) for x in gamma_input.split(',')] if gamma_input else [0.25, 0.5]
+                
+                delta_input = input("输入Delta值列表 (逗号分隔, 默认1.5,2.5): ").strip()
+                delta_values = [float(x.strip()) for x in delta_input.split(',')] if delta_input else [1.5, 2.5]
             
             print(f"\n将生成 {len(gamma_values) * len(delta_values)} 个参数组合")
             
@@ -272,7 +301,7 @@ class InteractiveHybridExperiment:
             for cd in result['cross_detection']:
                 print(f"\n文本 {cd['text_id']} (Key: {cd['text_key']}):")
                 for det in cd['detections']:
-                    status = "✓" if det['prediction'] else "✗"
+                    status = 'OK' if det['prediction'] else 'FAIL'
                     print(f"  {status} 检测器 (Key: {det['detector_key']}): z={det['z_score']:.2f}")
         
         else:
@@ -320,6 +349,19 @@ class InteractiveHybridExperiment:
         if save == 'y':
             self.experiment.save_results(result)
     
+    def run_cross_model_key_experiments(self):
+        """Sub-menu for cross-model key experiments."""
+        print("\n" + "-"*80)
+        print("Cross-Model Key Experiments")
+        print("-"*80 + "\n")
+        print("  1 - Shared key (all models reuse the same hash)")
+        print("  2 - Distinct keys (each model uses its own hash)")
+        choice = input("Select mode (1/2, default 1): ").strip()
+        if choice == '2':
+            self.run_cross_model_mixed_keys()
+        else:
+            self.run_cross_model_key_sharing()
+
     def run_cross_model_key_sharing(self):
         """运行跨模型共享密钥实验"""
         print("\n" + "-"*80)
@@ -342,10 +384,20 @@ class InteractiveHybridExperiment:
         selected_models = [self.model_nickname]  # 已加载的模型
         print(f"\n已加载模型: {self.model_nickname}")
         
+        # 构建编号映射，方便用户直接输入数字
+        model_index_map = {str(i): model for i, model in enumerate(available_models, 1)}
+
         # 选择额外的模型
         for i in range(1, num_models):
-            model_input = input(f"输入第{i+1}个模型昵称: ").strip()
-            if model_input and model_input in available_models:
+            model_input = input(f"输入第{i+1}个模型 (编号或昵称): ").strip()
+            if not model_input:
+                print("  警告: 未输入内容，跳过该模型")
+                continue
+
+            # 先尝试按编号匹配
+            if model_input in model_index_map:
+                selected_models.append(model_index_map[model_input])
+            elif model_input in available_models:
                 selected_models.append(model_input)
             else:
                 print(f"  警告: 模型'{model_input}'不可用，跳过")
@@ -438,7 +490,7 @@ class InteractiveHybridExperiment:
                 # 追加新生成的tokens到累积文本
                 cumulative_text = cumulative_text + " " + new_tokens
                 print(f"  ✓ 生成完成: {new_tokens[:60]}...")
-                print(f"  ✓ 生成完成: {generated_text[-60:] if len(generated_text) > 60 else generated_text}...")
+                print(f"  ✓ 混合文本片段: {cumulative_text[-60:] if len(cumulative_text) > 60 else cumulative_text}...")
             except Exception as e:
                 print(f"  ✗ 错误: {e}")
         
@@ -505,8 +557,185 @@ class InteractiveHybridExperiment:
             self.experiment.save_results(result_data)
     
     
-    # ========== 统计评估实验方法 ==========
-    
+    def run_cross_model_mixed_keys(self):
+        """Run cross-model experiment using distinct watermark keys."""
+        print("\n" + "-"*80)
+        print("Experiment 4: Cross-Model Distinct Keys")
+        print("-"*80 + "\n")
+        print("This experiment chains multiple models, each with its own hash key,")
+        print("shows combined detections, and reports a cross-key matrix.\n")
+
+        config_manager = ModelConfigManager()
+        available_models = config_manager.list_model_names()
+        print("Available models:")
+        for idx, model in enumerate(available_models, 1):
+            print(f"  {idx}. {model}")
+
+        num_models = input("\nNumber of models to use (default 2, current session already loaded 1): ").strip()
+        num_models = int(num_models) if num_models else 2
+
+        selected_models = [self.model_nickname]
+        print(f"\nPrimary model: {self.model_nickname}")
+
+        model_index_map = {str(i): model for i, model in enumerate(available_models, 1)}
+        for i in range(1, num_models):
+            model_input = input(f"Select model #{i+1} (index or nickname): ").strip()
+            if not model_input:
+                print("  Warning: empty input, skipping this slot.")
+                continue
+            if model_input in model_index_map:
+                selected_models.append(model_index_map[model_input])
+            elif model_input in available_models:
+                selected_models.append(model_input)
+            else:
+                print(f"  Warning: model '{model_input}' not found, skipping.")
+
+        if len(selected_models) < 2:
+            print("\nAt least two models are required. Experiment cancelled.")
+            return
+
+        print(f"\nUsing {len(selected_models)} models: {', '.join(selected_models)}")
+
+        default_base_key = 12345
+        model_keys = []
+        for idx, model in enumerate(selected_models, 1):
+            suggested_key = default_base_key + idx * 50000
+            key_input = input(f"Hash key for {model} (default {suggested_key}): ").strip()
+            model_key = int(key_input) if key_input else suggested_key
+            model_keys.append(model_key)
+
+        gamma_input = input("\nGamma (default 0.5): ").strip()
+        gamma = float(gamma_input) if gamma_input else 0.5
+        delta_input = input("Delta (default 2.0): ").strip()
+        delta = float(delta_input) if delta_input else 2.0
+
+        initial_prompt = input("\nInitial prompt (default 'The future of artificial intelligence'): ").strip()
+        if not initial_prompt:
+            initial_prompt = "The future of artificial intelligence"
+
+        continuation_tokens_input = input("Continuation tokens between models (default 20): ").strip()
+        continuation_tokens = int(continuation_tokens_input) if continuation_tokens_input else 20
+
+        max_new_tokens_input = input("Max new tokens per model (default 60): ").strip()
+        max_new_tokens = int(max_new_tokens_input) if max_new_tokens_input else 60
+
+        fragments = []
+        experiments = {self.model_nickname: self.experiment}
+        cumulative_text = initial_prompt
+
+        for idx, (model, key) in enumerate(zip(selected_models, model_keys), start=1):
+            if model in experiments:
+                exp = experiments[model]
+            else:
+                exp = HybridWatermarkExperiment(model_nickname=model, device=self.args.device)
+                experiments[model] = exp
+
+            if idx == 1:
+                prompt = initial_prompt
+            else:
+                tokens = cumulative_text.split()
+                if tokens and len(tokens) >= continuation_tokens:
+                    prompt = " ".join(tokens[-continuation_tokens:])
+                else:
+                    prompt = cumulative_text
+
+            print(f"\n[{idx}/{len(selected_models)}] Using {model} (key={key})")
+            print(f"  Prompt: {prompt[:80]}{'...' if len(prompt) > 80 else ''}")
+
+            processor = exp.create_watermark_processor(
+                gamma=gamma,
+                delta=delta,
+                seeding_scheme='selfhash',
+                hash_key=key
+            )
+            new_tokens = exp.generate_with_watermark(
+                prompt=prompt,
+                watermark_processor=processor,
+                max_new_tokens=max_new_tokens
+            )
+
+            fragments.append({
+                'fragment_id': idx,
+                'model': model,
+                'hash_key': key,
+                'prompt': prompt,
+                'new_tokens': new_tokens
+            })
+
+            cumulative_text = (cumulative_text + " " + new_tokens).strip()
+            print(f"  [OK] generated: {new_tokens[:60]}{'...' if len(new_tokens) > 60 else ''}")
+
+        combined_text = cumulative_text
+
+        detectors = {key: self.experiment.create_watermark_detector(
+            gamma=gamma,
+            seeding_scheme='selfhash',
+            hash_key=key
+        ) for key in model_keys}
+
+        combined_detections = []
+        for key, detector in detectors.items():
+            det = detector.detect(combined_text)
+            combined_detections.append({
+                'hash_key': key,
+                'z_score': float(det['z_score']),
+                'prediction': bool(det['prediction']),
+                'green_fraction': float(det.get('green_fraction', 0.0))
+            })
+
+        cross_detections = []
+        for fragment in fragments:
+            detections = []
+            for key, detector in detectors.items():
+                det = detector.detect(fragment['new_tokens'])
+                detections.append({
+                    'hash_key': key,
+                    'z_score': float(det['z_score']),
+                    'prediction': bool(det['prediction'])
+                })
+            cross_detections.append({
+                'fragment_id': fragment['fragment_id'],
+                'model': fragment['model'],
+                'hash_key': fragment['hash_key'],
+                'text_length': len(fragment['new_tokens']),
+                'detections': detections
+            })
+
+        print("\nCombined text detections:")
+        for det in combined_detections:
+            status = 'OK' if det['prediction'] else 'FAIL'
+            frac = det['green_fraction']
+            print(f"  Key {det['hash_key']}: {status} (z={det['z_score']:.2f}, green={frac:.2%})")
+
+        print("\nPer-fragment cross detection:")
+        for row in cross_detections:
+            print(f"Fragment {row['fragment_id']} [{row['model']}] (key={row['hash_key']}):")
+            for det in row['detections']:
+                status = 'OK' if det['prediction'] else 'FAIL'
+                print(f"    Detector key {det['hash_key']}: {status} (z={det['z_score']:.2f})")
+
+        result = {
+            'experiment_type': 'cross_model_distinct_keys',
+            'initial_prompt': initial_prompt,
+            'continuation_tokens': continuation_tokens,
+            'max_new_tokens': max_new_tokens,
+            'models': selected_models,
+            'model_keys': model_keys,
+            'gamma': gamma,
+            'delta': delta,
+            'fragments': fragments,
+            'combined_text': combined_text,
+            'combined_detections': combined_detections,
+            'cross_detections': cross_detections
+        }
+
+        save = input("\nSave results? (y/n): ").strip().lower()
+        if save == 'y':
+            self.experiment.save_results(result)
+
+    # ========== Statistical evaluation experiments ==========
+
+
     def _create_detector(self, watermark_config: Dict) -> WatermarkDetector:
         """创建水印检测器（共用方法）"""
         # 构造包含hash_key的seeding_scheme
@@ -1487,63 +1716,46 @@ class InteractiveHybridExperiment:
         plt.close()
     
     def show_experiment_info(self):
-        """显示实验说明"""
+        """Display reference information for each experiment."""
         print("\n" + "="*80)
-        print("实验说明")
+        print("Experiment Reference")
         print("="*80 + "\n")
-        
-        print("【混合水印实验】")
+
+        print("[Hybrid Watermark Experiments]")
         print("-"*80)
-        
-        print("\n实验1: 混合配置实验")
-        print("  - 模式 a: 片段级自定义配置")
-        print("    · 在同一段落中，不同片段使用不同的水印配置（gamma, delta, hash_key）")
-        print("    · 目的: 研究混合水印的检测特性和鲁棒性")
-        print("  - 模式 b: 参数网格扫描")
-        print("    · 使用不同的 gamma 和 delta 组合生成文本片段")
-        print("    · 目的: 系统性研究不同参数配置的混合效果")
-        
-        print("\n实验2: 密钥交叉检测实验")
-        print("  - 模式 a: 种子变体分析")
-        print("    · 同一模型使用不同的 hash_key 生成多个文本变体")
-        print("    · 研究不同种子之间的交叉检测能力和误检率")
-        print("  - 模式 b: 密钥共享策略")
-        print("    · 部分文本使用共享密钥，部分使用独立密钥")
-        print("    · 目的: 研究密钥共享对检测性能的影响")
-        
-        print("\n实验3: 跨模型共享密钥实验")
-        print("  - 多个不同模型使用相同密钥生成连贯文本")
-        print("  - 目的: 研究跨模型水印信号的兼容性和检测强度")
-        print("  - 适用场景: 多模型协作场景的水印设计")
-        
-        print("\n" + "="*80)
-        print("\n【统计评估实验】")
+
+        print("Experiment 1: Fragment / Parameter Mixing")
+        print("  - Mode A (Fragment level): assign distinct gamma/delta/hash per segment.")
+        print("  - Mode B (Grid scan): sweep gamma/delta pairs to study detection trends.")
+
+        print("Experiment 2: Seed & Key Cross Detection")
+        print("  - Mode A (Seed variants): same model, different hash keys; evaluate cross-key confusion.")
+        print("  - Mode B (Shared vs. individual): mix shared and private keys within a batch.")
+
+        print("Experiment 3: Cross-Model Key Experiments")
+        print("  - Shared-key mode: chain multiple models while reusing one hash key to validate signal compatibility.")
+        print("  - Distinct-key mode: assign unique hashes per model and report a cross-key detection matrix to prove exclusivity.")
+
+        print("\n[Statistical Evaluations]")
         print("-"*80)
-        
-        print("\n实验4: 滑动窗口检测")
-        print("  - 将文本分成连续的固定大小窗口")
-        print("  - 在每个窗口上单独计算 z-score")
-        print("  - 输出 z-score 曲线，反映水印信号随位置变化")
-        print("  - 适用场景: 检测文本中水印分布的均匀性")
-        
-        print("\n实验5: 窗口敏感性分析")
-        print("  - 系统地改变窗口大小 (如 25→50→100→200)")
-        print("  - 观察检测稳定性与噪声变化")
-        print("  - 绘制窗口长度 vs 平均 z-score 或检测准确率曲线")
-        print("  - 适用场景: 确定最优检测窗口大小")
-        
-        print("\n实验6: 最小可检测长度分析")
-        print("  - 找出在什么文本长度下能达到可靠检测")
-        print("  - 目标: FP/FN < 5%")
-        print("  - 输出图表或表格展示 z-score 与长度关系")
-        print("  - 适用场景: 确定水印系统的实际使用阈值")
-        
-        print("\n实验7: 完整统计评估")
-        print("  - 执行上述全部三项统计分析")
-        print("  - 生成完整的分析报告和图表")
-        print("  - 适用场景: 全面评估水印系统性能")
-        
-        print("\n" + "="*80 + "\n")
+
+        print("Experiment 4: Sliding Window Detection")
+        print("  - Score contiguous windows to observe spatial consistency of the watermark.")
+        print("  - Outputs a z-score curve along the text.")
+
+        print("Experiment 5: Window Sensitivity Analysis")
+        print("  - Sweep window sizes (e.g., 25/50/100/200) to balance accuracy and recall.")
+        print("  - Produces curves of window size vs. mean z-score / detection rate.")
+
+        print("Experiment 6: Minimum Detectable Length")
+        print("  - Identify the shortest text length that achieves reliable detection (target FP/FN < 5%).")
+        print("  - Visualises z-score growth against length.")
+
+        print("Experiment 7: Complete Statistical Suite")
+        print("  - Runs Experiments 5–7 sequentially and aggregates the plots/results.")
+
+        print("="*80 + "\n")
+
 
 
 def main():

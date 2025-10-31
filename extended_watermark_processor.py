@@ -25,8 +25,11 @@ import torch
 from tokenizers import Tokenizer
 from transformers import LogitsProcessor
 
-from normalizers import normalization_strategy_lookup
-from alternative_prf_schemes import prf_lookup, seeding_scheme_lookup
+from upstream.lm_watermarking.normalizers import normalization_strategy_lookup
+from upstream.lm_watermarking.alternative_prf_schemes import (
+    prf_lookup,
+    seeding_scheme_lookup,
+)
 
 
 class WatermarkBase:
@@ -403,8 +406,8 @@ class WatermarkDetector(WatermarkBase):
             seq_z_score_denom = torch.sqrt(sizes * self.gamma * (1 - self.gamma))
             z_score_at_effective_T = seq_z_score_enum / seq_z_score_denom
             z_score_at_T = z_score_at_effective_T[offsets]
-            assert torch.isclose(z_score_at_T[-1], torch.tensor(z_score))
-
+            z_tensor = torch.tensor(z_score, dtype=z_score_at_T.dtype, device=z_score_at_T.device)
+            assert torch.isclose(z_score_at_T[-1], z_tensor)
             score_dict.update(dict(z_score_at_T=z_score_at_T))
 
         return score_dict

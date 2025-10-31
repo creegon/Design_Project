@@ -277,10 +277,10 @@ python llama_interactive_demo.py
 ## 🔧 依赖关系
 
 所有脚本都依赖于项目原有的文件：
-- `extended_watermark_processor.py` (必需)
-- `normalizers.py` (必需)
-- `alternative_prf_schemes.py` (必需)
-- `homoglyph_data/` (必需)
+- `extended_watermark_processor.py` (必需，位于项目根目录)
+- `upstream/lm_watermarking/normalizers.py` (必需，原始归档)
+- `upstream/lm_watermarking/alternative_prf_schemes.py` (必需，原始归档)
+- `upstream/lm_watermarking/homoglyph_data/` (必需，原始归档)
 
 ## 📦 输出文件
 

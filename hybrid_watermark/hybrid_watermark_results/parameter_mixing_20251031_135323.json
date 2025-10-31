@@ -1,0 +1,267 @@
+{
+  "experiment_type": "parameter_mixing",
+  "prompt": "The future of artificial intelligence is",
+  "param_combinations": [
+    {
+      "gamma": 0.1,
+      "delta": 1.0
+    },
+    {
+      "gamma": 0.1,
+      "delta": 1.6667
+    },
+    {
+      "gamma": 0.1,
+      "delta": 2.3333
+    },
+    {
+      "gamma": 0.1,
+      "delta": 3.0
+    },
+    {
+      "gamma": 0.2667,
+      "delta": 1.0
+    },
+    {
+      "gamma": 0.2667,
+      "delta": 1.6667
+    },
+    {
+      "gamma": 0.2667,
+      "delta": 2.3333
+    },
+    {
+      "gamma": 0.2667,
+      "delta": 3.0
+    },
+    {
+      "gamma": 0.4333,
+      "delta": 1.0
+    },
+    {
+      "gamma": 0.4333,
+      "delta": 1.6667
+    },
+    {
+      "gamma": 0.4333,
+      "delta": 2.3333
+    },
+    {
+      "gamma": 0.4333,
+      "delta": 3.0
+    },
+    {
+      "gamma": 0.6,
+      "delta": 1.0
+    },
+    {
+      "gamma": 0.6,
+      "delta": 1.6667
+    },
+    {
+      "gamma": 0.6,
+      "delta": 2.3333
+    },
+    {
+      "gamma": 0.6,
+      "delta": 3.0
+    }
+  ],
+  "fragments": [
+    {
+      "text": " here. But what is it? What do you need to know to take advantage of it?\nArtificial intelligence is a computer system that can learn from experience and improve at a task without being explicitly programmed",
+      "gamma": 0.1,
+      "delta": 1.0,
+      "fragment_id": 1
+    },
+    {
+      "text": " to do so. It can be used in a variety of ways, but the most common application is in the form of software that can be used to automate certain tasks or make decisions based on past data",
+      "gamma": 0.1,
+      "delta": 1.6667,
+      "fragment_id": 2
+    },
+    {
+      "text": ". \nFor example, an AI system could be used to analyze images or videos and identify objects or people in them. It could also be used to analyze text and identify the meaning of sentences or words",
+      "gamma": 0.1,
+      "delta": 2.3333,
+      "fragment_id": 3
+    },
+    {
+      "text": ". \nThere are many different types of AI systems, including neural networks, machine learning algorithms, and deep learning systems. Neural networks are based on the way that neurons in our brains work, while machine",
+      "gamma": 0.1,
+      "delta": 3.0,
+      "fragment_id": 4
+    },
+    {
+      "text": " learning algorithms are based on the way that computers can be programmed to learn from experience. Deep learning systems are a type of neural network that is capable of learning more complex patterns than traditional neural networks. \n",
+      "gamma": 0.2667,
+      "delta": 1.0,
+      "fragment_id": 5
+    },
+    {
+      "text": "There are many different applications for AI, including self-driving cars, medical diagnosis, and financial forecasting. In addition, AI is also used to improve the efficiency of various businesses and organizations. \nWhat is",
+      "gamma": 0.2667,
+      "delta": 1.6667,
+      "fragment_id": 6
+    },
+    {
+      "text": " the future of artificial intelligence? \nAs artificial intelligence (AI) continues to evolve, it's important to understand how it might impact our lives in the future. \nFirst and foremost, AI will continue",
+      "gamma": 0.2667,
+      "delta": 2.3333,
+      "fragment_id": 7
+    },
+    {
+      "text": " to be used in a variety of fields and industries to assist humans in their daily lives and tasks. From self-driving cars to advanced medical diagnostics, AI is already making a real-world difference in how we",
+      "gamma": 0.2667,
+      "delta": 3.0,
+      "fragment_id": 8
+    },
+    {
+      "text": " live and work. \nHowever, as AI becomes more sophisticated and capable, it's likely that it will also have a greater impact on society as a whole. For example, AI could potentially revolutionize",
+      "gamma": 0.4333,
+      "delta": 1.0,
+      "fragment_id": 9
+    },
+    {
+      "text": " the way we communicate and interact with one another, or even change how we think about concepts like morality and justice. \nOf course, these are just a few of the many potential uses for AI that",
+      "gamma": 0.4333,
+      "delta": 1.6667,
+      "fragment_id": 10
+    },
+    {
+      "text": " are likely to be developed in the future. With so much uncertainty surrounding how AI might evolve over time, it's difficult to say exactly what its future holds. However, as AI continues to become a",
+      "gamma": 0.4333,
+      "delta": 2.3333,
+      "fragment_id": 11
+    },
+    {
+      "text": " more central part of our lives, it's likely that it will have a significant impact on both our professional and personal lives. \nWhat do you need to know to take advantage of it?\n  The",
+      "gamma": 0.4333,
+      "delta": 3.0,
+      "fragment_id": 12
+    },
+    {
+      "text": " future of artificial intelligence is here. But what do you need to know to take advantage of it? \nThere are a few key things that you need to understand in order to fully leverage the power of",
+      "gamma": 0.6,
+      "delta": 1.0,
+      "fragment_id": 13
+    },
+    {
+      "text": " artificial intelligence. \nFirst, you need to understand how artificial intelligence works. It's important to know the basic principles behind machine learning and how they can be used in order to develop more advanced systems.",
+      "gamma": 0.6,
+      "delta": 1.6667,
+      "fragment_id": 14
+    },
+    {
+      "text": " \nSecond, you need to understand the potential applications for artificial intelligence. There are a number of different ways that this technology can be used, from automating tasks to improving decision making. \nFinally,",
+      "gamma": 0.6,
+      "delta": 2.3333,
+      "fragment_id": 15
+    },
+    {
+      "text": " you need to understand the ethical implications of artificial intelligence. As more and more systems are developed, it's important to consider what these systems are capable of and how they might be used for good or bad",
+      "gamma": 0.6,
+      "delta": 3.0,
+      "fragment_id": 16
+    }
+  ],
+  "combined_text": " here. But what is it? What do you need to know to take advantage of it?\nArtificial intelligence is a computer system that can learn from experience and improve at a task without being explicitly programmed  to do so. It can be used in a variety of ways, but the most common application is in the form of software that can be used to automate certain tasks or make decisions based on past data . \nFor example, an AI system could be used to analyze images or videos and identify objects or people in them. It could also be used to analyze text and identify the meaning of sentences or words . \nThere are many different types of AI systems, including neural networks, machine learning algorithms, and deep learning systems. Neural networks are based on the way that neurons in our brains work, while machine  learning algorithms are based on the way that computers can be programmed to learn from experience. Deep learning systems are a type of neural network that is capable of learning more complex patterns than traditional neural networks. \n There are many different applications for AI, including self-driving cars, medical diagnosis, and financial forecasting. In addition, AI is also used to improve the efficiency of various businesses and organizations. \nWhat is  the future of artificial intelligence? \nAs artificial intelligence (AI) continues to evolve, it's important to understand how it might impact our lives in the future. \nFirst and foremost, AI will continue  to be used in a variety of fields and industries to assist humans in their daily lives and tasks. From self-driving cars to advanced medical diagnostics, AI is already making a real-world difference in how we  live and work. \nHowever, as AI becomes more sophisticated and capable, it's likely that it will also have a greater impact on society as a whole. For example, AI could potentially revolutionize  the way we communicate and interact with one another, or even change how we think about concepts like morality and justice. \nOf course, these are just a few of the many potential uses for AI that  are likely to be developed in the future. With so much uncertainty surrounding how AI might evolve over time, it's difficult to say exactly what its future holds. However, as AI continues to become a  more central part of our lives, it's likely that it will have a significant impact on both our professional and personal lives. \nWhat do you need to know to take advantage of it?\n  The  future of artificial intelligence is here. But what do you need to know to take advantage of it? \nThere are a few key things that you need to understand in order to fully leverage the power of  artificial intelligence. \nFirst, you need to understand how artificial intelligence works. It's important to know the basic principles behind machine learning and how they can be used in order to develop more advanced systems.  \nSecond, you need to understand the potential applications for artificial intelligence. There are a number of different ways that this technology can be used, from automating tasks to improving decision making. \nFinally,  you need to understand the ethical implications of artificial intelligence. As more and more systems are developed, it's important to consider what these systems are capable of and how they might be used for good or bad",
+  "detection_matrix": [
+    {
+      "detector_gamma": 0.1,
+      "z_score": 5.110899605829609,
+      "prediction": true,
+      "green_fraction": 0.16202945990180032
+    },
+    {
+      "detector_gamma": 0.1,
+      "z_score": 5.110899605829609,
+      "prediction": true,
+      "green_fraction": 0.16202945990180032
+    },
+    {
+      "detector_gamma": 0.1,
+      "z_score": 5.110899605829609,
+      "prediction": true,
+      "green_fraction": 0.16202945990180032
+    },
+    {
+      "detector_gamma": 0.1,
+      "z_score": 5.110899605829609,
+      "prediction": true,
+      "green_fraction": 0.16202945990180032
+    },
+    {
+      "detector_gamma": 0.2667,
+      "z_score": 5.858967511904187,
+      "prediction": true,
+      "green_fraction": 0.37152209492635024
+    },
+    {
+      "detector_gamma": 0.2667,
+      "z_score": 5.858967511904187,
+      "prediction": true,
+      "green_fraction": 0.37152209492635024
+    },
+    {
+      "detector_gamma": 0.2667,
+      "z_score": 5.858967511904187,
+      "prediction": true,
+      "green_fraction": 0.37152209492635024
+    },
+    {
+      "detector_gamma": 0.2667,
+      "z_score": 5.858967511904187,
+      "prediction": true,
+      "green_fraction": 0.37152209492635024
+    },
+    {
+      "detector_gamma": 0.4333,
+      "z_score": 5.898866065720326,
+      "prediction": true,
+      "green_fraction": 0.5515548281505729
+    },
+    {
+      "detector_gamma": 0.4333,
+      "z_score": 5.898866065720326,
+      "prediction": true,
+      "green_fraction": 0.5515548281505729
+    },
+    {
+      "detector_gamma": 0.4333,
+      "z_score": 5.898866065720326,
+      "prediction": true,
+      "green_fraction": 0.5515548281505729
+    },
+    {
+      "detector_gamma": 0.4333,
+      "z_score": 5.898866065720326,
+      "prediction": true,
+      "green_fraction": 0.5515548281505729
+    },
+    {
+      "detector_gamma": 0.6,
+      "z_score": 3.5839628851051537,
+      "prediction": false,
+      "green_fraction": 0.6710310965630114
+    },
+    {
+      "detector_gamma": 0.6,
+      "z_score": 3.5839628851051537,
+      "prediction": false,
+      "green_fraction": 0.6710310965630114
+    },
+    {
+      "detector_gamma": 0.6,
+      "z_score": 3.5839628851051537,
+      "prediction": false,
+      "green_fraction": 0.6710310965630114
+    },
+    {
+      "detector_gamma": 0.6,
+      "z_score": 3.5839628851051537,
+      "prediction": false,
+      "green_fraction": 0.6710310965630114
+    }
+  ]
+}

@@ -6,34 +6,44 @@
 
 ```
 lm-watermarking/
-│
-├── llama_demos/              # 基础水印演示脚本 ✓
-│   ├── llama_simple_example.py         (入门示例)
-│   ├── llama_watermark_demo.py         (完整演示)
-│   ├── llama_interactive_demo.py       (交互界面)
-│   ├── llama_batch_test.py             (批量测试)
-│   ├── model_config_manager.py         (⭐ 模型配置管理器)
-│   ├── model_config.json               (⭐ 模型配置文件)
-│   ├── llama_config_example.json       (配置示例)
-│   ├── run_llama_demo.ps1              (启动脚本)
-│   ├── requirements_llama.txt          (依赖列表)
-│   └── README.md                       ⭐ 目录说明
-│
-├── hybrid_watermark/         # 混合水印实验系统 ✓
-│   ├── hybrid_watermark_experiment.py  (核心实验)
-│   ├── hybrid_watermark_interactive.py (⭐ 交互式实验界面 - 1558行)
-│   ├── hybrid_watermark_analyzer.py    (结果分析)
-│   ├── statistical_evaluation.py       (统计评估模块)
-│   └── README.md                       ⭐ 目录说明
-│
-├── extended_watermark_processor.py    # 核心水印处理器 (626行)
-├── alternative_prf_schemes.py         # PRF方案
-├── normalizers.py                     # 文本规范化
-└── homoglyphs.py                      # 同形字处理
+├── docs_llama/               # 项目中文文档与导航 📄
+├── hybrid_watermark/         # 混合水印实验系统 ⭐
+│   ├── hybrid_watermark_experiment.py   (核心实验)
+│   ├── hybrid_watermark_interactive.py  (⭐ 交互式实验界面)
+│   ├── hybrid_watermark_analyzer.py     (结果分析工具)
+│   ├── statistical_evaluation.py        (统计评估模块)
+│   └── README.md                        ⭐ 目录说明
+├── llama_demos/              # 基础水印演示脚本 📄
+│   ├── llama_simple_example.py          (入门示例)
+│   ├── llama_watermark_demo.py          (完整演示)
+│   ├── llama_interactive_demo.py        (交互界面)
+│   ├── llama_batch_test.py              (批量测试)
+│   ├── model_config_manager.py          (⭐ 模型配置管理器)
+│   ├── model_config.json                (⭐ 模型配置文件)
+│   └── README.md                        ⭐ 目录说明
+├── upstream/
+│   └── lm_watermarking/      # 原始 lm-watermarking 源码全集 📦
+│       ├── alternative_prf_schemes.py
+│       ├── experiments/
+│       ├── hf_hub_space_demo/
+│       ├── homoglyph_data/
+│       ├── watermark_processor.py
+│       ├── demo_watermark.py
+│       ├── requirements.txt / setup.cfg / pyproject.toml
+│       └── watermark_reliability_release/ …
+├── extended_watermark_processor.py      # 自定义扩展处理器 (626行)
+├── REPORT_LLAMAWATERMARK_LLAMA.md       # 10 月 24 日实验报告
+├── SUMMARY.md                           # 项目摘要
+└── IMPORT_FIX.md                        # 导入修复备忘
 ```
 
-**✓ 表示目录已包含 README.md 说明文档**  
-**⭐ 表示重要文件或新功能**
+**📄 表示目录已包含 README.md 说明文档**  
+**⭐ 表示重要文件或新功能**  
+**📦 表示完整的上游项目打包在单一目录中**
+
+> 现在所有上游代码都集中在 `upstream/lm_watermarking/` 内，可通过
+> `from upstream.lm_watermarking import watermark_processor` 等方式导入；
+> 自定义模块（含中文注释）保持在仓库根目录下的独立子目录中。
 
 ## 🚀 快速开始
 
@@ -69,11 +79,13 @@ lm-watermarking/
 cd llama_demos
 
 # 运行简单示例
-python llama_simple_example.py --model llama-3.2-3b
+python llama_simple_example.py llama-3.2-3b
 
 # 或使用启动脚本
 .\run_llama_demo.ps1
 ```
+
+> 提示：`llama_simple_example.py` 和 `llama_batch_test.py` 使用**第一个位置参数**指定模型昵称，无 `--model` 选项。
 
 ### 3. 混合水印实验
 
@@ -82,11 +94,13 @@ python llama_simple_example.py --model llama-3.2-3b
 cd hybrid_watermark
 
 # 运行交互式界面（推荐）
-python hybrid_watermark_interactive.py --model llama-3.2-3b
+python hybrid_watermark_interactive.py
 
 # 或运行完整实验脚本
 python hybrid_watermark_experiment.py
 ```
+
+> `hybrid_watermark_interactive.py` 支持 `--model` 选项；`hybrid_watermark_experiment.py` 同样可接受一个可选的模型昵称位置参数（默认使用 `llama-2-7b`）。
 
 ## 📚 实验类型
 
@@ -113,7 +127,7 @@ python hybrid_watermark_experiment.py
 
 ```powershell
 cd llama_demos
-python llama_simple_example.py --model llama-3.2-3b
+python llama_simple_example.py llama-3.2-3b
 ```
 
 **适合**: 初次使用，了解基本功能
@@ -135,7 +149,7 @@ python hybrid_watermark_interactive.py --model llama-3.2-3b
 
 ```powershell
 cd llama_demos
-python llama_batch_test.py --model llama-3.2-3b
+python llama_batch_test.py llama-3.2-3b
 ```
 
 **适合**: 系统性参数对比研究
@@ -417,14 +431,14 @@ cd llama_demos
 python -c "from model_config_manager import ModelConfigManager; ModelConfigManager().validate_config()"
 
 # 2. 快速测试
-python llama_simple_example.py --model llama-3.2-3b
+python llama_simple_example.py llama-3.2-3b
 
 # 3. 交互式实验（推荐）
 cd ../hybrid_watermark
 python hybrid_watermark_interactive.py --model llama-3.2-3b
 
-# 4. 单项实验（滑动窗口）
-python statistical_evaluation.py --experiment sliding_window
+# 4. 统计评估（完整流程，含滑动窗口等）
+python statistical_evaluation.py --model llama-3.2-3b
 
 # 5. 结果分析
 python hybrid_watermark_analyzer.py

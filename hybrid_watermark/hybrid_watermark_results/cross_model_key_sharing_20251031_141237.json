@@ -1,0 +1,39 @@
+{
+  "experiment_type": "cross_model_key_sharing",
+  "initial_prompt": "The future of artificial intelligence",
+  "continuation_tokens": 20,
+  "models": [
+    "llama-3.2-3b",
+    "llama-3.1-8b",
+    "llama-3.2-3b"
+  ],
+  "shared_config": {
+    "gamma": 0.5,
+    "delta": 2.0,
+    "hash_key": 12345
+  },
+  "fragments": [
+    {
+      "model": "llama-3.2-3b",
+      "prompt": "The future of artificial intelligence",
+      "new_tokens": " in sports\nWith the rise of AI, sports have become more automated and efficient. This article discusses the benefits of AI in sports and the challenges that need to be addressed.\nThe use of artificial intelligence in sports has become increasingly prevalent in recent years. From automated scoring to advanced analytics, AI is revolution"
+    },
+    {
+      "model": "llama-3.1-8b",
+      "prompt": "artificial intelligence in sports has become increasingly prevalent in recent years. From automated scoring to advanced analytics, AI is revolution",
+      "new_tokens": "izing the way athletes perform and compete.\nIn this article, we will explore the benefits and drawbacks of using AI in sports.\nOne of the most significant advantages of using AI in sports is its ability to enhance the performance of athletes.\nAI-powered tools such as virtual reality (VR) training and automated feedback"
+    },
+    {
+      "model": "llama-3.2-3b",
+      "prompt": "is its ability to enhance the performance of athletes. AI-powered tools such as virtual reality (VR) training and automated feedback",
+      "new_tokens": " systems can help athletes improve their performance by providing them with personalized training plans and real-time data analysis. This article will explore the benefits of AI in sports training.\nThe use of AI in sports training has become increasingly popular in recent years. AI-powered tools such as VR training and automated feedback systems can help"
+    }
+  ],
+  "mixed_text": "The future of artificial intelligence  in sports\nWith the rise of AI, sports have become more automated and efficient. This article discusses the benefits of AI in sports and the challenges that need to be addressed.\nThe use of artificial intelligence in sports has become increasingly prevalent in recent years. From automated scoring to advanced analytics, AI is revolution izing the way athletes perform and compete.\nIn this article, we will explore the benefits and drawbacks of using AI in sports.\nOne of the most significant advantages of using AI in sports is its ability to enhance the performance of athletes.\nAI-powered tools such as virtual reality (VR) training and automated feedback  systems can help athletes improve their performance by providing them with personalized training plans and real-time data analysis. This article will explore the benefits of AI in sports training.\nThe use of AI in sports training has become increasingly popular in recent years. AI-powered tools such as VR training and automated feedback systems can help",
+  "detection": {
+    "z_score": 6.91860188355432,
+    "p_value": 2.280613492892886e-12,
+    "prediction": true,
+    "green_fraction": 0.7630057803468208
+  }
+}

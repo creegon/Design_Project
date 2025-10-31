@@ -223,11 +223,13 @@ python hybrid_watermark_interactive.py
 ```
 混合水印实验
     ↓
-extended_watermark_processor.py (项目原有)
+extended_watermark_processor.py (项目原有，位于根目录)
     ↓
-┌────────────────┬────────────────┐
-normalizers.py   alternative_prf_schemes.py   homoglyph_data/
-(项目原有)       (项目原有)                   (项目原有)
+┌────────────────┬──────────────────┐
+upstream/lm_watermarking/normalizers.py
+upstream/lm_watermarking/alternative_prf_schemes.py
+upstream/lm_watermarking/homoglyph_data/
+(上游归档)         (上游归档)                   (上游归档)
 ```
 
 所有新创建的脚本都依赖于项目原有的核心文件。
