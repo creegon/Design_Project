@@ -1,0 +1,107 @@
+{
+  "prompt": "The impact of artificial intelligence",
+  "watermark_config": {
+    "gamma": 0.5,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863
+  },
+  "generated_texts": {
+    "watermarked": {
+      "text": " (AI) on the insurance industry is hard to overstate, as AI helps insurers to manage their risks and boost profits, while saving them from a lot of time and money. AI is currently driving the insurance industry forward, and the insurance industry is currently driving the development of AI.\nThe insurance sector uses AI to gather data, assess risk, and make decisions about premium pricing, which are the most important elements of the insurance process. AI and machine learning are used in the insurance industry to assess risk, evaluate claims, and develop predictive models, as well as to automate tasks, reduce errors, and boost productivity.\nInsurers are also using AI to automate data collection, risk assessment, and claims processing, as well as to provide more accurate risk assessments and claims payouts. AI is also used to improve underwriting, pricing, and claims processing, as well as to provide real-time risk assessment and claims management tools.\nAI is changing the insurance industry’s future by allowing insurers to automate tasks, reduce human error, and improve risk assessment and claims management. It’s also helping insurers to provide more accurate risk assessments and claims payouts, as well as to automate data collection, risk assessment, and claims processing.\nAI is changing the insurance industry’s future by helping insurers to automate tasks, reduce human error, and improve risk assessment and claims management. It’s also helping insurers to provide more accurate risk assessments and claims payouts, as well as to automate data collection, risk assessment, and claims processing.\nThe insurance industry has been slow to adopt AI\nThe insurance industry has been slow to adopt AI, despite the potential benefits it offers. The industry’s reluctance to adopt AI is largely due to a lack of understanding of its potential and a reluctance to invest in it. This lack of understanding has been compounded by a lack of support from regulators and the public, as well as a lack of investment in research and development.\nThe insurance industry has also been slow to adopt AI due to a lack of resources and expertise, as well as a lack of trust in the technology. Despite these challenges, the insurance industry is slowly beginning to adopt AI, as it becomes increasingly clear that it offers a range of potential benefits.\nIn recent years, the insurance industry has seen a number of significant developments related to AI\nIn recent years, the insurance industry has seen a number of significant developments related to AI. These developments have been driven by a growing understanding of the potential benefits of AI and a desire to stay competitive in the global insurance market",
+      "length_chars": 2714,
+      "length_tokens": 500,
+      "detection": {
+        "z_score": 8.394927102781057,
+        "p_value": 2.330916947384544e-17,
+        "prediction": true,
+        "green_fraction": 0.7161803713527851
+      }
+    },
+    "unwatermarked": {
+      "text": " and machine learning on the finance industry is one of the most significant developments in the world of finance. Artificial intelligence and machine learning are transforming the way financial institutions operate, from risk management to investment decisions.\nArtificial intelligence (AI) is a branch of computer science that deals with the creation of intelligent machines that can perform tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and translation between languages. Machine learning (ML) is a subset of AI that focuses on the development of algorithms that can learn from data and make predictions or decisions based on that data.\nAI and ML have the potential to revolutionize the financial industry by automating tasks that are currently performed by humans, such as trading, risk management, and compliance. By automating these tasks, AI and ML can help financial institutions improve their efficiency, accuracy, and profitability.\nFor example, AI and ML can be used to develop algorithms that can analyze vast amounts of data in real-time, enabling financial institutions to make more informed decisions about risk management, investment decisions, and compliance with regulations. Additionally, AI and ML can be used to develop algorithms that can analyze customer behavior and predict their future financial needs, enabling financial institutions to offer more personalized and effective services.\nThe impact of AI and ML on the finance industry is already being felt, and it is expected to continue to grow in the coming years. However, there are also challenges and risks associated with the use of AI and ML in the finance industry, such as the risk of bias in the algorithms and the potential for unintended consequences. It is important for financial institutions to carefully consider the risks and benefits of AI and ML before implementing them in their operations.\nIn conclusion, the impact of AI and ML on the finance industry is significant and will continue to grow in the coming years. AI and ML have the potential to revolutionize the way financial institutions operate, but it is important for financial institutions to carefully consider the risks and benefits of AI and ML before implementing them in their operations.\nThe impact of artificial intelligence and machine learning on the finance industry is one of the most significant developments in the world of finance. Artificial intelligence and machine learning are transforming the way financial institutions operate, from risk management to investment decisions.\nArtificial intelligence (AI) is a branch of computer science that deals with the creation of intelligent machines that can perform tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and translation between languages. Machine learning (ML)",
+      "length_chars": 2916,
+      "length_tokens": 500,
+      "detection": {
+        "z_score": -1.5096588248481377,
+        "p_value": 0.9344347485651746,
+        "prediction": false,
+        "green_fraction": 0.45930232558139533
+      }
+    }
+  },
+  "sliding_window": {
+    "window_size": 100,
+    "stride": 100,
+    "num_windows": 17,
+    "avg_z_score": 4.08015543639032,
+    "std_z_score": 1.3491615198750746,
+    "detection_rate": 0.7058823529411765,
+    "avg_green_fraction": 0.7238602935628026
+  },
+  "window_sensitivity": {
+    "window_sizes": [
+      25,
+      50,
+      75,
+      100,
+      150,
+      200
+    ],
+    "avg_z_scores": [
+      2.0863206967203145,
+      3.001997409202793,
+      3.6572502069588944,
+      4.095074266347323,
+      5.233155706382638,
+      5.467583408381455
+    ],
+    "std_z_scores": [
+      1.120292835006867,
+      1.302755004625161,
+      1.3172366915962654,
+      1.4075894385261107,
+      1.560098190890784,
+      1.6878119277736747
+    ],
+    "detection_rates": [
+      0.175,
+      0.5263157894736842,
+      0.5833333333333334,
+      0.6666666666666666,
+      0.8,
+      1.0
+    ],
+    "optimal_window_size": 200,
+    "optimal_z_score": 5.467583408381455
+  },
+  "minimum_length": {
+    "test_range": [
+      20,
+      240
+    ],
+    "step_size": 10,
+    "num_tests": 23,
+    "min_success_length": 50,
+    "all_success_lengths": [
+      50,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240
+    ]
+  }
+}
