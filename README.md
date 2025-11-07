@@ -1,28 +1,28 @@
-# 水印系统 - 项目导航
+# Watermark System – Project Navigation
 
-本项目实现了基于大语言模型的水印生成、检测和混合水印实验系统，支持多种模型和API提供商。
+This project implements a watermark generation, detection, and hybrid watermark experimental system based on large language models, supporting multiple models and API providers.
 
-## 📁 目录结构
+## 📁 Directory Structure
 
 ```
 lm-watermarking/
-├── docs_llama/               # 项目中文文档与导航 📄
-├── hybrid_watermark/         # 混合水印实验系统 ⭐
-│   ├── hybrid_watermark_experiment.py   (核心实验)
-│   ├── hybrid_watermark_interactive.py  (⭐ 交互式实验界面)
-│   ├── hybrid_watermark_analyzer.py     (结果分析工具)
-│   ├── statistical_evaluation.py        (统计评估模块)
-│   └── README.md                        ⭐ 目录说明
-├── llama_demos/              # 基础水印演示脚本 📄
-│   ├── llama_simple_example.py          (入门示例)
-│   ├── llama_watermark_demo.py          (完整演示)
-│   ├── llama_interactive_demo.py        (交互界面)
-│   ├── llama_batch_test.py              (批量测试)
-│   ├── model_config_manager.py          (⭐ 模型配置管理器)
-│   ├── model_config.json                (⭐ 模型配置文件)
-│   └── README.md                        ⭐ 目录说明
+├── docs_llama/               # Chinese documentation & navigation 📄
+├── hybrid_watermark/         # Hybrid watermark experimental system ⭐
+│   ├── hybrid_watermark_experiment.py   (Core experiment)
+│   ├── hybrid_watermark_interactive.py  (⭐ Interactive experiment interface)
+│   ├── hybrid_watermark_analyzer.py     (Results analysis tool)
+│   ├── statistical_evaluation.py        (Statistical evaluation module)
+│   └── README.md                        ⭐ Directory description
+├── llama_demos/              # Basic watermark demo scripts 📄
+│   ├── llama_simple_example.py          (Introductory example)
+│   ├── llama_watermark_demo.py          (Full demo)
+│   ├── llama_interactive_demo.py        (Interactive interface)
+│   ├── llama_batch_test.py              (Batch testing)
+│   ├── model_config_manager.py          (⭐ Model configuration manager)
+│   ├── model_config.json                (⭐ Model configuration file)
+│   └── README.md                        ⭐ Directory description
 ├── upstream/
-│   └── lm_watermarking/      # 原始 lm-watermarking 源码全集 📦
+│   └── lm_watermarking/      # Original lm-watermarking full source code 📦
 │       ├── alternative_prf_schemes.py
 │       ├── experiments/
 │       ├── hf_hub_space_demo/
@@ -31,25 +31,27 @@ lm-watermarking/
 │       ├── demo_watermark.py
 │       ├── requirements.txt / setup.cfg / pyproject.toml
 │       └── watermark_reliability_release/ …
-├── extended_watermark_processor.py      # 自定义扩展处理器 (626行)
-├── REPORT_LLAMAWATERMARK_LLAMA.md       # 10 月 24 日实验报告
-├── SUMMARY.md                           # 项目摘要
-└── IMPORT_FIX.md                        # 导入修复备忘
+├── extended_watermark_processor.py      # Custom extended processor (626 lines)
+├── REPORT_LLAMAWATERMARK_LLAMA.md       # October 24 experiment report
+├── SUMMARY.md                           # Project summary
+└── IMPORT_FIX.md                        # Import fix notes
 ```
 
-**📄 表示目录已包含 README.md 说明文档**  
-**⭐ 表示重要文件或新功能**  
-**📦 表示完整的上游项目打包在单一目录中**
+**📄 indicates that the directory already contains a README.md documentation file**  
+**⭐ indicates important files or new features**  
+**📦 indicates that the full upstream project is packaged inside a single directory**
 
-> 现在所有上游代码都集中在 `upstream/lm_watermarking/` 内，可通过
-> `from upstream.lm_watermarking import watermark_processor` 等方式导入；
-> 自定义模块（含中文注释）保持在仓库根目录下的独立子目录中。
+> All upstream code is now consolidated under `upstream/lm_watermarking/`.  
+> You can import modules using statements like  
+> `from upstream.lm_watermarking import watermark_processor`.  
+> Custom modules (with Chinese comments) are kept in separate subdirectories at the repository root.
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 配置模型 (必需)
+### 1. Configure the Model (Required)
 
-首先配置 `llama_demos/model_config.json`：
+
+First `llama_demos/model_config.json`：
 
 ```json
 {
@@ -72,105 +74,101 @@ lm-watermarking/
 }
 ```
 
-### 2. 基础水印演示
+### 2. Basic Watermarking
 
 ```powershell
-# 进入演示目录
+
 cd llama_demos
 
-# 运行简单示例
 python llama_simple_example.py llama-3.2-3b
 
-# 或使用启动脚本
 .\run_llama_demo.ps1
 ```
 
-> 提示：`llama_simple_example.py` 和 `llama_batch_test.py` 使用**第一个位置参数**指定模型昵称，无 `--model` 选项。
+> Tip: `llama_simple_example.py` and `llama_batch_test.py` use the **first positional argument** to specify the model nickname; there is no `--model` option.
 
-### 3. 混合水印实验
+### 3. Hybrid Watermark Experiments
 
 ```powershell
-# 进入实验目录
+# Enter the experiment directory
 cd hybrid_watermark
 
-# 运行交互式界面（推荐）
+# Run the interactive interface (recommended)
 python hybrid_watermark_interactive.py
 
-# 或运行完整实验脚本
+# Or run the full experiment script
 python hybrid_watermark_experiment.py
-```
 
-> `hybrid_watermark_interactive.py` 支持 `--model` 选项；`hybrid_watermark_experiment.py` 同样可接受一个可选的模型昵称位置参数（默认使用 `llama-2-7b`）。
 
-## 📚 实验类型
+## 📚 Experiment Types
 
-### 混合水印实验 (3种)
+### Hybrid Watermark Experiments (3 types)
 
-| 实验编号 | 实验名称 | 说明 |
-|---------|---------|------|
-| **实验1** | 混合配置实验 | 片段级/参数级混合水印 |
-| **实验2** | 密钥交叉检测 | 种子混合/密钥共享策略 |
-| **实验3** | 跨模型共享密钥 | 多模型协作水印 |
+| Experiment No. | Name | Description |
+|----------------|------|-------------|
+| **Experiment 1** | Hybrid Configuration Experiment | Segment-level / parameter-level hybrid watermarking |
+| **Experiment 2** | Key Cross-Detection | Seed-mixing / key-sharing strategies |
+| **Experiment 3** | Cross-Model Shared Key | Multi-model cooperative watermarking |
 
-### 统计评估实验 (4种)
+### Statistical Evaluation Experiments (4 types)
 
-| 实验编号 | 实验名称 | 说明 |
-|---------|---------|------|
-| **实验4** | 滑动窗口检测 | 分析水印信号分布均匀性 |
-| **实验5** | 窗口敏感性分析 | 确定最优检测窗口大小 |
-| **实验6** | 最小可检测长度 | 找出可靠检测所需最小长度 |
-| **实验7** | 完整统计评估 | 执行全部三项统计分析 |
+| Experiment No. | Name | Description |
+|----------------|------|-------------|
+| **Experiment 4** | Sliding-Window Detection | Analyze uniformity of watermark signal distribution |
+| **Experiment 5** | Window Sensitivity Analysis | Determine optimal window size |
+| **Experiment 6** | Minimum Detectable Length | Find minimum length required for reliable detection |
+| **Experiment 7** | Full Statistical Evaluation | Perform all three statistical analyses |
 
-## 🎯 使用场景
+## 🎯 Usage Scenarios
 
-### 场景1: 快速测试水印功能
+### Scenario 1: Quick Watermark Function Test
 
 ```powershell
 cd llama_demos
 python llama_simple_example.py llama-3.2-3b
 ```
 
-**适合**: 初次使用，了解基本功能
+**Best for:** First-time users to understand core features
 
-### 场景2: 交互式实验研究
+### Scenario 2: Interactive Experiment Research
 
 ```powershell
 cd hybrid_watermark
 python hybrid_watermark_interactive.py --model llama-3.2-3b
 ```
 
-**适合**: 研究人员进行多种水印方案对比
-**功能**: 
-- 7种实验类型（3种混合+4种统计）
-- 实时可视化
-- 自动保存结果
+**Best for:** Researchers comparing multiple watermark schemes  
+**Features:**  
+- 7 experiment types (3 hybrid + 4 statistical)  
+- Real-time visualization  
+- Automatic result saving  
 
-### 场景3: 批量参数测试
+### Scenario 3: Batch Parameter Testing
 
 ```powershell
 cd llama_demos
 python llama_batch_test.py llama-3.2-3b
 ```
 
-**适合**: 系统性参数对比研究
+**Best for:** Systematic parameter comparison studies
 
-### 场景4: 结果分析
+### Scenario 4: Result Analysis
 
 ```powershell
 cd hybrid_watermark
 python hybrid_watermark_analyzer.py
 ```
 
-**适合**: 分析已保存的实验结果
+**Best for:** Analyzing saved experiment outputs
 
-## 💡 支持的模型
+## 💡 Supported Models
 
-### API提供商
-- **OpenAI**: GPT系列模型
-- **DeepSeek**: DeepSeek系列、Llama系列
-- **本地模型**: 通过Transformers库加载
+### API Providers
+- **OpenAI**: GPT series  
+- **DeepSeek**: DeepSeek series, Llama series  
+- **Local Models**: Loaded via HuggingFace Transformers  
 
-### 推荐模型配置
+### Recommended Model Configuration
 
 ```json
 {
@@ -178,40 +176,40 @@ python hybrid_watermark_analyzer.py
     "llama-3.2-3b": {
       "model_identifier": "meta-llama/Llama-3.2-3B-Instruct",
       "api_provider": "deepseek",
-      "description": "小型高效模型，推荐日常使用"
+      "description": "Small and efficient; recommended for daily use"
     },
     "gpt-4o-mini": {
       "model_identifier": "gpt-4o-mini",
       "api_provider": "openai",
-      "description": "高质量生成，适合对比实验"
+      "description": "High-quality outputs; good for comparison studies"
     }
   }
 }
 ```
 
-### 模型管理
+### Model Management
 
 ```powershell
-# 列出所有配置的模型
+# List all configured models
 cd llama_demos
 python -c "from model_config_manager import ModelConfigManager; mgr = ModelConfigManager(); print(mgr.list_model_names())"
 
-# 查看模型详情
+# View model details
 python -c "from model_config_manager import ModelConfigManager; mgr = ModelConfigManager(); print(mgr.get_model_info_by_nickname('llama-3.2-3b'))"
 ```
 
-## 🔧 安装依赖
+## 🔧 Installing Dependencies
 
 ```powershell
-# 方法1: 安装基础依赖
+# Method 1: Basic dependencies
 cd llama_demos
 pip install -r requirements_llama.txt
 
-# 方法2: 安装完整依赖（推荐）
+# Method 2: Full dependencies (recommended)
 cd ..
 pip install -r requirements.txt
 
-# 主要依赖包
+# Main packages:
 # - torch >= 2.0.0
 # - transformers >= 4.30.0
 # - openai >= 1.0.0
@@ -221,38 +219,35 @@ pip install -r requirements.txt
 # - tqdm
 ```
 
-## ⚙️ 环境配置
+## ⚙️ Environment Setup
 
-### 1. API密钥配置（推荐使用环境变量）
+### 1. API Key Configuration (recommended: environment variables)
 
 ```powershell
 # Windows PowerShell
 $env:OPENAI_API_KEY = "your-openai-api-key"
 $env:DEEPSEEK_API_KEY = "your-deepseek-api-key"
 
-# 或在 model_config.json 中直接配置
+# Or configure inside model_config.json
 {
   "api_providers": {
     "openai": {
-      "api_key": "env:OPENAI_API_KEY"  # 推荐：使用环境变量
+      "api_key": "env:OPENAI_API_KEY"
     }
   }
 }
 ```
 
-### 2. GPU配置（可选）
+### 2. GPU Configuration (optional)
 
 ```python
-# 系统自动选择：cuda（GPU）或 cpu
-# 可在运行时指定：
 python hybrid_watermark_interactive.py --device cuda
 ```
 
-## 🆘 常见问题
+## 🆘 Frequently Asked Questions
 
-### Q1: 如何添加新模型？
+### Q1: How do I add a new model?
 
-编辑 `llama_demos/model_config.json`：
 ```json
 {
   "models": {
@@ -260,106 +255,107 @@ python hybrid_watermark_interactive.py --device cuda
       "model_identifier": "organization/model-name",
       "nickname": "my-model",
       "api_provider": "openai",
-      "description": "我的自定义模型"
+      "description": "My custom model"
     }
   }
 }
 ```
 
-### Q2: 检测率低怎么办？
+### Q2: What if detection accuracy is low?
 
-当前系统已优化 `z_threshold = 3.0`（从4.0降低），显著提升检测率。
+Try the following:
 
-如果仍然检测率低，可以尝试：
-1. **增加 delta**（如从2.0提高到2.5）- 增强水印信号
-2. **降低 gamma**（如从0.5降到0.4）- 提高信噪比
-3. **增加生成长度** - 更长文本提供更多统计证据
+1. **Increase delta** (e.g. 2.0 → 2.5) — strengthens watermark signal  
+2. **Lower gamma** (e.g. 0.5 → 0.4) — improves signal-to-noise ratio  
+3. **Generate longer text** — more statistical evidence  
 
-### Q3: 如何理解 Z-score？
+### Q3: What is Z-score?
 
-Z-score 是统计显著性指标：
-- **Z = 3.0**: 99.87%置信度，检测阈值（推荐）
-- **Z = 4.0**: 99.997%置信度（过于严格，已弃用）
-- **Z = 2.5**: 99.38%置信度（较宽松）
+Z-score measures statistical significance:
 
-公式: `Z = (observed_green - expected_green) / std_dev`
+- **Z = 3.0** → 99.87% confidence (**recommended**)  
+- **Z = 4.0** → 99.997% confidence (too strict; deprecated)  
+- **Z = 2.5** → 99.38% confidence (lenient)
 
-### Q4: Gamma 和 Delta 如何选择？
+Formula:  
+`Z = (observed_green - expected_green) / std_dev`
 
-| 场景 | Gamma | Delta | 说明 |
-|------|-------|-------|------|
-| **质量优先** | 0.5 | 1.5-2.0 | 文本自然，水印中等 |
-| **平衡配置** | 0.5 | 2.0 | **推荐默认** |
-| **检测优先** | 0.25 | 2.5-3.0 | 水印强，可能影响质量 |
+### Q4: How to choose Gamma and Delta?
 
-### Q5: 如何查看所有可用模型？
+| Scenario | Gamma | Delta | Notes |
+|----------|--------|--------|------|
+| Quality-first | 0.5 | 1.5–2.0 | More natural text |
+| Balanced | 0.5 | 2.0 | **Recommended default** |
+| Detection-first | 0.25 | 2.5–3.0 | Strong signal, possible text impact |
+
+### Q5: List all models?
 
 ```powershell
-cd llama_demos
-python -c "from model_config_manager import ModelConfigManager; mgr = ModelConfigManager(); print('\n'.join(mgr.list_model_names()))"
+python -c "from model_config_manager import ModelConfigManager; print('\n'.join(ModelConfigManager().list_model_names()))"
 ```
 
-### Q6: 实验结果保存在哪里？
+### Q6: Where are results saved?
 
-所有结果保存在 `hybrid_watermark/hybrid_watermark_results/`，包括：
-- JSON数据文件（完整实验数据）
-- PNG图表文件（可视化结果）
+`hybrid_watermark/hybrid_watermark_results/`
 
-### Q7: 如何分析已有结果？
+- JSON data files  
+- PNG visualization files  
+
+### Q7: How to analyze existing results?
 
 ```powershell
 cd hybrid_watermark
 python hybrid_watermark_analyzer.py
 ```
 
-## 🎓 核心功能
+## 🎓 Core Features
 
-### 基础功能 (`llama_demos/`)
-- ✅ 水印生成和检测
-- ✅ 多模型支持（本地/API）
-- ✅ 模型配置管理系统
-- ✅ 交互式界面
-- ✅ 批量测试
+### Base Functionality
+- ✅ Watermark generation & detection  
+- ✅ Multi-model support (local/API)  
+- ✅ Model configuration system  
+- ✅ Interactive UI  
+- ✅ Batch testing  
 
-### 混合水印实验 (`hybrid_watermark/`)
+### Hybrid Watermark Experiments
+- ✅ Segment-level hybrid  
+- ✅ Parameter-grid hybrid  
+- ✅ Seed variants  
+- ✅ Key sharing  
+- ✅ Cross-model cooperation  
 
-**混合方案 (3种)**
-- ✅ 片段级混合 - 不同片段用不同配置
-- ✅ 参数网格混合 - gamma×delta组合扫描
-- ✅ 种子变体 - 不同hash_key生成变体
-- ✅ 密钥共享 - 共享密钥vs独立密钥
-- ✅ 跨模型协作 - 多模型共享密钥
+### Statistical Evaluation
+- ✅ Sliding-window detection  
+- ✅ Window sensitivity  
+- ✅ Minimum-length analysis  
+- ✅ Full statistical evaluation  
 
-**统计评估 (4种)**
-- ✅ 滑动窗口检测 - Z-score分布分析
-- ✅ 窗口敏感性 - 最优窗口大小
-- ✅ 最小长度分析 - 可靠检测阈值
-- ✅ 完整统计评估 - 综合性能评估
 
-### 水印参数
+### Watermark Parameters
 
-| 参数 | 说明 | 默认值 | 推荐范围 |
-|------|------|--------|---------|
-| **gamma** | 绿名单比例 | 0.5 | 0.25-0.5 |
-| **delta** | Logits偏置强度 | 2.0 | 1.5-3.0 |
-| **hash_key** | PRF种子 | 15485863 | 任意整数 |
-| **z_threshold** | 检测阈值 | 3.0 | 2.5-4.0 |
+| Parameter | Description | Default | Recommended Range |
+|-----------|-------------|----------|--------------------|
+| **gamma** | Green-list ratio | 0.5 | 0.25–0.5 |
+| **delta** | Logits bias strength | 2.0 | 1.5–3.0 |
+| **hash_key** | PRF seed | 15485863 | Any integer |
+| **z_threshold** | Detection threshold | 3.0 | 2.5–4.0 |
 
-**参数说明**:
-- **gamma**: 控制词汇表中绿色token的比例，影响期望绿色率
-- **delta**: 控制对绿色token的推动强度，影响实际绿色率
-- **z_threshold**: 统计显著性阈值（已优化为3.0，提升检测率）
+**Parameter Notes**:
+- **gamma**: Controls the proportion of green tokens in the vocabulary; affects expected green-token rate  
+- **delta**: Controls how strongly green tokens are boosted; affects actual green-token rate  
+- **z_threshold**: Statistical significance threshold (optimized to 3.0 to improve detection rate)
 
-## 📊 实验结果
+## 📊 Experiment Results
 
-运行后会在以下位置生成结果：
+Results are generated in the following location:
 
-### 结果目录
-- `hybrid_watermark/hybrid_watermark_results/` - 所有实验结果
+### Results Directory
+- `hybrid_watermark/hybrid_watermark_results/` — all experiment outputs
 
-### 输出文件类型
+### Output File Types
 
-**JSON格式** - 完整数据记录
+**JSON Files** — full data logs
+
 ```
 sliding_window_20251024_143022.json
 window_sensitivity_20251024_143155.json
@@ -367,119 +363,124 @@ minimum_length_20251024_143340.json
 complete_statistical_eval_20251024_143512.json
 ```
 
-**PNG格式** - 可视化图表
+**PNG Format** - Charts
 ```
 sliding_window_20251024_143022.png
 window_sensitivity_20251024_143155.png
 minimum_length_20251024_143340.png
 ```
 
-### JSON结构
+### JSON Structure
 
-每个实验结果包含：
-- `experiment_type`: 实验类型标识
-- `prompt`: 使用的提示词
-- `watermark_config`: 水印参数配置
-- `generated_texts`: 生成的文本及完整内容
-- `results`: 统计分析结果
-- `detailed_results`: 详细检测数据
+Each experiment result contains:
+- `experiment_type`: experiment type identifier  
+- `prompt`: prompt used  
+- `watermark_config`: watermark parameter configuration  
+- `generated_texts`: generated texts with full content  
+- `results`: statistical analysis results  
+- `detailed_results`: detailed detection data  
 
-### 可视化分析
+### Visualization Analysis
 
-所有统计评估实验自动生成matplotlib图表：
-- Z-score分布曲线
-- 检测率趋势图
-- 绿色token比例分析
-- 成功/失败散点图
+All statistical evaluation experiments automatically generate matplotlib charts:
+- Z-score distribution curve  
+- Detection-rate trend plot  
+- Green-token ratio analysis  
+- Success/Failure scatter plot  
 
-## ✅ 项目特色
 
-### 1. 统一模型管理
-- ✅ 支持多API提供商（OpenAI, DeepSeek等）
-- ✅ 模型昵称系统，简化调用
-- ✅ 环境变量安全管理API密钥
-- ✅ 统一配置文件 `model_config.json`
+## ✅ Project Features
 
-### 2. 完整实验体系
-- ✅ 3种混合水印方案（配置/密钥/跨模型）
-- ✅ 4种统计评估方法（窗口/敏感性/最小长度/综合）
-- ✅ 交互式界面，实时反馈
-- ✅ 自动保存JSON+PNG结果
+### 1. Unified Model Management
+- ✅ Supports multiple API providers (OpenAI, DeepSeek, etc.)
+- ✅ Model nickname system for simplified usage
+- ✅ Secure API key management via environment variables
+- ✅ Unified configuration file `model_config.json`
 
-### 3. 优化的检测算法
-- ✅ Z-score阈值优化（3.0 vs 4.0）
-- ✅ 提升检测灵敏度（检测率从40%→近100%）
-- ✅ 保持低假阳性率（<0.13%）
+### 2. Complete Experiment Framework
+- ✅ 3 hybrid watermarking schemes (configuration / key / cross-model)
+- ✅ 4 statistical evaluation methods (window / sensitivity / minimum length / comprehensive)
+- ✅ Interactive interface with real-time feedback
+- ✅ Automatic saving of JSON + PNG results
 
-### 4. 可视化分析
-- ✅ matplotlib自动生成图表
-- ✅ Z-score分布、检测率、绿色比例
-- ✅ 成功/失败散点图
-- ✅ 累积检测率曲线
+### 3. Optimized Detection Algorithm
+- ✅ Z-score threshold optimization (3.0 vs 4.0)
+- ✅ Improved detection sensitivity (accuracy from 40% → nearly 100%)
+- ✅ Maintains low false-positive rate (<0.13%)
 
-### 5. 研究工具
-- ✅ 滑动窗口分析水印均匀性
-- ✅ 窗口敏感性确定最优参数
-- ✅ 最小长度分析找检测阈值
-- ✅ 批量实验支持大规模测试
+### 4. Visualization & Analysis
+- ✅ Automatic chart generation with matplotlib
+- ✅ Z-score distribution, detection rate, green-token ratio
+- ✅ Success/failure scatter plots
+- ✅ Cumulative detection-rate curves
 
-## 📖 命令速查
+### 5. Research Tools
+- ✅ Sliding-window analysis of watermark uniformity
+- ✅ Window-sensitivity analysis for optimal parameters
+- ✅ Minimum-length analysis for detection thresholds
+- ✅ Batch-experiment support for large-scale testing
+
+
+## 📖 Command Quick Reference
 
 ```powershell
-# 1. 配置检查
+# 1. Configuration check
 cd llama_demos
 python -c "from model_config_manager import ModelConfigManager; ModelConfigManager().validate_config()"
 
-# 2. 快速测试
+# 2. Quick test
 python llama_simple_example.py llama-3.2-3b
 
-# 3. 交互式实验（推荐）
+# 3. Interactive experiment (recommended)
 cd ../hybrid_watermark
 python hybrid_watermark_interactive.py --model llama-3.2-3b
 
-# 4. 统计评估（完整流程，含滑动窗口等）
+# 4. Statistical evaluation (full workflow, including sliding window, etc.)
 python statistical_evaluation.py --model llama-3.2-3b
 
-# 5. 结果分析
+# 5. Result analysis
 python hybrid_watermark_analyzer.py
 
-# 6. 查看帮助
+# 6. View help
 python hybrid_watermark_interactive.py --help
+
 ```
 
-## 🔗 相关资源
+## 🔗 Related Resources
 
-- **原始项目**: [lm-watermarking](https://github.com/jwkirchenbauer/lm-watermarking)
-- **论文**: [A Watermark for Large Language Models](https://arxiv.org/abs/2301.10226)
-- **核心文件**: 
-  - `extended_watermark_processor.py` - 水印处理器（626行）
-  - `hybrid_watermark_interactive.py` - 交互界面（1558行）
-  - `model_config_manager.py` - 模型管理（443行）
+- **Original Project**: [lm-watermarking](https://github.com/jwkirchenbauer/lm-watermarking)
+- **Paper**: [A Watermark for Large Language Models](https://arxiv.org/abs/2301.10226)
+- **Key Files**:
+  - `extended_watermark_processor.py` – Watermark processor (626 lines)
+  - `hybrid_watermark_interactive.py` – Interactive interface (1558 lines)
+  - `model_config_manager.py` – Model manager (443 lines)
 
-## 📝 更新日志
 
-### 最新版本 (2025-10-24)
+## 📝 Changelog
 
-**新增功能**:
-- ✅ 统计评估实验模块（4种评估方法）
-- ✅ Z-score阈值优化（3.0替代4.0）
-- ✅ 模型配置管理系统
-- ✅ 完整JSON输出（包含生成文本）
-- ✅ 自动可视化图表生成
+### Latest Version (2025-10-24)
 
-**优化改进**:
-- ✅ 检测率显著提升（40%→近100%@200tokens）
-- ✅ 实验整合（5个→3个混合实验）
-- ✅ 交互界面优化（7种实验类型）
+**New Features**:
+- ✅ Statistical evaluation module (4 evaluation methods)
+- ✅ Z-score threshold optimization (3.0 replacing 4.0)
+- ✅ Model configuration management system
+- ✅ Complete JSON output (including generated text)
+- ✅ Automatic visualization chart generation
 
-**修复问题**:
-- ✅ hash_key参数传递错误
-- ✅ Z-score阈值过严格问题
-- ✅ 可视化图表阈值不一致
+**Improvements**:
+- ✅ Detection accuracy significantly improved (40% → nearly 100% @ 200 tokens)
+- ✅ Experiment consolidation (5 → 3 hybrid experiments)
+- ✅ Interactive UI optimization (7 experiment types)
+
+**Bug Fixes**:
+- ✅ `hash_key` parameter passing error
+- ✅ Overly strict Z-score threshold
+- ✅ Inconsistent visualization chart thresholds
 
 ---
 
-**创建日期**: 2025年10月23日  
-**最后更新**: 2025年10月24日  
-**推荐模型**: Llama 3.2 3B Instruct (DeepSeek API)  
-**实验类型**: 3种混合实验 + 4种统计评估
+**Created**: October 23, 2025  
+**Last Updated**: October 24, 2025  
+**Recommended Model**: Llama 3.2 3B Instruct (DeepSeek API)  
+**Experiment Types**: 3 hybrid experiments + 4 statistical evaluations
+
