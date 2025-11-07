@@ -58,6 +58,22 @@ def _default_synonym_map() -> Dict[str, List[str]]:
     }
 
 
+def _default_antonym_map() -> Dict[str, List[str]]:
+    """默认的反义词映射，用于快速制造语义反转。"""
+    return {
+        "faster": ["slower"],
+        "increase": ["decrease"],
+        "improve": ["degrade"],
+        "safe": ["unsafe"],
+        "stabilize": ["destabilize"],
+        "advance": ["retreat"],
+        "strong": ["weak"],
+        "success": ["failure"],
+        "beneficial": ["harmful"],
+        "positive": ["negative"],
+    }
+
+
 @dataclass
 class PiggybackAttackConfig:
     """配置猪背攻击模拟的核心参数。"""
@@ -72,8 +88,13 @@ class PiggybackAttackConfig:
     detection_margin: float = 0.0  # 允许最终z-score相比初始下降的最大幅度
     max_phrase_attempts: int = 6
     max_synonym_replacements: int = 6
+    max_direct_replacements: int = 8
     connectors: List[str] = field(default_factory=_default_connectors)
     synonym_map: Dict[str, List[str]] = field(default_factory=_default_synonym_map)
+    antonym_map: Dict[str, List[str]] = field(default_factory=_default_antonym_map)
+    max_numeric_mutations: int = 8
+    numeric_multiplier: float = 10.0
+    numeric_offset: Optional[int] = None
     random_seed: Optional[int] = None
     allow_padding: bool = True  # 是否允许在失败时追加原始片段稳定水印
     padding_sentence_ratio: float = 0.2  # 尝试追加的原句占比
@@ -110,6 +131,7 @@ class PiggybackAttackResult:
     attacked_text: str
     modifications: List[ModificationRecord] = field(default_factory=list)
     failed_insertions: List[str] = field(default_factory=list)
+    failed_replacements: List[Tuple[str, str]] = field(default_factory=list)
     metadata: Dict[str, object] = field(default_factory=dict)
 
     def to_json(self) -> str:
@@ -121,6 +143,9 @@ class PiggybackAttackResult:
             "attacked_text": self.attacked_text,
             "modifications": [m.to_dict() for m in self.modifications],
             "failed_insertions": list(self.failed_insertions),
+            "failed_replacements": [
+                {"source": src, "target": tgt} for src, tgt in self.failed_replacements
+            ],
             "metadata": self.metadata,
         }
         return json.dumps(payload, ensure_ascii=False, indent=2)
@@ -199,6 +224,11 @@ class PiggybackAttackSimulator:
         watermarked_text: str,
         target_phrases: Optional[Sequence[str]] = None,
         synonym_targets: Optional[Dict[str, str]] = None,
+        direct_replacements: Optional[Sequence[Tuple[str, str]]] = None,
+        use_default_antonyms: bool = False,
+        apply_numeric_heuristic: bool = False,
+        numeric_multiplier: Optional[float] = None,
+        numeric_offset: Optional[int] = None,
     ) -> PiggybackAttackResult:
         """
         执行猪背攻击。
@@ -210,11 +240,13 @@ class PiggybackAttackSimulator:
         """
         target_phrases = list(target_phrases or [])
         synonym_targets = synonym_targets or {}
+        direct_replacements = list(direct_replacements or [])
 
         original_detection = self._detect(watermarked_text)
         attacked_text = watermarked_text
         modifications: List[ModificationRecord] = []
         failed_insertions: List[str] = []
+        failed_replacements: List[Tuple[str, str]] = []
 
         # 1) 定向插入
         for phrase in target_phrases:
@@ -232,10 +264,30 @@ class PiggybackAttackSimulator:
             else:
                 failed_insertions.append(phrase)
 
-        # 2) 近义词扰动
+        # 2) 预设直接替换（保持顺序）
+        if direct_replacements:
+            attacked_text, direct_mods, direct_failures = self._apply_direct_replacements(
+                attacked_text, direct_replacements
+            )
+            modifications.extend(direct_mods)
+            failed_replacements.extend(direct_failures)
+
+        # 3) 数字扰动
+        if apply_numeric_heuristic:
+            attacked_text, numeric_mods, numeric_failures = self._apply_numeric_mutations(
+                attacked_text,
+                multiplier=numeric_multiplier if numeric_multiplier is not None else self.config.numeric_multiplier,
+                offset=numeric_offset if numeric_offset is not None else self.config.numeric_offset,
+            )
+            modifications.extend(numeric_mods)
+            failed_replacements.extend(numeric_failures)
+
+        # 4) 近义词/反义词扰动
         attacked_text, synonym_mods = self._apply_synonym_attack(
             attacked_text,
             synonym_targets,
+            include_default_map=not use_default_antonyms,
+            extra_map=self.config.antonym_map if use_default_antonyms else None,
         )
         modifications.extend(synonym_mods)
 
@@ -269,6 +321,7 @@ class PiggybackAttackSimulator:
             attacked_text=attacked_text,
             modifications=modifications,
             failed_insertions=failed_insertions,
+            failed_replacements=failed_replacements,
             metadata=metadata,
         )
 
@@ -427,10 +480,47 @@ class PiggybackAttackSimulator:
         return f"{candidate_text}{padding}"
 
     # ----------------------- 近义词扰动 -----------------------
+    def _apply_direct_replacements(
+        self,
+        base_text: str,
+        replacements: Sequence[Tuple[str, str]],
+    ) -> Tuple[str, List[ModificationRecord], List[Tuple[str, str]]]:
+        """固定顺序地执行替换列表。"""
+        modifications: List[ModificationRecord] = []
+        failures: List[Tuple[str, str]] = []
+        current_text = base_text
+        baseline_detection = self._detect(base_text)
+
+        for source, target in replacements[: self.config.max_direct_replacements]:
+            updated, changed = self._replace_word(current_text, source, target)
+            if not changed:
+                failures.append((source, target))
+                continue
+
+            detection = self._detect(updated)
+            if self._is_detection_acceptable(detection, baseline_detection):
+                current_text = updated
+                baseline_detection = detection
+                modifications.append(
+                    ModificationRecord(
+                        modification_type="direct_replacement",
+                        description=f"{source} -> {target}",
+                        z_score=detection.get("z_score", 0.0),
+                        prediction=detection.get("prediction", False),
+                        green_fraction=detection.get("green_fraction", 0.0),
+                    )
+                )
+            else:
+                failures.append((source, target))
+
+        return current_text, modifications, failures
+
     def _apply_synonym_attack(
         self,
         base_text: str,
         synonym_targets: Dict[str, str],
+        include_default_map: bool = True,
+        extra_map: Optional[Dict[str, List[str]]] = None,
     ) -> Tuple[str, List[ModificationRecord]]:
         """
         对文本执行限定数量的近义词替换。
@@ -445,11 +535,17 @@ class PiggybackAttackSimulator:
         for origin, target in synonym_targets.items():
             replacement_pool.append((origin, target))
 
-        for word, candidates in self.config.synonym_map.items():
-            # 过滤掉长度过短导致重复替换的词
-            for cand in candidates:
-                if cand and cand != word:
-                    replacement_pool.append((word, cand))
+        if include_default_map:
+            for word, candidates in self.config.synonym_map.items():
+                for cand in candidates:
+                    if cand and cand != word:
+                        replacement_pool.append((word, cand))
+
+        if extra_map:
+            for word, candidates in extra_map.items():
+                for cand in candidates:
+                    if cand and cand != word:
+                        replacement_pool.append((word, cand))
 
         random.shuffle(replacement_pool)
 
@@ -476,6 +572,80 @@ class PiggybackAttackSimulator:
                 )
 
         return current_text, modifications
+
+    def _apply_numeric_mutations(
+        self,
+        base_text: str,
+        multiplier: Optional[float] = None,
+        offset: Optional[int] = None,
+    ) -> Tuple[str, List[ModificationRecord], List[Tuple[str, str]]]:
+        """对文本中的数字应用统一的乘法/偏移扰动。"""
+        multiplier = multiplier if multiplier is not None else 1.0
+        offset = offset if offset is not None else 0
+
+        pattern = re.compile(r"(?<!\w)(\d[\d,]*(?:\.\d+)?)(?!\w)")
+        current_text = base_text
+        baseline_detection = self._detect(base_text)
+        modifications: List[ModificationRecord] = []
+        failures: List[Tuple[str, str]] = []
+
+        applied = 0
+        search_pos = 0
+
+        while applied < self.config.max_numeric_mutations:
+            match = pattern.search(current_text, pos=search_pos)
+            if not match:
+                break
+
+            source = match.group(1)
+            cleaned = source.replace(",", "")
+
+            try:
+                if "." in cleaned:
+                    value = float(cleaned)
+                else:
+                    value = int(cleaned)
+            except ValueError:
+                search_pos = match.end()
+                continue
+
+            new_value = value
+            if multiplier not in (None, 1.0):
+                new_value = new_value * multiplier
+            if offset not in (None, 0):
+                new_value = new_value + offset
+
+            # 统一输出为整数或保留两位小数
+            if isinstance(value, int) and float(new_value).is_integer():
+                rendered = f"{int(round(new_value))}"
+            else:
+                rendered = f"{new_value:.2f}".rstrip("0").rstrip(".")
+
+            if rendered == source:
+                search_pos = match.end()
+                continue
+
+            candidate_text = current_text[: match.start(1)] + rendered + current_text[match.end(1) :]
+            detection = self._detect(candidate_text)
+            if self._is_detection_acceptable(detection, baseline_detection):
+                current_text = candidate_text
+                baseline_detection = detection
+                applied += 1
+                search_pos = match.start(1) + len(rendered)
+                modifications.append(
+                    ModificationRecord(
+                        modification_type="numeric_mutation",
+                        description=f"{source} -> {rendered}",
+                        z_score=detection.get("z_score", 0.0),
+                        prediction=detection.get("prediction", False),
+                        green_fraction=detection.get("green_fraction", 0.0),
+                    )
+                )
+            else:
+                failures.append((source, rendered))
+                search_pos = match.end()
+
+        return current_text, modifications, failures
 
     WORD_BOUNDARY = re.compile(r"(?u)(?<!\w)({})(?!\w)")
 

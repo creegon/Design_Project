@@ -146,7 +146,7 @@ class HybridWatermarkExperiment:
                 seeding_scheme = '-'.join(parts)
             else:
                 seeding_scheme = f"ff-anchored_minhash_prf-4-True-{hash_key}"
-        
+
         return WatermarkDetector(
             vocab=list(self.tokenizer.get_vocab().values()),
             gamma=gamma,
@@ -157,6 +157,40 @@ class HybridWatermarkExperiment:
             normalizers=[],
             ignore_repeated_ngrams=True
         )
+
+    def _ensure_prompt_min_context(self, prompt: str, watermark_processor: WatermarkLogitsProcessor) -> str:
+        """确保提示词长度满足水印上下文需求，否则自动添加前缀。"""
+        context_width = getattr(watermark_processor, "context_width", 0)
+        if context_width is None or context_width <= 0:
+            return prompt
+
+        candidate = prompt
+        prefixes = [
+            "Background context: ",
+            "Additional detail: ",
+            "Warm-up detail: ",
+            "Context primer: ",
+        ]
+        prefix_index = 0
+
+        while True:
+            tokenized = self.tokenizer(
+                candidate,
+                return_tensors="pt",
+                add_special_tokens=False
+            )["input_ids"][0]
+            if tokenized.shape[-1] >= context_width:
+                if candidate != prompt:
+                    print(f"[Info] Prompt auto-prefixed to satisfy watermark context requirement ({context_width} tokens).")
+                return candidate
+
+            prefix = prefixes[prefix_index % len(prefixes)]
+            candidate = prefix + candidate
+            prefix_index += 1
+
+            if prefix_index > 8:
+                # 兜底：若仍不足，直接补空格以避免死循环
+                candidate = (" warm-up" * (context_width - tokenized.shape[-1])) + candidate
     
     def generate_with_watermark(
         self,
@@ -166,8 +200,8 @@ class HybridWatermarkExperiment:
         temperature: float = 0.7
     ) -> str:
         """使用指定水印处理器生成文本"""
-        
-        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        prompt_prepared = self._ensure_prompt_min_context(prompt, watermark_processor)
+        inputs = self.tokenizer(prompt_prepared, return_tensors="pt").to(self.device)
         
         with torch.no_grad():
             output_tokens = self.model.generate(

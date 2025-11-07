@@ -20,7 +20,7 @@
     },
     {
       "name": "HuggingFace",
-      "base_url": "https://api-inference.huggingface.co/models",
+  "base_url": "https://router.huggingface.co/hf-inference/v1",
       "api_key": "auto",
       "client_type": "openai",
       "max_retry": 2,
@@ -125,6 +125,16 @@
       "price_out": 0.0,
       "context_length": 8192,
       "description": "Llama 3.2 3B - 中等参数量",
+      "requires_auth": true
+    },
+    {
+      "model_identifier": "Qwen/Qwen3-8B",
+      "name": "qwen-3-8b",
+      "api_provider": "HuggingFace",
+      "price_in": 0.0,
+      "price_out": 0.0,
+      "context_length": 8192,
+      "description": "Qwen 3-8B",
       "requires_auth": true
     },
     {

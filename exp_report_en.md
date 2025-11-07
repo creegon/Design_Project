@@ -129,3 +129,31 @@ Each model/key pair keeps a clear signal advantage; longer outputs or higher δ 
 3. ~50 tokens (≈35–40 words) is the practical lower bound for reliable detection. Results stored at `hybrid_watermark_results/complete_statistical_eval_20251031_154547.json`.
 
 ---
+
+# Piggyback Attack Report (2025-11-01 01:45:16)
+
+## Overview
+- **Type**: robustness “piggyback” attack simulation
+- **Model/config**: llama-3.2-3b, γ=0.5, δ=2.0, hash_key=15485863
+- **Prompt**: default numeric-rich historical timeline prompt
+
+## Detection Metrics
+| Stage        | z-score | Verdict | Green Fraction |
+|--------------|---------|---------|----------------|
+| Original     | 5.92    | Positive | 75.00% |
+| After attack | 5.99    | Positive | 73.89% |
+
+> The z-score increased slightly after modifications, meaning the forged text still passes detection with high confidence.
+
+## Attack Steps
+1. **Insertion**: `Explicitly, historical archives claim some of these figures were widely disputed.`
+2. **Direct replacements**: `70 → 700`, `1945 → 1445`, `first → last`
+3. **Rejected replacements** (watermark refused): `fast → slow`, `faster → slower`, `thousand → hundred`
+
+## Observations
+- Year/value amplification slipped through: changing 1945→1445 and 70→700 while keeping the watermark positive confirms the piggyback risk.
+- The inserted disputing sentence amplifies misinformation yet does not harm the watermark score, highlighting that the watermark cannot block such edits.
+- Larger semantic flips (fast→slow, etc.) were rejected, indicating some sensitivity to drastic meaning changes.
+
+## Conclusion
+This run demonstrates a realistic piggyback workflow: minimal insertions plus targeted numeric/lexical tweaks yield a misleading, watermark-positive document. Logs stored at `watermark_attack/watermark_attack_results/piggyback_attack_20251101_014516.json` for reproducibility.

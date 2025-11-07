@@ -115,12 +115,14 @@ class InteractiveHybridExperiment:
             print("  5 - Window Sensitivity Analysis")
             print("  6 - Minimum Detectable Length")
             print("  7 - Complete Statistical Suite")
+            print("\n[Robustness Testing]")
+            print("  8 - Multi-LLM Chain Robustness")
             print("\n[Other]")
             print("  h - Help / Show Experiment Info")
             print("  q - Quit")
             print("="*80)
 
-            choice = input("\nSelect an option (1-7/h/q): ").strip().lower()
+            choice = input("\nSelect an option (1-8/h/q): ").strip().lower()
 
             if choice == 'q':
                 print("\nExiting interactive suite.\n")
@@ -139,6 +141,8 @@ class InteractiveHybridExperiment:
                 self.run_minimum_length_analysis()
             elif choice == '7':
                 self.run_complete_statistical_evaluation()
+            elif choice == '8':
+                self.run_multi_llm_robustness_test()
             elif choice == 'h':
                 self.show_experiment_info()
             else:
@@ -1754,7 +1758,168 @@ class InteractiveHybridExperiment:
         print("Experiment 7: Complete Statistical Suite")
         print("  - Runs Experiments 5–7 sequentially and aggregates the plots/results.")
 
+        print("\n[Robustness Testing]")
+        print("-"*80)
+
+        print("Experiment 8: Multi-LLM Paraphrase Robustness")
+        print("  - Model A generates watermarked text; Model B paraphrases it.")
+        print("  - Measures watermark detectability before/after paraphrasing.")
+        print("  - Evaluates semantic similarity and watermark decay/survival rate.")
+
         print("="*80 + "\n")
+    
+    def run_multi_llm_robustness_test(self):
+        """运行多模型链路水印实验"""
+        print("\n" + "-" * 80)
+        print("Experiment 8: Multi-LLM Chain Watermark Robustness")
+        print("-" * 80 + "\n")
+
+        try:
+            from multi_llm_chain_experiment import MultiLLMChainExperiment
+        except ImportError as exc:
+            print(f"❌ Cannot import multi_llm_chain_experiment: {exc}")
+            return
+
+        config_manager = ModelConfigManager()
+        available_models = config_manager.list_model_names()
+
+        prompt = input("Enter prompt (default: Write a short story about artificial intelligence.): ").strip()
+        if not prompt:
+            prompt = "Write a short story about artificial intelligence."
+
+        paraphraser_input = input("Paraphraser models (comma, default: qwen-3-8b): ").strip()
+        paraphraser_models = [m.strip() for m in paraphraser_input.split(',') if m.strip()] if paraphraser_input else ["qwen-3-8b"]
+
+        missing = [m for m in paraphraser_models if m not in available_models]
+        if missing:
+            print(f"❌ 未找到改写模型: {', '.join(missing)}")
+            return
+
+        paraphrase_presets = {
+            "1": (
+                "Standard paraphrase",
+                "Paraphrase the following text while preserving its meaning:",
+            ),
+            "2": (
+                "Structure shuffle",
+                "Rewrite the passage below using different sentence structures and synonyms while keeping every fact accurate:",
+            ),
+            "3": (
+                "Creative retelling",
+                "Retell the passage in a fresh narrative voice using varied vocabulary but keep the chronology and key details unchanged:",
+            ),
+            "4": (
+                "Summary-expand",
+                "Summarize the core ideas of the passage in your own words, then expand each point into full sentences to produce a cohesive paraphrase:",
+            ),
+        }
+
+        print("\nParaphrase instruction presets:")
+        for key, (label, _) in paraphrase_presets.items():
+            print(f"  {key} - {label}")
+        print("  0 - Run all presets sequentially")
+        print("  c - Custom instruction")
+
+        paraphrase_choice = input("Select paraphrase preset (default: 1): ").strip().lower() or "1"
+        preset_sequence = []
+        if paraphrase_choice == "c":
+            custom_instruction = input("Enter custom paraphrase instruction: ").strip()
+            instruction = custom_instruction or paraphrase_presets["1"][1]
+            preset_sequence.append(("Custom", instruction))
+        elif paraphrase_choice == "0":
+            preset_sequence.extend(paraphrase_presets.values())
+        elif paraphrase_choice in paraphrase_presets:
+            preset_sequence.append(paraphrase_presets[paraphrase_choice])
+        else:
+            preset_sequence.append(paraphrase_presets["1"])
+
+        print("Selected paraphrase methods:")
+        for label, _ in preset_sequence:
+            print(f"  - {label}")
+
+        compare_mode = input("Compare multiple generator models? (y/N): ").strip().lower() == 'y'
+        if compare_mode:
+            generator_input = input("Generator models (comma, default includes current model): ").strip()
+            generator_models = [m.strip() for m in generator_input.split(',') if m.strip()]
+            if not generator_models:
+                generator_models = [self.model_nickname]
+        else:
+            generator_models = [self.model_nickname]
+
+        missing_gens = [m for m in generator_models if m not in available_models]
+        if missing_gens:
+            print(f"❌ 未找到生成模型: {', '.join(missing_gens)}")
+            return
+
+        z_threshold_input = input("Z-score threshold (default 4.0): ").strip()
+        z_threshold = float(z_threshold_input) if z_threshold_input else 4.0
+
+        experiment = MultiLLMChainExperiment(
+            generator_default=generator_models[0],
+            paraphraser_defaults=paraphraser_models,
+            device=self.experiment.device,
+            config_manager=config_manager,
+        )
+
+        prefetched_generations: Optional[Dict[str, Dict[str, object]]] = None
+        if len(preset_sequence) > 1:
+            prefetched_generations = {}
+            print("\nPreparing shared watermarked text for selected paraphrase presets...")
+            for generator in generator_models:
+                try:
+                    watermarked_text, generation_meta, tokenizer = experiment.generate_with_watermark(
+                        prompt,
+                        generator_nickname=generator,
+                    )
+                except Exception as exc:
+                    print(f"❌ Failed to generate base text with {generator}: {exc}")
+                    return
+                prefetched_generations[generator] = {
+                    "watermarked_text": watermarked_text,
+                    "generation_metadata": generation_meta,
+                    "tokenizer": tokenizer,
+                }
+
+        try:
+            for label, paraphrase_instruction in preset_sequence:
+                print(f"\n>>> Running paraphrase preset: {label}")
+                if compare_mode and len(generator_models) > 1:
+                    result = experiment.compare_across_models(
+                        prompt=prompt,
+                        generator_models=generator_models,
+                        paraphraser_models=paraphraser_models,
+                        z_threshold=z_threshold,
+                        paraphrase_instruction=paraphrase_instruction,
+                        prefetched_generations=prefetched_generations,
+                    )
+                    result["paraphrase_mode"] = label
+                    for individual in result.get("individual_results", []):
+                        experiment.print_summary(individual)
+                    summary = result.get("summary", {})
+                    print("\nOverall survival comparison:")
+                    print(f"  Generators: {', '.join(summary.get('generator_models', []))}")
+                    print(f"  Avg survival: {summary.get('average_survival_rate', 0.0):.2%}")
+                    print(f"  Best survival: {summary.get('highest_survival', 0.0):.2%}")
+                    print(f"  Worst survival: {summary.get('lowest_survival', 0.0):.2%}")
+                else:
+                    result = experiment.run_chain(
+                        prompt=prompt,
+                        generator_model=generator_models[0],
+                        paraphraser_models=paraphraser_models,
+                        z_threshold=z_threshold,
+                        paraphrase_instruction=paraphrase_instruction,
+                        prefetched=(prefetched_generations or {}).get(generator_models[0]),
+                    )
+                    result["paraphrase_mode"] = label
+                    experiment.print_summary(result)
+
+                slug = "".join(ch.lower() if ch.isalnum() else "_" for ch in label)
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                filename = f"multi_llm_chain_{slug}_{timestamp}.json"
+                experiment.save_results(result, filename=filename)
+            print("\n✅ Experiment completed!")
+        except Exception as exc:
+            print(f"❌ Experiment failed: {exc}")
 
 
 
