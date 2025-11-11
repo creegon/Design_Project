@@ -1,0 +1,129 @@
+{
+  "experiment_type": "watermarked_paraphrase_chain",
+  "prompt": "Write a short story about artificial intelligence.",
+  "generator_model": "llama-3.2-3b",
+  "paraphraser_models": [
+    "qwen-3-8b"
+  ],
+  "generator_watermark_config": {
+    "gamma": 0.25,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863
+  },
+  "paraphraser_watermark_configs": [
+    {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 50000000
+    }
+  ],
+  "z_threshold": 3.0,
+  "generated_text": "The story must take place in the near future.\nThe main character is an AI program that is trying to make a decision. The decision must be based on the input provided by a human.\nThe AI program can use any tools and information it needs to make the decision. However, the decision must be made based on the information provided by a human.\nThe story must be no more than 1,000 words.",
+  "generation_metadata": {
+    "model": "llama-3.2-3b",
+    "model_identifier": "meta-llama/Llama-3.2-3B",
+    "prompt": "Write a short story about artificial intelligence.",
+    "prompt_prepared": "Write a short story about artificial intelligence.",
+    "watermark_config": {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "generation_config": {
+      "max_new_tokens": 150,
+      "temperature": 0.7,
+      "top_p": 0.85,
+      "top_k": 30,
+      "do_sample": true
+    },
+    "generated_at": "2025-11-11T17:57:56.872887",
+    "token_usage": {
+      "prompt_tokens": 9,
+      "completion_tokens": 84,
+      "total_tokens": 93
+    }
+  },
+  "original_detection": {
+    "z_score": 4.6714570342143595,
+    "p_value": 1.4953533142003658e-06,
+    "prediction": true,
+    "num_green_tokens": 37,
+    "num_tokens_scored": 77,
+    "green_fraction": 0.4805194805194805,
+    "z_threshold": 3.0,
+    "confidence": 0.9999985046466858
+  },
+  "paraphraser_results": [
+    {
+      "paraphraser": "qwen-3-8b",
+      "paraphrased_text": "The narrative should occur in a near-future setting. The protagonist is an artificial intelligence that needs to make a choice. This choice should be influenced by input from a human. The AI has access to all necessary tools and information required for decision-making. Nonetheless, the final decision must rely solely on the human's input. The story should not exceed 1,000 words in length. The original text requires that the story is set in a near-future time. The main character is an AI that must make a decision, which should be based on human input. The AI can utilize any tools or information needed, but the decision must ultimately be grounded in the human's input. The story should be no longer than 1,00",
+      "metadata": {
+        "model": "qwen-3-8b",
+        "model_identifier": "Qwen/Qwen3-8B",
+        "instruction": "Paraphrase the following text while preserving its meaning:",
+        "prompt_text": "Paraphrase the following text while preserving its meaning:\n\nOriginal text:\nThe story must take place in the near future.\nThe main character is an AI program that is trying to make a decision. The decision must be based on the input provided by a human.\nThe AI program can use any tools and information it needs to make the decision. However, the decision must be made based on the information provided by a human.\nThe story must be no more than 1,000 words.\n\nParaphrased text:",
+        "original_text": "The story must take place in the near future.\nThe main character is an AI program that is trying to make a decision. The decision must be based on the input provided by a human.\nThe AI program can use any tools and information it needs to make the decision. However, the decision must be made based on the information provided by a human.\nThe story must be no more than 1,000 words.",
+        "generation_config": {
+          "max_new_tokens": 150,
+          "temperature": 0.7,
+          "top_p": 0.85,
+          "top_k": 30,
+          "do_sample": true
+        },
+        "paraphrase_watermark_config": {
+          "gamma": 0.25,
+          "delta": 2.0,
+          "seeding_scheme": "selfhash",
+          "hash_key": 50000000
+        },
+        "paraphrased_at": "2025-11-11T18:00:43.666382",
+        "token_usage": {
+          "prompt_tokens": 105,
+          "completion_tokens": 150,
+          "total_tokens": 255
+        }
+      },
+      "paraphrase_watermark_config": {
+        "gamma": 0.25,
+        "delta": 2.0,
+        "seeding_scheme": "selfhash",
+        "hash_key": 50000000
+      },
+      "detection_with_generator_key": {
+        "z_score": -0.8385481602338831,
+        "p_value": 0.799138544302779,
+        "prediction": false,
+        "num_green_tokens": 30,
+        "num_tokens_scored": 137,
+        "green_fraction": 0.21897810218978103,
+        "z_threshold": 3.0,
+        "confidence": null
+      },
+      "detection_with_paraphraser_key": {
+        "z_score": -0.24663181183349503,
+        "p_value": 0.5974034086888425,
+        "prediction": false,
+        "num_green_tokens": 33,
+        "num_tokens_scored": 137,
+        "green_fraction": 0.24087591240875914,
+        "z_threshold": 3.0,
+        "confidence": null
+      },
+      "semantic_similarity": 0.3258426966292135,
+      "generator_watermark_decay": 5.510005194448243,
+      "generator_z_score_retention": -0.17950462866130357
+    }
+  ],
+  "summary": {
+    "generator_watermark_survival_rate": 0.0,
+    "generator_watermark_survived_count": 0,
+    "paraphraser_watermark_detection_rate": 0.0,
+    "paraphraser_watermark_detected_count": 0,
+    "average_similarity": 0.3258426966292135,
+    "average_generator_decay": 5.510005194448243
+  },
+  "timestamp": "2025-11-11T18:00:43.811259"
+}

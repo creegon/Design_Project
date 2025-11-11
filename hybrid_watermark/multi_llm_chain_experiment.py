@@ -254,6 +254,7 @@ class MultiLLMChainExperiment:
         paraphraser_nickname: str,
         instruction: str = "Paraphrase the following text while preserving its meaning:",
         generation_config_name: str = "precise",
+        watermark_config: Optional[Dict] = None,
     ) -> Tuple[str, Dict]:
         tokenizer, model, info = self._load_model(paraphraser_nickname)
         prompt_text = (
@@ -280,6 +281,11 @@ class MultiLLMChainExperiment:
         if "top_k" in generation_config:
             paraphrase_kwargs["top_k"] = generation_config["top_k"]
 
+        # 如果提供了水印配置，在改写时也嵌入水印
+        if watermark_config is not None:
+            processor = self._create_watermark_processor(tokenizer, watermark_config)
+            paraphrase_kwargs["logits_processor"] = LogitsProcessorList([processor])
+
         with torch.no_grad():
             output_tokens = model.generate(**inputs, **paraphrase_kwargs)
 
@@ -293,6 +299,7 @@ class MultiLLMChainExperiment:
             "prompt_text": prompt_text,
             "original_text": text,
             "generation_config": generation_config,
+            "paraphrase_watermark_config": watermark_config,
             "paraphrased_at": datetime.now().isoformat(),
             "token_usage": {
                 "prompt_tokens": int(inputs["input_ids"].shape[-1]),
@@ -431,6 +438,142 @@ class MultiLLMChainExperiment:
                 ),
                 "average_decay": (
                     sum(item["watermark_decay"] for item in paraphraser_results) / len(paraphraser_results)
+                    if paraphraser_results
+                    else 0.0
+                ),
+            },
+            "timestamp": datetime.now().isoformat(),
+        }
+        return result
+
+    def run_chain_with_watermarked_paraphrase(
+        self,
+        prompt: str,
+        generator_model: Optional[str] = None,
+        paraphraser_models: Optional[List[str]] = None,
+        generator_watermark_config: Optional[Dict] = None,
+        paraphraser_watermark_configs: Optional[List[Dict]] = None,
+        z_threshold: float = 3.0,
+        paraphrase_instruction: str = "Paraphrase the following text while preserving its meaning:",
+    ) -> Dict:
+        """
+        运行链路实验，改写阶段也嵌入水印（使用不同的 green/red list）。
+        
+        Args:
+            paraphraser_watermark_configs: 每个改写模型对应的水印配置列表。
+                                           如果为 None，则改写时不嵌入水印。
+        """
+        paraphraser_models = paraphraser_models or self.paraphraser_defaults
+        
+        # 生成带水印文本
+        watermarked_text, generation_meta, tokenizer = self.generate_with_watermark(
+            prompt,
+            generator_nickname=generator_model,
+            watermark_config=generator_watermark_config,
+        )
+        generator_watermark_conf = generation_meta["watermark_config"]
+
+        # 检测原始生成文本的水印
+        original_detection = self.detect_watermark(
+            watermarked_text,
+            tokenizer=tokenizer,
+            watermark_config=generator_watermark_conf,
+            z_threshold=z_threshold,
+        )
+
+        paraphraser_results = []
+        for idx, paraphraser in enumerate(paraphraser_models):
+            # 获取改写器的水印配置
+            paraphrase_wm_config = None
+            if paraphraser_watermark_configs and idx < len(paraphraser_watermark_configs):
+                paraphrase_wm_config = paraphraser_watermark_configs[idx]
+            
+            # 改写文本（可能嵌入新水印）
+            paraphrased_text, paraphrase_meta = self.paraphrase_text(
+                watermarked_text,
+                paraphraser,
+                instruction=paraphrase_instruction,
+                watermark_config=paraphrase_wm_config,
+            )
+            
+            # 用原始生成器的密钥检测（原水印存活性）
+            detection_with_generator_key = self.detect_watermark(
+                paraphrased_text,
+                tokenizer=tokenizer,
+                watermark_config=generator_watermark_conf,
+                z_threshold=z_threshold,
+            )
+            
+            # 如果改写时也嵌入了水印，用改写器的密钥检测
+            detection_with_paraphraser_key = None
+            if paraphrase_wm_config is not None:
+                detection_with_paraphraser_key = self.detect_watermark(
+                    paraphrased_text,
+                    tokenizer=tokenizer,
+                    watermark_config=paraphrase_wm_config,
+                    z_threshold=z_threshold,
+                )
+            
+            similarity = self.calculate_similarity(watermarked_text, paraphrased_text)
+            watermark_decay = original_detection.z_score - detection_with_generator_key.z_score
+            retention = (
+                detection_with_generator_key.z_score / original_detection.z_score
+                if original_detection.z_score != 0
+                else 0.0
+            )
+
+            paraphraser_results.append(
+                {
+                    "paraphraser": paraphraser,
+                    "paraphrased_text": paraphrased_text,
+                    "metadata": paraphrase_meta,
+                    "paraphrase_watermark_config": paraphrase_wm_config,
+                    "detection_with_generator_key": detection_with_generator_key.__dict__,
+                    "detection_with_paraphraser_key": detection_with_paraphraser_key.__dict__ if detection_with_paraphraser_key else None,
+                    "semantic_similarity": similarity,
+                    "generator_watermark_decay": watermark_decay,
+                    "generator_z_score_retention": retention,
+                }
+            )
+
+        # 统计原水印存活率
+        generator_survival_count = sum(
+            1 for result in paraphraser_results 
+            if result["detection_with_generator_key"]["prediction"]
+        )
+        generator_survival_rate = generator_survival_count / len(paraphraser_results) if paraphraser_results else 0.0
+
+        # 统计新水印检测率
+        paraphraser_detection_count = sum(
+            1 for result in paraphraser_results 
+            if result["detection_with_paraphraser_key"] and result["detection_with_paraphraser_key"]["prediction"]
+        )
+        paraphraser_detection_rate = paraphraser_detection_count / len(paraphraser_results) if paraphraser_results else 0.0
+
+        result = {
+            "experiment_type": "watermarked_paraphrase_chain",
+            "prompt": prompt,
+            "generator_model": generator_model or self.generator_default,
+            "paraphraser_models": paraphraser_models,
+            "generator_watermark_config": generator_watermark_conf,
+            "paraphraser_watermark_configs": paraphraser_watermark_configs,
+            "z_threshold": z_threshold,
+            "generated_text": watermarked_text,
+            "generation_metadata": generation_meta,
+            "original_detection": original_detection.__dict__,
+            "paraphraser_results": paraphraser_results,
+            "summary": {
+                "generator_watermark_survival_rate": generator_survival_rate,
+                "generator_watermark_survived_count": generator_survival_count,
+                "paraphraser_watermark_detection_rate": paraphraser_detection_rate,
+                "paraphraser_watermark_detected_count": paraphraser_detection_count,
+                "average_similarity": (
+                    sum(item["semantic_similarity"] for item in paraphraser_results) / len(paraphraser_results)
+                    if paraphraser_results
+                    else 0.0
+                ),
+                "average_generator_decay": (
+                    sum(item["generator_watermark_decay"] for item in paraphraser_results) / len(paraphraser_results)
                     if paraphraser_results
                     else 0.0
                 ),

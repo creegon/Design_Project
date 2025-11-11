@@ -117,12 +117,13 @@ class InteractiveHybridExperiment:
             print("  7 - Complete Statistical Suite")
             print("\n[Robustness Testing]")
             print("  8 - Multi-LLM Chain Robustness")
+            print("  9 - Watermarked Paraphrase Chain (Different Green/Red Lists)")
             print("\n[Other]")
             print("  h - Help / Show Experiment Info")
             print("  q - Quit")
             print("="*80)
 
-            choice = input("\nSelect an option (1-8/h/q): ").strip().lower()
+            choice = input("\nSelect an option (1-9/h/q): ").strip().lower()
 
             if choice == 'q':
                 print("\nExiting interactive suite.\n")
@@ -143,6 +144,8 @@ class InteractiveHybridExperiment:
                 self.run_complete_statistical_evaluation()
             elif choice == '8':
                 self.run_multi_llm_robustness_test()
+            elif choice == '9':
+                self.run_watermarked_paraphrase_chain()
             elif choice == 'h':
                 self.show_experiment_info()
             else:
@@ -1766,6 +1769,11 @@ class InteractiveHybridExperiment:
         print("  - Measures watermark detectability before/after paraphrasing.")
         print("  - Evaluates semantic similarity and watermark decay/survival rate.")
 
+        print("Experiment 9: Watermarked Paraphrase Chain (Different Green/Red Lists)")
+        print("  - Generator embeds watermark with one hash key; paraphraser embeds watermark with a different hash key.")
+        print("  - Tests 'same LLM, different green/red list' sequential generation/refinement.")
+        print("  - Detects text with both generator and paraphraser keys to measure dual watermark survival.")
+
         print("="*80 + "\n")
     
     def run_multi_llm_robustness_test(self):
@@ -1921,6 +1929,150 @@ class InteractiveHybridExperiment:
         except Exception as exc:
             print(f"❌ Experiment failed: {exc}")
 
+    def run_watermarked_paraphrase_chain(self):
+        """运行带水印改写链路实验（同一模型用不同 green/red list）"""
+        print("\n" + "-" * 80)
+        print("Experiment 9: Watermarked Paraphrase Chain (Different Green/Red Lists)")
+        print("-" * 80 + "\n")
+        print("This experiment embeds different watermarks during paraphrasing,")
+        print("allowing you to test watermark survival with distinct green/red lists.\n")
+
+        try:
+            from multi_llm_chain_experiment import MultiLLMChainExperiment
+        except ImportError as exc:
+            print(f"❌ Cannot import multi_llm_chain_experiment: {exc}")
+            return
+
+        config_manager = ModelConfigManager()
+        available_models = config_manager.list_model_names()
+
+        prompt = input("Enter prompt (default: Write a short story about artificial intelligence.): ").strip()
+        if not prompt:
+            prompt = "Write a short story about artificial intelligence."
+
+        paraphraser_input = input("Paraphraser models (comma, default: qwen-3-8b): ").strip()
+        paraphraser_models = [m.strip() for m in paraphraser_input.split(',') if m.strip()] if paraphraser_input else ["qwen-3-8b"]
+
+        missing = [m for m in paraphraser_models if m not in available_models]
+        if missing:
+            print(f"❌ 未找到改写模型: {', '.join(missing)}")
+            return
+
+        z_threshold_input = input("Z-score threshold (default 3.0): ").strip()
+        z_threshold = float(z_threshold_input) if z_threshold_input else 3.0
+
+        # 配置生成器水印
+        print("\n=== Generator Watermark Configuration ===")
+        gen_gamma_input = input("Generator gamma (default 0.25): ").strip()
+        gen_gamma = float(gen_gamma_input) if gen_gamma_input else 0.25
+        gen_delta_input = input("Generator delta (default 2.0): ").strip()
+        gen_delta = float(gen_delta_input) if gen_delta_input else 2.0
+        gen_hash_key_input = input("Generator hash_key (default 15485863): ").strip()
+        gen_hash_key = int(gen_hash_key_input) if gen_hash_key_input else 15485863
+
+        generator_watermark_config = {
+            "gamma": gen_gamma,
+            "delta": gen_delta,
+            "seeding_scheme": "selfhash",
+            "hash_key": gen_hash_key,
+        }
+
+        # 配置改写器水印
+        print("\n=== Paraphraser Watermark Configurations ===")
+        enable_paraphrase_wm = input("Embed watermark during paraphrasing? (y/N): ").strip().lower() == 'y'
+        
+        paraphraser_watermark_configs = None
+        if enable_paraphrase_wm:
+            paraphraser_watermark_configs = []
+            base_hash_key = 50000000
+            for idx, paraphraser in enumerate(paraphraser_models):
+                print(f"\n--- Paraphraser {idx+1}: {paraphraser} ---")
+                auto_config = input(f"  Auto-configure (different hash_key from generator)? (Y/n): ").strip().lower()
+                if auto_config != 'n':
+                    para_hash_key = base_hash_key + idx * 10000
+                    para_config = {
+                        "gamma": gen_gamma,
+                        "delta": gen_delta,
+                        "seeding_scheme": "selfhash",
+                        "hash_key": para_hash_key,
+                    }
+                    print(f"  Auto: gamma={gen_gamma}, delta={gen_delta}, hash_key={para_hash_key}")
+                else:
+                    para_gamma_input = input(f"  Gamma (default {gen_gamma}): ").strip()
+                    para_gamma = float(para_gamma_input) if para_gamma_input else gen_gamma
+                    para_delta_input = input(f"  Delta (default {gen_delta}): ").strip()
+                    para_delta = float(para_delta_input) if para_delta_input else gen_delta
+                    para_hash_key_input = input(f"  Hash_key (default {base_hash_key + idx * 10000}): ").strip()
+                    para_hash_key = int(para_hash_key_input) if para_hash_key_input else (base_hash_key + idx * 10000)
+                    para_config = {
+                        "gamma": para_gamma,
+                        "delta": para_delta,
+                        "seeding_scheme": "selfhash",
+                        "hash_key": para_hash_key,
+                    }
+                paraphraser_watermark_configs.append(para_config)
+
+        experiment = MultiLLMChainExperiment(
+            generator_default=self.model_nickname,
+            paraphraser_defaults=paraphraser_models,
+            device=self.experiment.device,
+            config_manager=config_manager,
+        )
+
+        try:
+            result = experiment.run_chain_with_watermarked_paraphrase(
+                prompt=prompt,
+                generator_model=self.model_nickname,
+                paraphraser_models=paraphraser_models,
+                generator_watermark_config=generator_watermark_config,
+                paraphraser_watermark_configs=paraphraser_watermark_configs,
+                z_threshold=z_threshold,
+            )
+
+            # 显示结果
+            print("\n" + "=" * 80)
+            print("Experiment Results")
+            print("=" * 80)
+            print(f"\nPrompt: {result['prompt']}")
+            print(f"Generator: {result['generator_model']}")
+            print(f"Paraphrasers: {', '.join(result['paraphraser_models'])}")
+            print(f"\nGenerator watermark config: gamma={generator_watermark_config['gamma']}, delta={generator_watermark_config['delta']}, hash_key={generator_watermark_config['hash_key']}")
+            
+            print(f"\nOriginal z-score (generator key): {result['original_detection']['z_score']:.4f}")
+            print(f"Original detection: {'✓ PASS' if result['original_detection']['prediction'] else '✗ FAIL'}")
+
+            summary = result['summary']
+            print(f"\n=== Summary ===")
+            print(f"Generator watermark survival rate: {summary['generator_watermark_survival_rate']:.2%}")
+            print(f"Generator watermark survived: {summary['generator_watermark_survived_count']}/{len(paraphraser_models)}")
+            if enable_paraphrase_wm:
+                print(f"Paraphraser watermark detection rate: {summary['paraphraser_watermark_detection_rate']:.2%}")
+                print(f"Paraphraser watermark detected: {summary['paraphraser_watermark_detected_count']}/{len(paraphraser_models)}")
+            print(f"Average semantic similarity: {summary['average_similarity']:.4f}")
+            print(f"Average generator watermark decay: {summary['average_generator_decay']:.4f}")
+
+            print("\n=== Per-Paraphraser Details ===")
+            for idx, para_result in enumerate(result['paraphraser_results']):
+                print(f"\n[{idx+1}] {para_result['paraphraser']}")
+                print(f"  Paraphrased text: {para_result['paraphrased_text'][:100]}...")
+                print(f"  Detection (generator key): z={para_result['detection_with_generator_key']['z_score']:.4f}, "
+                      f"{'✓ PASS' if para_result['detection_with_generator_key']['prediction'] else '✗ FAIL'}")
+                if para_result['detection_with_paraphraser_key']:
+                    print(f"  Detection (paraphraser key): z={para_result['detection_with_paraphraser_key']['z_score']:.4f}, "
+                          f"{'✓ PASS' if para_result['detection_with_paraphraser_key']['prediction'] else '✗ FAIL'}")
+                print(f"  Semantic similarity: {para_result['semantic_similarity']:.4f}")
+                print(f"  Generator watermark retention: {para_result['generator_z_score_retention']:.2%}")
+
+            # 保存结果
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            filename = f"watermarked_paraphrase_chain_{timestamp}.json"
+            experiment.save_results(result, filename=filename)
+            print(f"\n✅ Results saved to: {filename}")
+
+        except Exception as exc:
+            print(f"❌ Experiment failed: {exc}")
+            import traceback
+            traceback.print_exc()
 
 
 def main():
