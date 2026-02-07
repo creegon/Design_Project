@@ -1,0 +1,89 @@
+{
+  "prompt": "Write a poem about the ocean",
+  "generator_model": "llama-3.2-3b",
+  "paraphraser_models": [
+    "qwen-3-4b"
+  ],
+  "watermark_config": {
+    "gamma": 0.25,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863
+  },
+  "z_threshold": 3.0,
+  "generated_text": ", its power and beauty.\nThe ocean, a force so grand and wide,\nWith waves that crash, and a deep blue tide.\nIts power is fierce, its beauty is might,\nA wonder of nature, a true delight.\n\nIts roar is like thunder, as the waves do rise,\nAnd the sun's rays dance upon its surface with surprise.\nThe tides come in, with a gentle touch,\nBut the ocean's fury, can be quite too much.\n\nThe coral reefs, a colorful sight",
+  "generation_metadata": {
+    "model": "llama-3.2-3b",
+    "model_identifier": "meta-llama/Llama-3.2-3B-Instruct",
+    "prompt": "Write a poem about the ocean",
+    "watermark_config": {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "generation_config": {
+      "max_new_tokens": 100,
+      "temperature": 0.7,
+      "do_sample": true,
+      "top_p": null,
+      "top_k": null
+    },
+    "generated_at": "2026-01-25T15:45:03.549474",
+    "token_usage": {
+      "prompt_tokens": 7,
+      "completion_tokens": 100,
+      "total_tokens": 107
+    },
+    "api_mode": true
+  },
+  "original_detection": {
+    "z_score": 4.162093710499899,
+    "p_value": 1.576714409902799e-05,
+    "prediction": true,
+    "num_green_tokens": 42,
+    "num_tokens_scored": 97,
+    "green_fraction": 0.4329896907216495,
+    "z_threshold": 3.0,
+    "confidence": 0.999984232855901
+  },
+  "paraphraser_results": [
+    {
+      "paraphraser": "qwen-3-4b",
+      "paraphrased_text": "A majestic and powerful force, the ocean unfolds in grandeur and splendor.  \nWith waves that crash and a vast, deep blue expanse.  \nIts strength is intense, its beauty overwhelming,  \nA breathtaking marvel of nature, a genuine joy.  \n\nIts roar echoes like thunder as waves surge upward,  \nAnd the sun's light glimmers playfully on its surface.  \nThe tides gently arrive, a soft embrace,  \nYet the ocean's wrath can be overwhelming.  \n\nThe coral reefs, a vibrant and dazzling display.Humanity's greatest achievements, from ancient civilizations to modern science, have been built on the foundation of curiosity and exploration. The drive to understand the unknown, to push boundaries, and to discover new frontiers has shaped our world. From the earliest maps drawn by sailors to the latest satellite images, the human spirit has always sought to uncover the mysteries of the Earth and beyond. This pursuit has not only expanded our knowledge but also inspired innovation, technology,",
+      "metadata": {
+        "model": "qwen-3-4b",
+        "model_identifier": "Qwen/Qwen3-4B-Instruct-2507-FP8",
+        "instruction": "Paraphrase the following text to preserve its meaning.\nIMPORTANT: Output ONLY the rewritten text. Do not include any notes, explanations, labels, or introductory phrases like \"Here is the paraphrased version\".",
+        "original_text": ", its power and beauty.\nThe ocean, a force so grand and wide,\nWith waves that crash, and a deep blue tide.\nIts power is fierce, its beauty is might,\nA wonder of nature, a true delight.\n\nIts roar is like thunder, as the waves do rise,\nAnd the sun's rays dance upon its surface with surprise.\nThe tides come in, with a gentle touch,\nBut the ocean's fury, can be quite too much.\n\nThe coral reefs, a colorful sight",
+        "paraphrase_watermark_config": null,
+        "paraphrased_at": "2026-01-25T15:45:18.476284",
+        "token_usage": {
+          "prompt_tokens": 147,
+          "completion_tokens": 200
+        },
+        "api_mode": true
+      },
+      "detection": {
+        "z_score": -1.2816922574218208,
+        "p_value": 0.9000246889638621,
+        "prediction": false,
+        "num_green_tokens": 41,
+        "num_tokens_scored": 195,
+        "green_fraction": 0.21025641025641026,
+        "z_threshold": 3.0,
+        "confidence": null
+      },
+      "semantic_similarity": 0.1643835616438356,
+      "watermark_decay": 5.44378596792172,
+      "z_score_retention": -0.3079441133649727
+    }
+  ],
+  "summary": {
+    "watermark_survival_rate": 0.0,
+    "watermark_survived_count": 0,
+    "average_similarity": 0.1643835616438356,
+    "average_decay": 5.44378596792172
+  },
+  "timestamp": "2026-01-25T15:45:18.572444"
+}

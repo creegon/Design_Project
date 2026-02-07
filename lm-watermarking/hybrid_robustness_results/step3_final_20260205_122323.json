@@ -1,0 +1,214 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "attack_types": [
+    "none",
+    "light",
+    "moderate",
+    "aggressive"
+  ],
+  "detection_results": [
+    {
+      "prompt": "What is 2+2? Explain briefly in one or two sentences.",
+      "baseline_detection": {
+        "kgw_z_score": 8.47700708521628,
+        "kgw_detected": true,
+        "simmark_z_score": 2.449489742779912,
+        "simmark_detected": true,
+        "both_detected": true
+      },
+      "attack_results": [
+        {
+          "attack_type": "none",
+          "original_sentences": 3,
+          "attacked_sentences": 3,
+          "kgw_z_score": 8.47700708521628,
+          "kgw_detected": true,
+          "simmark_z_score": 2.449489742779912,
+          "simmark_detected": true,
+          "both_detected": true
+        },
+        {
+          "attack_type": "light",
+          "original_sentences": 3,
+          "attacked_sentences": 3,
+          "kgw_z_score": 3.8149852626337304,
+          "kgw_detected": true,
+          "simmark_z_score": 1.1168159932903854,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "moderate",
+          "original_sentences": 3,
+          "attacked_sentences": 7,
+          "kgw_z_score": -1.1986582537134605,
+          "kgw_detected": false,
+          "simmark_z_score": 2.358366256698303,
+          "simmark_detected": true,
+          "both_detected": false
+        },
+        {
+          "attack_type": "aggressive",
+          "original_sentences": 3,
+          "attacked_sentences": 5,
+          "kgw_z_score": 0.9058216273156765,
+          "kgw_detected": false,
+          "simmark_z_score": 1.2780672122543024,
+          "simmark_detected": false,
+          "both_detected": false
+        }
+      ]
+    },
+    {
+      "prompt": "Define artificial intelligence in one sentence.",
+      "baseline_detection": {
+        "kgw_z_score": 1.277798247604809,
+        "kgw_detected": false,
+        "simmark_z_score": -0.3966770969355559,
+        "simmark_detected": false,
+        "both_detected": false
+      },
+      "attack_results": [
+        {
+          "attack_type": "none",
+          "original_sentences": 2,
+          "attacked_sentences": 2,
+          "kgw_z_score": 1.277798247604809,
+          "kgw_detected": false,
+          "simmark_z_score": -0.3966770969355559,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "light",
+          "original_sentences": 2,
+          "attacked_sentences": 3,
+          "kgw_z_score": 1.6646297986075504,
+          "kgw_detected": false,
+          "simmark_z_score": 0.9676920787950467,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "moderate",
+          "original_sentences": 2,
+          "attacked_sentences": 5,
+          "kgw_z_score": 0.050443327230531826,
+          "kgw_detected": false,
+          "simmark_z_score": 1.2489393250535725,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "aggressive",
+          "original_sentences": 2,
+          "attacked_sentences": 4,
+          "kgw_z_score": -2.1167475416399473,
+          "kgw_detected": false,
+          "simmark_z_score": -0.09808365503938221,
+          "simmark_detected": false,
+          "both_detected": false
+        }
+      ]
+    },
+    {
+      "prompt": "What color is the sky? Answer briefly.",
+      "baseline_detection": {
+        "kgw_z_score": 6.0,
+        "kgw_detected": true,
+        "simmark_z_score": 1.7320508075642584,
+        "simmark_detected": false,
+        "both_detected": false
+      },
+      "attack_results": [
+        {
+          "attack_type": "none",
+          "original_sentences": 2,
+          "attacked_sentences": 2,
+          "kgw_z_score": 6.0,
+          "kgw_detected": true,
+          "simmark_z_score": 1.7320508075642584,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "light",
+          "original_sentences": 2,
+          "attacked_sentences": 2,
+          "kgw_z_score": 4.075272154992216,
+          "kgw_detected": true,
+          "simmark_z_score": -0.5751463385335674,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "moderate",
+          "original_sentences": 2,
+          "attacked_sentences": 5,
+          "kgw_z_score": -0.6808829066491903,
+          "kgw_detected": false,
+          "simmark_z_score": 0.0002014932075715701,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "aggressive",
+          "original_sentences": 2,
+          "attacked_sentences": 5,
+          "kgw_z_score": 2.23606797749979,
+          "kgw_detected": false,
+          "simmark_z_score": -1.0275453986548084,
+          "simmark_detected": false,
+          "both_detected": false
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "none": {
+      "total": 3,
+      "kgw_survival_rate": 0.6666666666666666,
+      "simmark_survival_rate": 0.3333333333333333,
+      "both_survival_rate": 0.3333333333333333,
+      "any_survival_rate": 0.6666666666666666,
+      "kgw_avg_z": 5.251601777607029,
+      "simmark_avg_z": 1.2616211511362048
+    },
+    "light": {
+      "total": 3,
+      "kgw_survival_rate": 0.6666666666666666,
+      "simmark_survival_rate": 0.0,
+      "both_survival_rate": 0.0,
+      "any_survival_rate": 0.6666666666666666,
+      "kgw_avg_z": 3.184962405411166,
+      "simmark_avg_z": 0.5031205778506216
+    },
+    "moderate": {
+      "total": 3,
+      "kgw_survival_rate": 0.0,
+      "simmark_survival_rate": 0.3333333333333333,
+      "both_survival_rate": 0.0,
+      "any_survival_rate": 0.3333333333333333,
+      "kgw_avg_z": -0.6096992777107063,
+      "simmark_avg_z": 1.2025023583198158
+    },
+    "aggressive": {
+      "total": 3,
+      "kgw_survival_rate": 0.0,
+      "simmark_survival_rate": 0.0,
+      "both_survival_rate": 0.0,
+      "any_survival_rate": 0.0,
+      "kgw_avg_z": 0.34171402105850635,
+      "simmark_avg_z": 0.05081271952003726
+    }
+  },
+  "timestamp": "2026-02-05T12:23:38.702968"
+}

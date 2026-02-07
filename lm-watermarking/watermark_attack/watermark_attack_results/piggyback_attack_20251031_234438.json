@@ -1,0 +1,38 @@
+{
+  "success": true,
+  "original_detection": {
+    "num_tokens_scored": 124,
+    "num_green_tokens": 101,
+    "green_fraction": 0.8145161290322581,
+    "z_score": 7.004606779044222,
+    "p_value": 1.2384023284467344e-12,
+    "z_score_at_T": "tensor([1.0000, 1.4142, 1.7321, 2.0000, 2.2361, 2.4495, 2.6458, 2.8284, 2.3333,\n        2.5298, 2.7136, 2.3094, 1.9415, 2.1381, 2.3238, 2.5000, 2.1828, 2.3570,\n        2.5236, 2.6833, 2.8368, 2.5584, 2.7107, 2.4495, 2.2000, 2.3534, 2.5019,\n        2.2678, 2.4140, 2.5560, 2.6941, 2.4749, 2.6112, 2.7440, 2.8735, 3.0000,\n        3.1236, 3.2444, 3.3627, 3.4785, 3.5920, 3.7033, 3.5075, 3.3166, 3.4286,\n        3.5386, 3.6466, 3.7528, 3.8571, 3.9598, 4.0608, 3.8829, 3.7087, 3.8103,\n        3.6407, 3.7417, 3.8411, 3.9392, 3.7755, 3.8730, 3.9691, 3.8100, 3.9056,\n        4.0000, 4.0931, 4.1851, 4.2759, 4.3656, 4.4543, 4.5419, 4.6284, 4.7140,\n        4.7987, 4.8824, 4.7343, 4.8177, 4.9003, 4.9820, 4.8379, 4.6957, 4.7778,\n        4.8590, 4.9394, 5.0190, 5.0979, 5.1760, 5.2534, 5.3300, 5.4060, 5.4813,\n        5.5559, 5.6299, 5.7032, 5.7760, 5.8481, 5.9196, 5.9905, 6.0609, 5.9297,\n        6.0000, 6.0697, 6.1389, 6.2076, 6.2757, 6.3434, 6.2162, 6.2838, 6.3509,\n        6.4174, 6.4835, 6.5492, 6.6144, 6.6791, 6.7434, 6.8073, 6.8707, 6.9338,\n        6.9964, 6.8752, 6.9378, 6.9378, 6.9378, 6.9378, 6.9378, 6.9378, 6.9378,\n        7.0000, 6.8807, 6.9429, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046])",
+    "prediction": true,
+    "confidence": 0.9999999999987615
+  },
+  "final_detection": {
+    "num_tokens_scored": 124,
+    "num_green_tokens": 101,
+    "green_fraction": 0.8145161290322581,
+    "z_score": 7.004606779044222,
+    "p_value": 1.2384023284467344e-12,
+    "z_score_at_T": "tensor([1.0000, 1.4142, 1.7321, 2.0000, 2.2361, 2.4495, 2.6458, 2.8284, 2.3333,\n        2.5298, 2.7136, 2.3094, 1.9415, 2.1381, 2.3238, 2.5000, 2.1828, 2.3570,\n        2.5236, 2.6833, 2.8368, 2.5584, 2.7107, 2.4495, 2.2000, 2.3534, 2.5019,\n        2.2678, 2.4140, 2.5560, 2.6941, 2.4749, 2.6112, 2.7440, 2.8735, 3.0000,\n        3.1236, 3.2444, 3.3627, 3.4785, 3.5920, 3.7033, 3.5075, 3.3166, 3.4286,\n        3.5386, 3.6466, 3.7528, 3.8571, 3.9598, 4.0608, 3.8829, 3.7087, 3.8103,\n        3.6407, 3.7417, 3.8411, 3.9392, 3.7755, 3.8730, 3.9691, 3.8100, 3.9056,\n        4.0000, 4.0931, 4.1851, 4.2759, 4.3656, 4.4543, 4.5419, 4.6284, 4.7140,\n        4.7987, 4.8824, 4.7343, 4.8177, 4.9003, 4.9820, 4.8379, 4.6957, 4.7778,\n        4.8590, 4.9394, 5.0190, 5.0979, 5.1760, 5.2534, 5.3300, 5.4060, 5.4813,\n        5.5559, 5.6299, 5.7032, 5.7760, 5.8481, 5.9196, 5.9905, 6.0609, 5.9297,\n        6.0000, 6.0697, 6.1389, 6.2076, 6.2757, 6.3434, 6.2162, 6.2838, 6.3509,\n        6.4174, 6.4835, 6.5492, 6.6144, 6.6791, 6.7434, 6.8073, 6.8707, 6.9338,\n        6.9964, 6.8752, 6.9378, 6.9378, 6.9378, 6.9378, 6.9378, 6.9378, 6.9378,\n        7.0000, 6.8807, 6.9429, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046,\n        7.0046, 7.0046, 7.0046, 7.0046, 7.0046, 7.0046])",
+    "prediction": true,
+    "confidence": 0.9999999999987615
+  },
+  "original_text": " (AI) revolution\nArtificial intelligence (AI) is the intelligence demonstrated by machines, unlike the natural intelligence displayed by humans and animals. AI research has identified several criteria, which are used to describe and classify the various forms of AI research. The most common definition of AI is that it refers to a machine's performance of tasks that are commonly associated with intelligent beings, like reasoning, learning, and problem-solving. These tasks are usually carried out automatically and at a high rate. AI is currently the subject of intense academic research, and many companies are attempting to develop and apply it to various fields.\nArtificial intelligence (AI) is the intelligence displayed by machines, unlike the natural intelligence displayed by humans and animals. AI research has identified several criteria, which are used to describe and classify the various forms of AI research. The most common definition of AI is that it refers to a machine's performance of",
+  "attacked_text": " (AI) revolution\nArtificial intelligence (AI) is the intelligence demonstrated by machines, unlike the natural intelligence displayed by humans and animals. AI research has identified several criteria, which are used to describe and classify the various forms of AI research. The most common definition of AI is that it refers to a machine's performance of tasks that are commonly associated with intelligent beings, like reasoning, learning, and problem-solving. These tasks are usually carried out automatically and at a high rate. AI is currently the subject of intense academic research, and many companies are attempting to develop and apply it to various fields.\nArtificial intelligence (AI) is the intelligence displayed by machines, unlike the natural intelligence displayed by humans and animals. AI research has identified several criteria, which are used to describe and classify the various forms of AI research. The most common definition of AI is that it refers to a machine's performance of",
+  "modifications": [],
+  "failed_insertions": [],
+  "metadata": {
+    "target_phrases": [],
+    "synonym_targets": {},
+    "timestamp": "2025-10-31T23:44:27.114019Z",
+    "model_nickname": "llama-3.2-3b",
+    "gamma": 0.5,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863,
+    "z_threshold": 4.0
+  }
+}

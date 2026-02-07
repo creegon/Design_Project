@@ -1,0 +1,129 @@
+{
+  "experiment_type": "watermarked_paraphrase_chain",
+  "prompt": "Write a short story about artificial intelligence.",
+  "generator_model": "llama-3.2-3b",
+  "paraphraser_models": [
+    "qwen-3-8b"
+  ],
+  "generator_watermark_config": {
+    "gamma": 0.25,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863
+  },
+  "paraphraser_watermark_configs": [
+    {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 50000000
+    }
+  ],
+  "z_threshold": 4.0,
+  "generated_text": "It must involve an intelligent computer program that interacts with the human characters.\nThis short story is intended to introduce you to the topic of artificial intelligence and to give you a glimpse of what it might be like to work with such a computer program.\nYou will write a short story in which you will introduce the reader to a character named John Smith. John Smith is a computer programmer who works for a company called XYZ Corporation. XYZ Corporation is a software company that develops computer programs for businesses and organizations.\nThe short story will take place in the year 2050. In 2050, artificial intelligence will be very advanced. You will describe how John Smith works with his company’s computer program to help XYZ Corporation’s clients solve their business problems.\nYou will also",
+  "generation_metadata": {
+    "model": "llama-3.2-3b",
+    "model_identifier": "meta-llama/Llama-3.2-3B",
+    "prompt": "Write a short story about artificial intelligence.",
+    "prompt_prepared": "Write a short story about artificial intelligence.",
+    "watermark_config": {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "generation_config": {
+      "max_new_tokens": 150,
+      "temperature": 0.7,
+      "top_p": 0.85,
+      "top_k": 30,
+      "do_sample": true
+    },
+    "generated_at": "2025-11-09T21:25:12.359622",
+    "token_usage": {
+      "prompt_tokens": 9,
+      "completion_tokens": 150,
+      "total_tokens": 159
+    }
+  },
+  "original_detection": {
+    "z_score": 8.428571428571429,
+    "p_value": 1.7495528006975224e-17,
+    "prediction": true,
+    "num_green_tokens": 81,
+    "num_tokens_scored": 147,
+    "green_fraction": 0.5510204081632653,
+    "z_threshold": 4.0,
+    "confidence": 1.0
+  },
+  "paraphraser_results": [
+    {
+      "paraphraser": "qwen-3-8b",
+      "paraphrased_text": "This text must be rewritten in a way that the original meaning is preserved. The rewritten text must be in English, and it should be a continuous text with no markdown.\nOkay, let's see. The user wants me to paraphrase the original text while keeping the meaning. First, I need to understand the original text thoroughly. The original text is about creating a short story that introduces artificial intelligence through the character John Smith, a programmer at XYZ Corporation in 2050.\n\nThe original text has several parts: the requirement for an intelligent computer program interacting with humans, the purpose of the story to introduce AI, the character details, the setting in 2050, and the tasks involved. I need to make sure all these",
+      "metadata": {
+        "model": "qwen-3-8b",
+        "model_identifier": "Qwen/Qwen3-8B",
+        "instruction": "Paraphrase the following text while preserving its meaning:",
+        "prompt_text": "Paraphrase the following text while preserving its meaning:\n\nOriginal text:\nIt must involve an intelligent computer program that interacts with the human characters.\nThis short story is intended to introduce you to the topic of artificial intelligence and to give you a glimpse of what it might be like to work with such a computer program.\nYou will write a short story in which you will introduce the reader to a character named John Smith. John Smith is a computer programmer who works for a company called XYZ Corporation. XYZ Corporation is a software company that develops computer programs for businesses and organizations.\nThe short story will take place in the year 2050. In 2050, artificial intelligence will be very advanced. You will describe how John Smith works with his company’s computer program to help XYZ Corporation’s clients solve their business problems.\nYou will also\n\nParaphrased text:",
+        "original_text": "It must involve an intelligent computer program that interacts with the human characters.\nThis short story is intended to introduce you to the topic of artificial intelligence and to give you a glimpse of what it might be like to work with such a computer program.\nYou will write a short story in which you will introduce the reader to a character named John Smith. John Smith is a computer programmer who works for a company called XYZ Corporation. XYZ Corporation is a software company that develops computer programs for businesses and organizations.\nThe short story will take place in the year 2050. In 2050, artificial intelligence will be very advanced. You will describe how John Smith works with his company’s computer program to help XYZ Corporation’s clients solve their business problems.\nYou will also",
+        "generation_config": {
+          "max_new_tokens": 150,
+          "temperature": 0.7,
+          "top_p": 0.85,
+          "top_k": 30,
+          "do_sample": true
+        },
+        "paraphrase_watermark_config": {
+          "gamma": 0.25,
+          "delta": 2.0,
+          "seeding_scheme": "selfhash",
+          "hash_key": 50000000
+        },
+        "paraphrased_at": "2025-11-09T21:27:59.552994",
+        "token_usage": {
+          "prompt_tokens": 175,
+          "completion_tokens": 150,
+          "total_tokens": 325
+        }
+      },
+      "paraphrase_watermark_config": {
+        "gamma": 0.25,
+        "delta": 2.0,
+        "seeding_scheme": "selfhash",
+        "hash_key": 50000000
+      },
+      "detection_with_generator_key": {
+        "z_score": -0.4375949744936836,
+        "p_value": 0.669160042567,
+        "prediction": false,
+        "num_green_tokens": 33,
+        "num_tokens_scored": 141,
+        "green_fraction": 0.23404255319148937,
+        "z_threshold": 4.0,
+        "confidence": null
+      },
+      "detection_with_paraphraser_key": {
+        "z_score": 1.7017582341421031,
+        "p_value": 0.0444003494294378,
+        "prediction": false,
+        "num_green_tokens": 44,
+        "num_tokens_scored": 141,
+        "green_fraction": 0.3120567375886525,
+        "z_threshold": 4.0,
+        "confidence": null
+      },
+      "semantic_similarity": 0.23622047244094488,
+      "generator_watermark_decay": 8.866166403065112,
+      "generator_z_score_retention": -0.051918047821284494
+    }
+  ],
+  "summary": {
+    "generator_watermark_survival_rate": 0.0,
+    "generator_watermark_survived_count": 0,
+    "paraphraser_watermark_detection_rate": 0.0,
+    "paraphraser_watermark_detected_count": 0,
+    "average_similarity": 0.23622047244094488,
+    "average_generator_decay": 8.866166403065112
+  },
+  "timestamp": "2025-11-09T21:27:59.727713"
+}

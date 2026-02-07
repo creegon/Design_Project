@@ -1,0 +1,89 @@
+{
+  "experiment_type": "fragment_mixing",
+  "base_prompt": "The future of artificial intelligence is",
+  "fragments": [
+    {
+      "text": " here.\nThis course will take you on a journey through the history of Artificial Intelligence and how it developed. You will explore the various fields of AI and how these are used today. You will learn about machine learning and how it works and you will discover",
+      "config": {
+        "gamma": 0.25,
+        "delta": 2.0,
+        "hash_key": 15485863
+      },
+      "fragment_id": 1
+    },
+    {
+      "text": " the various applications in various fields.\nThe course will provide you with a general overview of AI and you will learn about the various fields and applications. The course will provide you with the knowledge you need to understand the various applications of AI and you will learn",
+      "config": {
+        "gamma": 0.5,
+        "delta": 1.5,
+        "hash_key": 32452843
+      },
+      "fragment_id": 2
+    },
+    {
+      "text": " to assess the value of AI-based solutions and the risks associated with them. You will discover how AI-based solutions can be used to solve real-world problems and you will learn to assess the value of such solutions. The course will provide you with a comprehensive",
+      "config": {
+        "gamma": 0.1,
+        "delta": 3.0,
+        "hash_key": 49979687
+      },
+      "fragment_id": 3
+    }
+  ],
+  "combined_text": " here.\nThis course will take you on a journey through the history of Artificial Intelligence and how it developed. You will explore the various fields of AI and how these are used today. You will learn about machine learning and how it works and you will discover  the various applications in various fields.\nThe course will provide you with a general overview of AI and you will learn about the various fields and applications. The course will provide you with the knowledge you need to understand the various applications of AI and you will learn  to assess the value of AI-based solutions and the risks associated with them. You will discover how AI-based solutions can be used to solve real-world problems and you will learn to assess the value of such solutions. The course will provide you with a comprehensive",
+  "detection_results": [
+    {
+      "config_id": 1,
+      "config": {
+        "gamma": 0.25,
+        "delta": 2.0,
+        "hash_key": 15485863
+      },
+      "z_score": 3.366501646120693,
+      "p_value": 0.0003806406392274632,
+      "prediction": false,
+      "green_fraction": 0.375
+    },
+    {
+      "config_id": 2,
+      "config": {
+        "gamma": 0.5,
+        "delta": 1.5,
+        "hash_key": 32452843
+      },
+      "z_score": 4.973458969132756,
+      "p_value": 3.288434960324058e-07,
+      "prediction": true,
+      "green_fraction": 0.7132352941176471
+    },
+    {
+      "config_id": 3,
+      "config": {
+        "gamma": 0.1,
+        "delta": 3.0,
+        "hash_key": 49979687
+      },
+      "z_score": 3.544304092945182,
+      "p_value": 0.00019682546529708718,
+      "prediction": false,
+      "green_fraction": 0.19117647058823528
+    }
+  ],
+  "fragment_configs": [
+    {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "hash_key": 15485863
+    },
+    {
+      "gamma": 0.5,
+      "delta": 1.5,
+      "hash_key": 32452843
+    },
+    {
+      "gamma": 0.1,
+      "delta": 3.0,
+      "hash_key": 49979687
+    }
+  ]
+}

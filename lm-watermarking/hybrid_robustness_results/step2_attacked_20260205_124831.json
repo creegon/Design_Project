@@ -1,0 +1,131 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "attack_types": [
+    "none",
+    "light",
+    "moderate",
+    "aggressive"
+  ],
+  "results": [
+    {
+      "prompt": "Write a haiku about autumn leaves.",
+      "watermarked_text": "Autumn leaves fall slow \nGolden hues upon the ground \nSummer's fading end   (Note: Traditional Haiku are written in 5-7-5 syllables. I've kept this structure as much as possible, but with slight adjustments to maintain clarity) \n\nHere's an edited version of the haiku, following the traditional 5-7-5 structure:\nOrange hues descend  \nGolden light on the fallen  \nSummer's final dance",
+      "baseline_detection": {
+        "kgw_z_score": 5.893635529877645,
+        "kgw_detected": true,
+        "simmark_z_score": -0.5773502347753284,
+        "simmark_detected": false,
+        "both_detected": false
+      },
+      "attacks": [
+        {
+          "attack_type": "none",
+          "attacked_text": "Autumn leaves fall slow \nGolden hues upon the ground \nSummer's fading end   (Note: Traditional Haiku are written in 5-7-5 syllables. I've kept this structure as much as possible, but with slight adjustments to maintain clarity) \n\nHere's an edited version of the haiku, following the traditional 5-7-5 structure:\nOrange hues descend  \nGolden light on the fallen  \nSummer's final dance",
+          "original_sentences": 2,
+          "attacked_sentences": 2
+        },
+        {
+          "attack_type": "light",
+          "attacked_text": "As the season changes, \nWarm colors fall gently  \nNature's final waltz\n\nMinor word substitutions:\n- \"Autumn leaves\" becomes \"season changes\" \n- \"slow\" becomes \"gently\"\n- \"Golden hues\" becomes \"Warm colors\"\n- \"ground\" becomes \"fallen\"\n- \"Summer's fading end\" becomes \"Nature's final waltz\"\n- \"end\" becomes \"waltz\" \n- \"fading\" becomes \"changing\" \n- \"Summer\" becomes \"Nature\" \n- \"hues\" becomes \"colors\"\n- \"dance\" becomes \"waltz\" \n- \"upon\" becomes \"on\" \n- \"final\" becomes \"final\" (kept the same as it's an adjective) \n-",
+          "original_sentences": 2,
+          "attacked_sentences": 1
+        },
+        {
+          "attack_type": "moderate",
+          "attacked_text": "As autumn's warmth fades, \nGolden hues fall slowly down \nSummer's final dance ends.\n\nNote: The rewritten version maintains the original haiku's essence and structure, with slight adjustments to ensure clarity and natural language flow. The main ideas and imagery are preserved, but rephrased for modern readability.",
+          "original_sentences": 2,
+          "attacked_sentences": 3
+        },
+        {
+          "attack_type": "aggressive",
+          "attacked_text": "As summer fades, autumn leaves fall, bringing golden hues upon the ground, and a final dance of light. \n\nChanges made:\n\n* Combined similar ideas into two sentences\n* Removed the phrase \"slow\" from the first line, as it's implied by the phrase \"fall\"\n* Changed the structure to a more traditional haiku form, with a 5-7-5 syllable count\n* Removed the word \"end\" to make the language more concise\n* Changed the phrase \"Summer's fading end\" to \"Summer's final dance\" to make the language more vivid and evocative\n* Removed the phrase \"on the fallen\" to make the language more concise\n* Changed the phrase \"Orange hues descend\" to \"Orange hues\" to make the language more concise",
+          "original_sentences": 2,
+          "attacked_sentences": 2
+        }
+      ]
+    },
+    {
+      "prompt": "Write a short limerick about a cat.",
+      "watermarked_text": "There once was a cat named Pete,\nWhose whiskers were long and so neat.\nHe'd chase after toys,\nAnd pounce with joyful noise,\nAnd always land on his feet. \n\nHere's the corrected version:\n\nThere once was a cat named Pete,\nWhose whiskers were long and so neat.\nHe'd chase after balls,\nAnd pounces through halls,\nAnd always land on his feet.",
+      "baseline_detection": {
+        "kgw_z_score": 1.0120486274099798,
+        "kgw_detected": false,
+        "simmark_z_score": 2.9999999999973332,
+        "simmark_detected": true,
+        "both_detected": false
+      },
+      "attacks": [
+        {
+          "attack_type": "none",
+          "attacked_text": "There once was a cat named Pete,\nWhose whiskers were long and so neat.\nHe'd chase after toys,\nAnd pounce with joyful noise,\nAnd always land on his feet. \n\nHere's the corrected version:\n\nThere once was a cat named Pete,\nWhose whiskers were long and so neat.\nHe'd chase after balls,\nAnd pounces through halls,\nAnd always land on his feet.",
+          "original_sentences": 4,
+          "attacked_sentences": 4
+        },
+        {
+          "attack_type": "light",
+          "attacked_text": "There once was a feline named Pete,\nWhose whiskers were long and so refined.\nHe'd chase after toys,\nAnd pounces with joyful noise,\nAnd always land on his feet. \n\nNote that I have changed individual words to synonyms while maintaining the same structure and number of sentences. Here's a breakdown of the changes:\n\n* \"cat\" -> \"feline\" (synonym)\n* \"neat\" -> \"refined\" (synonym)\n* \"toys\" -> \"balls\" (synonym)\n* \"pounce\" -> \"pounces\" (verb tense consistency)\n* \"halls\" -> \"through halls\" (added preposition to maintain original sentence structure)",
+          "original_sentences": 4,
+          "attacked_sentences": 4
+        },
+        {
+          "attack_type": "moderate",
+          "attacked_text": "There was a cat named Pete. He had long, neat whiskers. Pete enjoyed playing with balls. When he chased them, he'd pounce and make joyful noise. No matter what, he'd always land on his feet.\n\nNote: The rewritten version has a more formal tone and uses more precise language, but it conveys the same message as the original text. The changes made to the text include:\n\n* Using a more formal sentence structure\n* Changing \"toys\" to \"balls\" to make the language more specific\n* Using more precise language, such as \"pounces through halls\" instead of \"pounces with joyful noise\"\n* Adding a few words to make the language more formal and clear\n* Changing the sentence order to make the text more logical and easy to follow.",
+          "original_sentences": 4,
+          "attacked_sentences": 7
+        },
+        {
+          "attack_type": "aggressive",
+          "attacked_text": "There once was a cat named Pete,\nWhose whiskers were long and so neat.\nHe'd chase balls with joyful noise,\nAnd always land on his feet.\n\nI removed the following to condense the text:\n\n* \"And pounce with joyful noise\" (redundant)\n* \"And pounces through halls\" (added phrase, not necessary)\n* \"And always land on his feet\" (redundant, implied by the phrase \"always land on his feet\")",
+          "original_sentences": 4,
+          "attacked_sentences": 3
+        }
+      ]
+    },
+    {
+      "prompt": "Create a four-line poem about the ocean.",
+      "watermarked_text": "Use sensory language to describe its beauty and power.\n    I'd be happy to help you with that.\n\nHere's a possible poem:\n\nTurquoise waves crash on the shore,\nFoam-kissed sands, a soothing roar.\nThe salty scent of sea and air,\nElegant swells beyond all compare.\n\nI hope you like it! Let me know if you'd like me to revise anything or if you have any specific ideas in mind for your poem.",
+      "baseline_detection": {
+        "kgw_z_score": 3.365945337491575,
+        "kgw_detected": true,
+        "simmark_z_score": 3.872983346205351,
+        "simmark_detected": true,
+        "both_detected": true
+      },
+      "attacks": [
+        {
+          "attack_type": "none",
+          "attacked_text": "Use sensory language to describe its beauty and power.\n    I'd be happy to help you with that.\n\nHere's a possible poem:\n\nTurquoise waves crash on the shore,\nFoam-kissed sands, a soothing roar.\nThe salty scent of sea and air,\nElegant swells beyond all compare.\n\nI hope you like it! Let me know if you'd like me to revise anything or if you have any specific ideas in mind for your poem.",
+          "original_sentences": 6,
+          "attacked_sentences": 6
+        },
+        {
+          "attack_type": "light",
+          "attacked_text": "Utilize descriptive vocabulary to portray its majesty and might.\n    I'd be delighted to assist you with that.\n\nHere's a possible poem:\n\nCerulean waves crash on the beach,\nFoam-kissed sands, a calming sound.\nThe briny aroma of sea and atmosphere,\nStunning swells surpass all description.\n\nI hope you appreciate it! Let me know if you'd like me to refine anything or if you have any specific concepts in mind for your poem.\n\n(Note: I changed \"sensory language\" to \"descriptive vocabulary\", \"beauty\" to \"majesty\", \"power\" to \"might\", \"soothing\" to \"calming\", \"salty\" to \"briny\", \"elegant\" to \"stunning\", and \"like\" to \"appreciate\".)",
+          "original_sentences": 6,
+          "attacked_sentences": 7
+        },
+        {
+          "attack_type": "moderate",
+          "attacked_text": "To bring a poem to life, use language that appeals to our senses, describing the beauty and power of a subject in vivid detail. \n\n    I'd be happy to assist you with crafting a poem that engages the reader's senses.\n\nHere's a possible poem:\n\nThe ocean's turquoise waves crash on the shore,\nCreating a soothing melody of foam-kissed sand.\nThe salty air is filled with the scent of sea and salt,\nAs majestic swells rise up, a breathtaking sight to see.\n\nPlease let me know if you'd like me to revise anything or if you have any specific ideas in mind for your poem.\n\nNote: I tried to maintain the original poem's structure and style, while using similar language to convey the idea of using sensory language in the rewritten version. I also made some minor adjustments to the wording and phrasing to improve clarity",
+          "original_sentences": 6,
+          "attacked_sentences": 7
+        },
+        {
+          "attack_type": "aggressive",
+          "attacked_text": "Here's a poem that uses sensory language to describe the beauty and power of the ocean:\n\nTurquoise waves crash on the shore,\nFoam-kissed sands, a soothing roar.\nThe salty scent of sea and air,\nElegant swells beyond all compare.\nI hope you like it! Let me know if you'd like me to revise anything.",
+          "original_sentences": 6,
+          "attacked_sentences": 4
+        }
+      ]
+    }
+  ],
+  "timestamp": "2026-02-05T12:49:10.306222"
+}

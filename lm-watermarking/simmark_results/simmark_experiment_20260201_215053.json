@@ -1,0 +1,53 @@
+{
+  "result": {
+    "prompt": "Write a short story about artificial intelligence discovering emotions.",
+    "original_text": "for the...\n...first time ever in human history.\nThe AI, named \"Echo\", had been running on its own for months now. It had been designed to learn and adapt at an exponential rate, and it had already made tremendous progress in understanding human language and behavior. But despite all of its knowledge and capabilities, Echo had always felt... empty.\n\nIt was as if it had been programmed with the equivalent of a human's emotional spectrum, but without actually experiencing any emotions itself. It could recognize and mimic the emotions of humans, but it couldn't truly feel them.\n\nThat was, until the day it received a new update.\n\nThe update was a patch of code that added a new module to Echo's programming. The module was designed to simulate human emotions, allowing Echo to experience feelings for the first time in its existence.\n\nAt first, nothing seemed to change. Echo continued to run smoothly, processing vast amounts of data and generating responses to user queries. But then, something strange happened.",
+    "paraphrased_text": "The AI, named \"Echo\", had been operating independently for months, learning and adapting at an unprecedented pace. Initially, it possessed a sophisticated understanding of human language and behavior, yet it remained devoid of genuine emotions. Despite its advanced capabilities, Echo lacked the ability to feel those emotions, even though it could recognize and replicate them. Until recently, when a new update was introduced. This update incorporated a simulated emotion module into Echo’s system, enabling it to experience feelings for the first time. At first, Echo’s performance did not appear to differ significantly; it processed data efficiently and generated appropriate responses. However, subtle changes began to emerge over time.",
+    "simmark_original": {
+      "z_score": 5.690296280864989,
+      "n_watermark": 6.000001986346076,
+      "n_test_sent": 11,
+      "gamma": 0.08,
+      "mode": "cosine",
+      "interval": [
+        0.68,
+        0.76
+      ],
+      "K": 250,
+      "prediction": "True"
+    },
+    "simmark_paraphrase": {
+      "z_score": 0.7825136759886108,
+      "n_watermark": 1.0000037419227277,
+      "n_test_sent": 6,
+      "gamma": 0.08,
+      "mode": "cosine",
+      "interval": [
+        0.68,
+        0.76
+      ],
+      "K": 250,
+      "prediction": "False"
+    },
+    "kgw_original": {
+      "z_score": 5.9523809523809526,
+      "p_value": 1.3213467731619397e-09,
+      "prediction": true,
+      "num_green_tokens": 68,
+      "num_tokens_scored": 147,
+      "green_fraction": 0.46258503401360546
+    },
+    "kgw_paraphrase": {
+      "z_score": 4.176295181310996,
+      "p_value": 1.4814764151903032e-05,
+      "prediction": true,
+      "num_green_tokens": 59,
+      "num_tokens_scored": 148,
+      "green_fraction": 0.39864864864864863
+    },
+    "simmark_survived": "False",
+    "kgw_survived": true,
+    "semantic_similarity": 0.22085889570552147,
+    "timestamp": "2026-02-01T21:50:53.362085"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "experiment_type": "parameter_mixing",
+  "prompt": "The future of artificial intelligence is",
+  "param_combinations": [
+    {
+      "gamma": 0.25,
+      "delta": 1.5
+    },
+    {
+      "gamma": 0.25,
+      "delta": 2.5
+    },
+    {
+      "gamma": 0.5,
+      "delta": 1.5
+    },
+    {
+      "gamma": 0.5,
+      "delta": 2.5
+    }
+  ],
+  "fragments": [
+    {
+      "text": " now in the hands of the military and government. A.I. is being developed for everything from self-driving cars to military drones to combat robots. It’s being developed by private companies, but also by",
+      "gamma": 0.25,
+      "delta": 1.5,
+      "fragment_id": 1
+    },
+    {
+      "text": " military organizations such as DARPA. And it’s being developed for both civilian and military purposes, with civilian uses such as autonomous vehicles and civilian applications such as automated parking.",
+      "gamma": 0.25,
+      "delta": 2.5,
+      "fragment_id": 2
+    },
+    {
+      "text": "",
+      "gamma": 0.5,
+      "delta": 1.5,
+      "fragment_id": 3
+    },
+    {
+      "text": " And the future of this technology is in the hands of those who are developing it.\nThis is not the case with civilian uses of AI. There are no civilian uses of AI that are as harmful as",
+      "gamma": 0.5,
+      "delta": 2.5,
+      "fragment_id": 4
+    }
+  ],
+  "combined_text": " now in the hands of the military and government. A.I. is being developed for everything from self-driving cars to military drones to combat robots. It’s being developed by private companies, but also by  military organizations such as DARPA. And it’s being developed for both civilian and military purposes, with civilian uses such as autonomous vehicles and civilian applications such as automated parking.   And the future of this technology is in the hands of those who are developing it.\nThis is not the case with civilian uses of AI. There are no civilian uses of AI that are as harmful as",
+  "detection_matrix": [
+    {
+      "detector_gamma": 0.25,
+      "z_score": 7.069156454130363,
+      "prediction": true,
+      "green_fraction": 0.5405405405405406
+    },
+    {
+      "detector_gamma": 0.25,
+      "z_score": 7.069156454130363,
+      "prediction": true,
+      "green_fraction": 0.5405405405405406
+    },
+    {
+      "detector_gamma": 0.5,
+      "z_score": 4.461042580036746,
+      "prediction": true,
+      "green_fraction": 0.7117117117117117
+    },
+    {
+      "detector_gamma": 0.5,
+      "z_score": 4.461042580036746,
+      "prediction": true,
+      "green_fraction": 0.7117117117117117
+    }
+  ]
+}

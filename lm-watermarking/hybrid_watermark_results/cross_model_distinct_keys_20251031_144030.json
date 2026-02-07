@@ -1,0 +1,133 @@
+{
+  "experiment_type": "cross_model_distinct_keys",
+  "initial_prompt": "The future of artificial intelligence",
+  "continuation_tokens": 20,
+  "max_new_tokens": 60,
+  "models": [
+    "llama-3.2-3b",
+    "llama-3.1-8b",
+    "llama-3.2-1b"
+  ],
+  "model_keys": [
+    13579,
+    24680,
+    97531
+  ],
+  "gamma": 0.5,
+  "delta": 2.0,
+  "fragments": [
+    {
+      "fragment_id": 1,
+      "model": "llama-3.2-3b",
+      "hash_key": 13579,
+      "prompt": "The future of artificial intelligence",
+      "new_tokens": " is here\nThere is a lot of talk about how AI is going to disrupt the world and we are already seeing it. The question is, is AI a disruptive technology or a transformational one?\nThe answer is, it’s both. AI is a disruptive technology because it is a disruptive technology."
+    },
+    {
+      "fragment_id": 2,
+      "model": "llama-3.1-8b",
+      "hash_key": 24680,
+      "prompt": "or a transformational one? The answer is, it’s both. AI is a disruptive technology because it is a disruptive technology.",
+      "new_tokens": " The good news is that AI can help us make our lives easier and more efficient.\nThe bad news is that AI can also make our lives more difficult and less efficient. The bad news is that AI can also make our lives more difficult and less efficient. The bad news is that AI can also make"
+    },
+    {
+      "fragment_id": 3,
+      "model": "llama-3.2-1b",
+      "hash_key": 97531,
+      "prompt": "AI can also make our lives more difficult and less efficient. The bad news is that AI can also make",
+      "new_tokens": " our lives more difficult and less efficient. The good news is that we can prevent these negative outcomes. The bad news is that we can prevent these negative outcomes. The good news is that we can prevent these negative outcomes. The bad news is that we can prevent these negative outcomes. The good news is"
+    }
+  ],
+  "combined_text": "The future of artificial intelligence  is here\nThere is a lot of talk about how AI is going to disrupt the world and we are already seeing it. The question is, is AI a disruptive technology or a transformational one?\nThe answer is, it’s both. AI is a disruptive technology because it is a disruptive technology.  The good news is that AI can help us make our lives easier and more efficient.\nThe bad news is that AI can also make our lives more difficult and less efficient. The bad news is that AI can also make our lives more difficult and less efficient. The bad news is that AI can also make  our lives more difficult and less efficient. The good news is that we can prevent these negative outcomes. The bad news is that we can prevent these negative outcomes. The good news is that we can prevent these negative outcomes. The bad news is that we can prevent these negative outcomes. The good news is",
+  "combined_detections": [
+    {
+      "hash_key": 13579,
+      "z_score": 4.196271637081412,
+      "prediction": true,
+      "green_fraction": 0.6956521739130435
+    },
+    {
+      "hash_key": 24680,
+      "z_score": -0.4662524041201569,
+      "prediction": false,
+      "green_fraction": 0.4782608695652174
+    },
+    {
+      "hash_key": 97531,
+      "z_score": 1.212256250712408,
+      "prediction": false,
+      "green_fraction": 0.5565217391304348
+    }
+  ],
+  "cross_detections": [
+    {
+      "fragment_id": 1,
+      "model": "llama-3.2-3b",
+      "hash_key": 13579,
+      "text_length": 273,
+      "detections": [
+        {
+          "hash_key": 13579,
+          "z_score": 5.077963596336064,
+          "prediction": true
+        },
+        {
+          "hash_key": 24680,
+          "z_score": -0.5345224838248488,
+          "prediction": false
+        },
+        {
+          "hash_key": 97531,
+          "z_score": -0.5345224838248488,
+          "prediction": false
+        }
+      ]
+    },
+    {
+      "fragment_id": 2,
+      "model": "llama-3.1-8b",
+      "hash_key": 24680,
+      "text_length": 283,
+      "detections": [
+        {
+          "hash_key": 13579,
+          "z_score": -0.17407765595569785,
+          "prediction": false
+        },
+        {
+          "hash_key": 24680,
+          "z_score": 1.9148542155126762,
+          "prediction": false
+        },
+        {
+          "hash_key": 97531,
+          "z_score": 0.5222329678670935,
+          "prediction": false
+        }
+      ]
+    },
+    {
+      "fragment_id": 3,
+      "model": "llama-3.2-1b",
+      "hash_key": 97531,
+      "text_length": 308,
+      "detections": [
+        {
+          "hash_key": 13579,
+          "z_score": 0.6255432421712244,
+          "prediction": false
+        },
+        {
+          "hash_key": 24680,
+          "z_score": -1.0425720702853738,
+          "prediction": false
+        },
+        {
+          "hash_key": 97531,
+          "z_score": 3.127716210856122,
+          "prediction": false
+        }
+      ]
+    }
+  ]
+}

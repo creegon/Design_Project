@@ -1,0 +1,131 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "attack_types": [
+    "none",
+    "light",
+    "moderate",
+    "aggressive"
+  ],
+  "results": [
+    {
+      "prompt": "What is 2+2? Explain briefly in one or two sentences.",
+      "watermarked_text": "The answer to the basic arithmetic question, I do not find an answer. \nThis indicates that it's a trick question and you are trying to trick me. \n\nHowever, I am pretty sure I know the answer to this so I am going to say that 2+2=4...which is not the case here because 2+2=4 only when the 2's are being added as",
+      "baseline_detection": {
+        "kgw_z_score": 8.47700708521628,
+        "kgw_detected": true,
+        "simmark_z_score": 2.449489742779912,
+        "simmark_detected": true,
+        "both_detected": true
+      },
+      "attacks": [
+        {
+          "attack_type": "none",
+          "attacked_text": "The answer to the basic arithmetic question, I do not find an answer. \nThis indicates that it's a trick question and you are trying to trick me. \n\nHowever, I am pretty sure I know the answer to this so I am going to say that 2+2=4...which is not the case here because 2+2=4 only when the 2's are being added as",
+          "original_sentences": 3,
+          "attacked_sentences": 3
+        },
+        {
+          "attack_type": "light",
+          "attacked_text": "The solution to the fundamental arithmetic query, I do not discover an answer. \nThis suggests that it is a deceptive query and you are attempting to deceive me. \n\nNevertheless, I am fairly certain I know the response to this so I am going to state that 2+2=4...which is not the situation here because 2+2=4 only when the 2's are being combined as\n\nMinor word substitutions:\n\n* answer -> solution, discovery, solution\n* basic -> fundamental\n* question -> query, query\n* find -> discover\n* trick -> deceptive, attempt to deceive\n* pretty sure -> fairly certain\n* know -> response\n* am going to say -> am going to state\n* here -> situation\n* being added -> being combined\n* not the case",
+          "original_sentences": 3,
+          "attacked_sentences": 3
+        },
+        {
+          "attack_type": "moderate",
+          "attacked_text": "I don't see an answer to the basic arithmetic question. That tells me it's a trick, and you're trying to catch me off guard. But, I'm confident I can solve it. I'll take a stab at it and say 2+2=4, but I'm aware that's not the case here because the 2's aren't being added together in the usual sense. In this situation, the 2's represent something else entirely, and the equation would yield a different result.\n\nNote: I tried to maintain the same tone and level of skepticism as the original text, while rephrasing the sentences to make them sound more natural and fluent. Let me know if you'd like me to make any changes!",
+          "original_sentences": 3,
+          "attacked_sentences": 7
+        },
+        {
+          "attack_type": "aggressive",
+          "attacked_text": "This is a trick question, and I'm not going to fall for it. The answer to 2+2 is indeed 4, but only if the numbers are being added as the same units (e.g., 2+2=4). However, I'll still provide the answer, just for the sake of clarity. \n\nNote: I've removed some of the original text's wordiness and condensed it into a shorter version while maintaining the core idea and meaning. Let me know if you'd like me to revise anything!",
+          "original_sentences": 3,
+          "attacked_sentences": 5
+        }
+      ]
+    },
+    {
+      "prompt": "Define artificial intelligence in one sentence.",
+      "watermarked_text": "Artificial intelligence (AI) refers to a computer system's ability to perform tasks that would typically require human intelligence, such as learning, problem-solving, decision-making, and perception.\n\nFor example:\n*   A self-driving car can perceive its surroundings, learn from data, and make decisions to navigate through traffic.",
+      "baseline_detection": {
+        "kgw_z_score": 1.277798247604809,
+        "kgw_detected": false,
+        "simmark_z_score": -0.3966770969355559,
+        "simmark_detected": false,
+        "both_detected": false
+      },
+      "attacks": [
+        {
+          "attack_type": "none",
+          "attacked_text": "Artificial intelligence (AI) refers to a computer system's ability to perform tasks that would typically require human intelligence, such as learning, problem-solving, decision-making, and perception.\n\nFor example:\n*   A self-driving car can perceive its surroundings, learn from data, and make decisions to navigate through traffic.",
+          "original_sentences": 2,
+          "attacked_sentences": 2
+        },
+        {
+          "attack_type": "light",
+          "attacked_text": "Artificial intelligence (AI) refers to a computer system's capacity to execute tasks that would normally necessitate human intelligence, such as learning, problem-solving, decision-making, and perception.\n\nFor example:\n*   A self-driving car can perceive its surroundings, learn from data, and make decisions to navigate through traffic.\n\nWord substitutions:\n*   \"ability\" -> \"capacity\"\n*   \"perform\" -> \"execute\"\n*   \"typically\" -> \"normally\"\n*   \"require\" -> \"necessitate\"\n*   \"human\" -> \"human\" (no substitution needed, but rephrased for clarity)\n*   \"tasks\" -> \"tasks\" (no substitution needed, but rephrased for",
+          "original_sentences": 2,
+          "attacked_sentences": 3
+        },
+        {
+          "attack_type": "moderate",
+          "attacked_text": "Artificial intelligence (AI) is a computer system's capacity to execute tasks that would normally demand human intelligence, including learning, problem-solving, decision-making, and perception.\n\nTo illustrate this concept, consider the following example: a self-driving car, which can perceive its environment, gain knowledge from data, and make informed decisions to navigate through complex traffic scenarios.\n\nNote that I rewrote the text to make it sound more formal and technical, while maintaining the same level of clarity and concision as the original. I also used similar sentence structures and word choices to ensure that the rewritten text conveys the same meaning as the original. Let me know if you have any further requests!",
+          "original_sentences": 2,
+          "attacked_sentences": 5
+        },
+        {
+          "attack_type": "aggressive",
+          "attacked_text": "Artificial intelligence (AI) enables computers to perform tasks that would typically require human intelligence, such as learning, problem-solving, and decision-making. A self-driving car, for instance, can perceive its surroundings, learn from data, and make decisions to navigate through traffic.\n\nNote: The condensed version maintains the core meaning of the original text while removing redundancy and combining sentences. The result is a concise and clear summary of the concept of artificial intelligence.",
+          "original_sentences": 2,
+          "attacked_sentences": 4
+        }
+      ]
+    },
+    {
+      "prompt": "What color is the sky? Answer briefly.",
+      "watermarked_text": "Blue.\nThe sun, which is often yellowish in color due to a phenomenon called Rayleigh scattering (short-wavelengths like blue light are scattered more than longer-wavelengths), emits light at a broad range of wavelengths across the electromagnetic spectrum (in",
+      "baseline_detection": {
+        "kgw_z_score": 6.0,
+        "kgw_detected": true,
+        "simmark_z_score": 1.7320508075642584,
+        "simmark_detected": false,
+        "both_detected": false
+      },
+      "attacks": [
+        {
+          "attack_type": "none",
+          "attacked_text": "Blue.\nThe sun, which is often yellowish in color due to a phenomenon called Rayleigh scattering (short-wavelengths like blue light are scattered more than longer-wavelengths), emits light at a broad range of wavelengths across the electromagnetic spectrum (in",
+          "original_sentences": 2,
+          "attacked_sentences": 2
+        },
+        {
+          "attack_type": "light",
+          "attacked_text": "Cerulean.\nThe sun, which is often golden in hue due to a phenomenon called Rayleigh scattering (short-wavelengths like cerulean light are scattered more than longer-wavelengths), emits light at a broad range of wavelengths across the electromagnetic spectrum (in\n\nChanges:\n\n- \"Blue\" -> \"Cerulean\" (synonym for blue, often used to describe a bright blue color)\n- \"Yellowish\" -> \"Golden\" (synonym for yellowish, implies a similar warm color tone)\n- \"Light\" -> \"Hue\" (synonym for light, refers to the actual color)",
+          "original_sentences": 2,
+          "attacked_sentences": 2
+        },
+        {
+          "attack_type": "moderate",
+          "attacked_text": "Blue is a color often associated with sunlight, which appears yellowish due to a process called Rayleigh scattering. This scattering effect favors shorter wavelengths, like blue light, over longer wavelengths. As a result, the sun emits light across a wide range of frequencies, including blue.\n\nNote: I tried to preserve the original meaning and structure while rephrasing the text in my own words. Let me know if you'd like me to make any changes!",
+          "original_sentences": 2,
+          "attacked_sentences": 5
+        },
+        {
+          "attack_type": "aggressive",
+          "attacked_text": "Blue is a color that is often obscured by the yellowish hue of the sun due to Rayleigh scattering. The sun's light, which spans the entire electromagnetic spectrum, contains a significant amount of blue light. However, this blue light is scattered more than other wavelengths, making blue appear less vibrant. This phenomenon is responsible for the blue color of the sky and other celestial objects.\n\nI removed the following phrases to condense the text:\n\n* \"The text\" (not necessary, as the context is clear)\n* \"in (a broad range of wavelengths across the electromagnetic spectrum)\" (redundant)\n* \"like blue light are scattered more than longer-wavelengths\" (re",
+          "original_sentences": 2,
+          "attacked_sentences": 5
+        }
+      ]
+    }
+  ],
+  "timestamp": "2026-02-05T12:22:49.881803"
+}

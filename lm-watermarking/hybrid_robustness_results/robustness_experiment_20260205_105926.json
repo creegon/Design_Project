@@ -1,0 +1,16 @@
+{
+  "experiment_config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ],
+    "kgw_z_threshold": 3.0,
+    "simmark_z_threshold": 2.0
+  },
+  "summary": {},
+  "results": [],
+  "timestamp": "2026-02-05T10:59:26.809890"
+}

@@ -1,0 +1,69 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "category": "poetry",
+  "generated_texts": [
+    {
+      "prompt": "Write a haiku about autumn leaves.",
+      "category": "poetry",
+      "watermarked_text": "Autumn leaves fall slow \nGolden hues upon the ground \nSummer's fading end   (Note: Traditional Haiku are written in 5-7-5 syllables. I've kept this structure as much as possible, but with slight adjustments to maintain clarity) \n\nHere's an edited version of the haiku, following the traditional 5-7-5 structure:\nOrange hues descend  \nGolden light on the fallen  \nSummer's final dance",
+      "stats": {
+        "total_sentences": 3,
+        "total_trials": 23,
+        "avg_trials_per_sentence": 7.666666666666667,
+        "maxed_out_sentences": 0
+      },
+      "baseline_detection": {
+        "kgw_z_score": 5.893635529877645,
+        "kgw_detected": true,
+        "simmark_z_score": -0.5773502347753284,
+        "simmark_detected": false,
+        "both_detected": false
+      }
+    },
+    {
+      "prompt": "Write a short limerick about a cat.",
+      "category": "poetry",
+      "watermarked_text": "There once was a cat named Pete,\nWhose whiskers were long and so neat.\nHe'd chase after toys,\nAnd pounce with joyful noise,\nAnd always land on his feet. \n\nHere's the corrected version:\n\nThere once was a cat named Pete,\nWhose whiskers were long and so neat.\nHe'd chase after balls,\nAnd pounces through halls,\nAnd always land on his feet.",
+      "stats": {
+        "total_sentences": 4,
+        "total_trials": 6,
+        "avg_trials_per_sentence": 1.5,
+        "maxed_out_sentences": 0
+      },
+      "baseline_detection": {
+        "kgw_z_score": 1.0120486274099798,
+        "kgw_detected": false,
+        "simmark_z_score": 2.9999999999973332,
+        "simmark_detected": true,
+        "both_detected": false
+      }
+    },
+    {
+      "prompt": "Create a four-line poem about the ocean.",
+      "category": "poetry",
+      "watermarked_text": "Use sensory language to describe its beauty and power.\n    I'd be happy to help you with that.\n\nHere's a possible poem:\n\nTurquoise waves crash on the shore,\nFoam-kissed sands, a soothing roar.\nThe salty scent of sea and air,\nElegant swells beyond all compare.\n\nI hope you like it! Let me know if you'd like me to revise anything or if you have any specific ideas in mind for your poem.",
+      "stats": {
+        "total_sentences": 6,
+        "total_trials": 16,
+        "avg_trials_per_sentence": 2.6666666666666665,
+        "maxed_out_sentences": 0
+      },
+      "baseline_detection": {
+        "kgw_z_score": 3.365945337491575,
+        "kgw_detected": true,
+        "simmark_z_score": 3.872983346205351,
+        "simmark_detected": true,
+        "both_detected": true
+      }
+    }
+  ],
+  "timestamp": "2026-02-05T12:47:52.655417"
+}

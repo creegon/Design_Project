@@ -1,0 +1,41 @@
+# LM-Watermarking Project Requirements
+# Conda environment: CS6158_project
+# Python 3.10 or 3.11 required (3.13 NOT supported)
+#
+# INSTALL:
+#   1. conda activate CS6158_project
+#   2. pip install torch --index-url https://download.pytorch.org/whl/cu121
+#   3. pip install -r requirements.txt
+
+# NOTE: PyTorch must be installed separately BEFORE running this file.
+# Do NOT add torch here — it will override the CUDA-enabled version.
+
+# ============================================================
+# Core: Transformers + Model Loading
+# ============================================================
+transformers>=4.38.0
+accelerate>=0.27.0
+tokenizers>=0.15.0
+
+# ============================================================
+# SimMark: Sentence Embeddings
+# ============================================================
+sentence-transformers>=2.5.0   # hkunlp/instructor-large
+nltk>=3.8.0                    # sent_tokenize
+scikit-learn>=1.3.0            # cosine_similarity
+
+# ============================================================
+# Scientific Computing
+# ============================================================
+scipy>=1.12.0
+numpy>=1.26.0
+
+# ============================================================
+# Visualization (for hybrid_watermark/ experiments)
+# ============================================================
+matplotlib>=3.8.0
+
+# ============================================================
+# Progress Bars
+# ============================================================
+tqdm>=4.66.0

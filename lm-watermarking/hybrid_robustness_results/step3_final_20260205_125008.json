@@ -1,0 +1,214 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "attack_types": [
+    "none",
+    "light",
+    "moderate",
+    "aggressive"
+  ],
+  "detection_results": [
+    {
+      "prompt": "Write a haiku about autumn leaves.",
+      "baseline_detection": {
+        "kgw_z_score": 5.893635529877645,
+        "kgw_detected": true,
+        "simmark_z_score": -0.5773502347753284,
+        "simmark_detected": false,
+        "both_detected": false
+      },
+      "attack_results": [
+        {
+          "attack_type": "none",
+          "original_sentences": 2,
+          "attacked_sentences": 2,
+          "kgw_z_score": 5.893635529877645,
+          "kgw_detected": true,
+          "simmark_z_score": -0.5773502347753284,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "light",
+          "original_sentences": 2,
+          "attacked_sentences": 1,
+          "kgw_z_score": 0.048970210687439175,
+          "kgw_detected": false,
+          "simmark_z_score": 0.0,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "moderate",
+          "original_sentences": 2,
+          "attacked_sentences": 3,
+          "kgw_z_score": -0.5261522196019802,
+          "kgw_detected": false,
+          "simmark_z_score": 2.449489742779912,
+          "simmark_detected": true,
+          "both_detected": false
+        },
+        {
+          "attack_type": "aggressive",
+          "original_sentences": 2,
+          "attacked_sentences": 2,
+          "kgw_z_score": 1.0972602697183962,
+          "kgw_detected": false,
+          "simmark_z_score": -0.5772706380667546,
+          "simmark_detected": false,
+          "both_detected": false
+        }
+      ]
+    },
+    {
+      "prompt": "Write a short limerick about a cat.",
+      "baseline_detection": {
+        "kgw_z_score": 1.0120486274099798,
+        "kgw_detected": false,
+        "simmark_z_score": 2.9999999999973332,
+        "simmark_detected": true,
+        "both_detected": false
+      },
+      "attack_results": [
+        {
+          "attack_type": "none",
+          "original_sentences": 4,
+          "attacked_sentences": 4,
+          "kgw_z_score": 1.0120486274099798,
+          "kgw_detected": false,
+          "simmark_z_score": 2.9999999999973332,
+          "simmark_detected": true,
+          "both_detected": false
+        },
+        {
+          "attack_type": "light",
+          "original_sentences": 4,
+          "attacked_sentences": 4,
+          "kgw_z_score": 1.6646297986075504,
+          "kgw_detected": false,
+          "simmark_z_score": 0.44531768218885015,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "moderate",
+          "original_sentences": 4,
+          "attacked_sentences": 7,
+          "kgw_z_score": -0.5101127853361851,
+          "kgw_detected": false,
+          "simmark_z_score": 2.3570581101624226,
+          "simmark_detected": true,
+          "both_detected": false
+        },
+        {
+          "attack_type": "aggressive",
+          "original_sentences": 4,
+          "attacked_sentences": 3,
+          "kgw_z_score": 1.052273583003294,
+          "kgw_detected": false,
+          "simmark_z_score": 0.8164968605501349,
+          "simmark_detected": false,
+          "both_detected": false
+        }
+      ]
+    },
+    {
+      "prompt": "Create a four-line poem about the ocean.",
+      "baseline_detection": {
+        "kgw_z_score": 3.365945337491575,
+        "kgw_detected": true,
+        "simmark_z_score": 3.872983346205351,
+        "simmark_detected": true,
+        "both_detected": true
+      },
+      "attack_results": [
+        {
+          "attack_type": "none",
+          "original_sentences": 6,
+          "attacked_sentences": 6,
+          "kgw_z_score": 3.365945337491575,
+          "kgw_detected": true,
+          "simmark_z_score": 3.872983346205351,
+          "simmark_detected": true,
+          "both_detected": true
+        },
+        {
+          "attack_type": "light",
+          "original_sentences": 6,
+          "attacked_sentences": 7,
+          "kgw_z_score": -0.7213357077339458,
+          "kgw_detected": false,
+          "simmark_z_score": 2.6175726618174164,
+          "simmark_detected": true,
+          "both_detected": false
+        },
+        {
+          "attack_type": "moderate",
+          "original_sentences": 6,
+          "attacked_sentences": 7,
+          "kgw_z_score": 1.247219128924647,
+          "kgw_detected": false,
+          "simmark_z_score": -0.35661660914751564,
+          "simmark_detected": false,
+          "both_detected": false
+        },
+        {
+          "attack_type": "aggressive",
+          "original_sentences": 6,
+          "attacked_sentences": 4,
+          "kgw_z_score": 1.9603921176392136,
+          "kgw_detected": false,
+          "simmark_z_score": 0.37009200360593086,
+          "simmark_detected": false,
+          "both_detected": false
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "none": {
+      "total": 3,
+      "kgw_survival_rate": 0.6666666666666666,
+      "simmark_survival_rate": 0.6666666666666666,
+      "both_survival_rate": 0.3333333333333333,
+      "any_survival_rate": 1.0,
+      "kgw_avg_z": 3.4238764982597334,
+      "simmark_avg_z": 2.098544370475785
+    },
+    "light": {
+      "total": 3,
+      "kgw_survival_rate": 0.0,
+      "simmark_survival_rate": 0.3333333333333333,
+      "both_survival_rate": 0.0,
+      "any_survival_rate": 0.3333333333333333,
+      "kgw_avg_z": 0.33075476718701463,
+      "simmark_avg_z": 1.0209634480020888
+    },
+    "moderate": {
+      "total": 3,
+      "kgw_survival_rate": 0.0,
+      "simmark_survival_rate": 0.6666666666666666,
+      "both_survival_rate": 0.0,
+      "any_survival_rate": 0.6666666666666666,
+      "kgw_avg_z": 0.07031804132882728,
+      "simmark_avg_z": 1.4833104145982732
+    },
+    "aggressive": {
+      "total": 3,
+      "kgw_survival_rate": 0.0,
+      "simmark_survival_rate": 0.0,
+      "both_survival_rate": 0.0,
+      "any_survival_rate": 0.0,
+      "kgw_avg_z": 1.3699753234536347,
+      "simmark_avg_z": 0.20310607536310374
+    }
+  },
+  "timestamp": "2026-02-05T12:50:23.555681"
+}

@@ -1,0 +1,69 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "category": "short",
+  "generated_texts": [
+    {
+      "prompt": "What is 2+2? Explain briefly in one or two sentences.",
+      "category": "short",
+      "watermarked_text": "The answer to the basic arithmetic question, I do not find an answer. \nThis indicates that it's a trick question and you are trying to trick me. \n\nHowever, I am pretty sure I know the answer to this so I am going to say that 2+2=4...which is not the case here because 2+2=4 only when the 2's are being added as",
+      "stats": {
+        "total_sentences": 3,
+        "total_trials": 5,
+        "avg_trials_per_sentence": 1.6666666666666667,
+        "maxed_out_sentences": 0
+      },
+      "baseline_detection": {
+        "kgw_z_score": 8.47700708521628,
+        "kgw_detected": true,
+        "simmark_z_score": 2.449489742779912,
+        "simmark_detected": true,
+        "both_detected": true
+      }
+    },
+    {
+      "prompt": "Define artificial intelligence in one sentence.",
+      "category": "short",
+      "watermarked_text": "Artificial intelligence (AI) refers to a computer system's ability to perform tasks that would typically require human intelligence, such as learning, problem-solving, decision-making, and perception.\n\nFor example:\n*   A self-driving car can perceive its surroundings, learn from data, and make decisions to navigate through traffic.",
+      "stats": {
+        "total_sentences": 2,
+        "total_trials": 2,
+        "avg_trials_per_sentence": 1.0,
+        "maxed_out_sentences": 0
+      },
+      "baseline_detection": {
+        "kgw_z_score": 1.277798247604809,
+        "kgw_detected": false,
+        "simmark_z_score": -0.3966770969355559,
+        "simmark_detected": false,
+        "both_detected": false
+      }
+    },
+    {
+      "prompt": "What color is the sky? Answer briefly.",
+      "category": "short",
+      "watermarked_text": "Blue.\nThe sun, which is often yellowish in color due to a phenomenon called Rayleigh scattering (short-wavelengths like blue light are scattered more than longer-wavelengths), emits light at a broad range of wavelengths across the electromagnetic spectrum (in",
+      "stats": {
+        "total_sentences": 2,
+        "total_trials": 7,
+        "avg_trials_per_sentence": 3.5,
+        "maxed_out_sentences": 0
+      },
+      "baseline_detection": {
+        "kgw_z_score": 6.0,
+        "kgw_detected": true,
+        "simmark_z_score": 1.7320508075642584,
+        "simmark_detected": false,
+        "both_detected": false
+      }
+    }
+  ],
+  "timestamp": "2026-02-05T12:02:42.182177"
+}

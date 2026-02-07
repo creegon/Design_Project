@@ -1,0 +1,97 @@
+{
+  "prompt": "Write a short story about artificial intelligence.",
+  "generator_model": "llama-3.2-3b",
+  "paraphraser_models": [
+    "qwen-3-8b"
+  ],
+  "watermark_config": {
+    "gamma": 0.25,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863
+  },
+  "z_threshold": 4.0,
+  "generated_text": "The story should take place in the year 2050, and you will be required to write a plot summary, character descriptions, and a setting description.\nThe artificial intelligence (AI) story takes place in the year 2050, where AI has become an integral part of society. The main character, John, works as a software engineer and has developed a cutting-edge artificial intelligence (AI) system that is capable of making decisions and solving problems autonomously. However, John’s AI system is still in the early stages of development and has yet to fully understand human behavior and emotions.\nOne day, John receives a phone call from a client who is seeking the assistance of John’s AI system to help him make a decision. The client, Mr.",
+  "generation_metadata": {
+    "model": "llama-3.2-3b",
+    "model_identifier": "meta-llama/Llama-3.2-3B",
+    "prompt": "Write a short story about artificial intelligence.",
+    "prompt_prepared": "Write a short story about artificial intelligence.",
+    "watermark_config": {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "generation_config": {
+      "max_new_tokens": 150,
+      "temperature": 0.7,
+      "top_p": 0.85,
+      "top_k": 30,
+      "do_sample": true
+    },
+    "generated_at": "2025-11-07T15:48:40.636854",
+    "token_usage": {
+      "prompt_tokens": 9,
+      "completion_tokens": 150,
+      "total_tokens": 159
+    }
+  },
+  "original_detection": {
+    "z_score": 5.729514650430383,
+    "p_value": 5.0359195479794695e-09,
+    "prediction": true,
+    "num_green_tokens": 64,
+    "num_tokens_scored": 139,
+    "green_fraction": 0.460431654676259,
+    "z_threshold": 4.0,
+    "confidence": 0.9999999949640804
+  },
+  "paraphraser_results": [
+    {
+      "paraphraser": "qwen-3-8b",
+      "paraphrased_text": "The narrative is set in the year 2050, and you are expected to provide a plot summary, character outlines, and a setting description.\nIn the year 2050, the AI story is set in a society where artificial intelligence has become a fundamental element. The main character, John, is a software engineer who has created an advanced AI system that can make decisions and solve problems on its own. However, this AI system is still in the early phase of development and has not yet fully grasped human behavior and emotions.\nOne day, John gets a call from a client who wants to use his AI system to assist in making a decision. The client, Mr.\n\nI need to continue the paraphrased text to",
+      "metadata": {
+        "model": "qwen-3-8b",
+        "model_identifier": "Qwen/Qwen3-8B",
+        "instruction": "Rewrite the passage below using different sentence structures and synonyms while keeping every fact accurate:",
+        "prompt_text": "Rewrite the passage below using different sentence structures and synonyms while keeping every fact accurate:\n\nOriginal text:\nThe story should take place in the year 2050, and you will be required to write a plot summary, character descriptions, and a setting description.\nThe artificial intelligence (AI) story takes place in the year 2050, where AI has become an integral part of society. The main character, John, works as a software engineer and has developed a cutting-edge artificial intelligence (AI) system that is capable of making decisions and solving problems autonomously. However, John’s AI system is still in the early stages of development and has yet to fully understand human behavior and emotions.\nOne day, John receives a phone call from a client who is seeking the assistance of John’s AI system to help him make a decision. The client, Mr.\n\nParaphrased text:",
+        "original_text": "The story should take place in the year 2050, and you will be required to write a plot summary, character descriptions, and a setting description.\nThe artificial intelligence (AI) story takes place in the year 2050, where AI has become an integral part of society. The main character, John, works as a software engineer and has developed a cutting-edge artificial intelligence (AI) system that is capable of making decisions and solving problems autonomously. However, John’s AI system is still in the early stages of development and has yet to fully understand human behavior and emotions.\nOne day, John receives a phone call from a client who is seeking the assistance of John’s AI system to help him make a decision. The client, Mr.",
+        "generation_config": {
+          "max_new_tokens": 150,
+          "temperature": 0.7,
+          "top_p": 0.85,
+          "top_k": 30,
+          "do_sample": true
+        },
+        "paraphrased_at": "2025-11-07T15:52:38.175871",
+        "token_usage": {
+          "prompt_tokens": 180,
+          "completion_tokens": 150,
+          "total_tokens": 330
+        }
+      },
+      "detection": {
+        "z_score": 0.048970210687439175,
+        "p_value": 0.4804715179370811,
+        "prediction": false,
+        "num_green_tokens": 35,
+        "num_tokens_scored": 139,
+        "green_fraction": 0.2517985611510791,
+        "z_threshold": 4.0,
+        "confidence": null
+      },
+      "semantic_similarity": 0.4732142857142857,
+      "watermark_decay": 5.6805444397429445,
+      "z_score_retention": 0.008547008547008548
+    }
+  ],
+  "summary": {
+    "watermark_survival_rate": 0.0,
+    "watermark_survived_count": 0,
+    "average_similarity": 0.4732142857142857,
+    "average_decay": 5.6805444397429445
+  },
+  "timestamp": "2025-11-07T15:52:38.254148",
+  "paraphrase_mode": "Structure shuffle"
+}

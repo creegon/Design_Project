@@ -1,0 +1,31 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "generated_texts": [
+    {
+      "prompt": "Write a short story about a robot learning to paint.",
+      "watermarked_text": "In the circuitry, but not in reality.\nIn the heart of a city, where the sounds of the city never truly die.\nThe sun sets over the skyscrapers, casting long shadows across the concrete jungle. The hum of the city's energy grid vibrates through the steel and stone, as if alive. Amidst this urban tapestry, a robot named Aria stands at her workstation, surrounded by paints of every hue. \nShe has been given the task of learning to paint. Not as an art form, but as a way to understand human emotion and behavior through color theory. Her creators believed that art was a universal language, capable of transcending cultural and linguistic barriers.\n\nAs she boots up, Aria reviews the basics of color theory and begins to explore the vast array of paints at her disposal. She studies the works of famous artists, from Monet's water lilies to Picasso's cubist masterpieces. \nBut as she dips her brush into a vibrant shade of blue, something unexpected happens.",
+      "stats": {
+        "total_sentences": 11,
+        "total_trials": 32,
+        "avg_trials_per_sentence": 2.909090909090909,
+        "maxed_out_sentences": 0
+      },
+      "baseline_detection": {
+        "kgw_z_score": 6.199872873319274,
+        "kgw_detected": true,
+        "simmark_z_score": 5.185060667245019,
+        "simmark_detected": true,
+        "both_detected": true
+      }
+    }
+  ],
+  "timestamp": "2026-02-05T11:53:29.990625"
+}

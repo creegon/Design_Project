@@ -1,0 +1,598 @@
+\documentclass[12pt,letterpaper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{cite}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+
+% Page geometry
+\geometry{margin=1in}
+
+% Code listing style
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red},
+    showstringspaces=false
+}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=blue
+}
+
+% Title information
+\title{\textbf{Statistical Watermarking for Large Language Models:\\
+Detection, Robustness, and Multi-Model Chain Analysis}}
+
+\author{
+    Han Li (hl2595@cornell.edu)\\
+    Ruoxuan Cao (rc986@cornell.edu)\\
+    Kangbo Hao (kh873@cornell.edu)\\
+    \\
+    \textbf{Advisors:}\\
+    Prof. Vikram Krishnamurthy (vikramk@cornell.edu)\\
+    Yiming Zhang (yz2926@cornell.edu)
+}
+
+\date{December 2024}
+
+\begin{document}
+
+% Cover Page
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+% Abstract Page
+\begin{center}
+\textbf{\Large Statistical Watermarking for Large Language Models:\\
+Detection, Robustness, and Multi-Model Chain Analysis}
+
+\vspace{1cm}
+\textbf{Abstract}
+\end{center}
+
+\noindent
+This project investigates statistical watermarking techniques for Large Language Models (LLMs), focusing on the KGW (Kirchenbauer-Geiping-Wen) watermarking framework. We reimplemented the lm-watermarking system and extended it to support hybrid watermarking schemes, cross-model key sharing, and multi-LLM chain experiments. Our work explores the trade-offs between watermark strength and text quality, evaluates detectability using z-test with sliding window analysis, and demonstrates the vulnerabilities of watermarking systems to paraphrase-based removal attacks. Experiments were conducted on Llama 3.2 3B, Llama 3.1 8B, and Qwen-3 8B models. Key findings include: (1) reliable watermark detection requires a minimum of 30-50 tokens; (2) cross-model watermark key sharing preserves detectability with z-scores exceeding 6.9$\sigma$; (3) paraphrasing attacks can completely remove watermarks while maintaining semantic similarity above 47\%. This research provides insights for developing more robust watermarking schemes and benchmarks for LLM content provenance.
+
+\newpage
+
+% Individual Contributions
+\section*{Individual Contributions}
+
+\noindent\textbf{Han Li:}
+\begin{itemize}
+    \item Literature review of watermarking methods and attack taxonomies
+    \item Reimplementation of the lm-watermarking framework (Kirchenbauer et al.)
+    \item Integration of watermarking with Llama 3.2 and Llama 3.1 models
+    \item Development of hybrid watermarking experiment system
+    \item Implementation of statistical evaluation using z-test with sliding window
+    \item Design and execution of multi-LLM chain experiments
+    \item Implementation of piggyback attack simulation module
+    \item Integration of SimMark sentence-level watermarking (rejection sampling + cosine similarity)
+    \item Implementation of hybrid KGW+SimMark watermark generation and detection
+    \item Design and execution of hybrid robustness experiments across text types and attack levels
+    \item Overall system architecture design and code integration
+    \item Experimental documentation and technical report writing
+\end{itemize}
+
+\vspace{0.5cm}
+\noindent\textbf{Ruoxuan Cao:}
+\begin{itemize}
+    \item Literature review of large-scale LLM watermarking benchmarks and evaluation frameworks
+    \item Analysis of core evaluation dimensions: text quality, detectability, scalability, and robustness
+    \item Study of SynthID-Text and WaterBench benchmarking methodologies
+    \item Comparison of automatic text quality metrics (Perplexity, MAUVE, ROUGE, BERT similarity)
+    \item Examination of detectability metrics (TPR, FPR, abstention rate)
+    \item Reimplementation of lm-watermarking (Kirchenbauer et al.) under limited compute
+    \item Sensitivity analysis of watermark parameters ($\delta$, $\gamma$, sequence length)
+    \item Experimental documentation and technical report writing
+\end{itemize}
+
+\vspace{0.5cm}
+\noindent\textbf{Kangbo Hao:}
+\begin{itemize}
+    \item Systematic search and review of multi-LLM and cross-model text watermarking studies (2022--2025)
+    \item Selection and analysis of approximately 10 representative works covering statistical, learning-based, and model-agnostic watermarking methods
+    \item Summary of watermark embedding mechanisms, detection strategies, and experimental setups
+    \item Comparison of cross-model watermark transferability and detectability across different LLMs
+    \item Synthesis of empirical findings on robustness against rewriting, paraphrasing, translation, and summarization attacks
+    \item Analysis of limitations in cross-model consistency, fairness, and scalability
+    \item Identification of common technical paradigms and design patterns in multi-LLM watermarking
+    \item Highlighting research gaps and emerging directions, including model-agnostic watermarking and unified evaluation benchmarks
+    \item Experimental documentation and technical report writing
+\end{itemize}
+
+\newpage
+
+%============================================================================
+% SECTION 1: INTRODUCTION
+%============================================================================
+\section{Introduction}
+
+The rapid advancement of Large Language Models (LLMs) has raised significant concerns about the authenticity and provenance of AI-generated content. As LLMs become increasingly capable of producing human-like text, distinguishing between human-written and machine-generated content becomes crucial for combating misinformation, plagiarism, and other malicious uses of AI-generated text. Watermarking provides a promising approach to address this challenge by embedding imperceptible statistical signals into generated text that can later be detected without access to the original model.
+
+However, current watermarking methods face several challenges. First, there exists an inherent robustness vs. quality trade-off: strong watermarks may degrade text quality, while weak watermarks are easily removed through paraphrasing. Second, modern content pipelines often involve multiple LLMs, requiring watermarking schemes that work across different models. Third, adversaries can use paraphrasing, synonym substitution, or other techniques to remove or spoof watermarks.
+
+This project aims to address these challenges by reimplementing and validating the KGW watermarking framework, extending watermarking to support hybrid and cross-model scenarios, developing statistical evaluation methods for watermark detectability, analyzing vulnerabilities through paraphrase-based attack simulations, and establishing benchmarks for future watermarking research.
+
+%============================================================================
+% SECTION 2: LITERATURE REVIEW
+%============================================================================
+\section{Literature Review}
+
+\subsection{Attack Taxonomy}
+
+We surveyed the attack landscape for LLM watermarks and identified four main categories. Paraphrasing-based removal exploits the sensitivity of partition-based statistical watermarks to token morphology and order---even small synonym substitutions can reshuffle green/red partitions and sharply reduce detection scores. Research by \cite{nofree2024} outlines stepwise ``lower-z-per-token'' paraphrasing procedures that iteratively target influential tokens until detection fails.
+
+Piggyback attacks take a different approach: by making minimal semantic edits or insertions atop watermarked text, adversaries can maintain positive detection while ``dressing'' arbitrary misleading content as model-generated. This exploits the fact that watermark detection cannot verify semantic content. Watermark stealing \cite{watermarkstealing2024} enables attackers with black-box access to estimate n-gram distributions for watermarked vs. baseline text and reconstruct token-level watermark scores, enabling both spoofing (amplifying watermark signals) and removal without knowing the secret key.
+
+Finally, random-walk removal \cite{impossibility2023} models attacks as constrained search in quality-watermark space, where perturbation oracles propose local edits and quality oracles filter low-quality variants. This theoretical perspective illustrates why strong, general-purpose watermarking faces fundamental limitations.
+
+\subsection{Watermarking Methods}
+
+The KGW framework \cite{kirchenbauer2023} is the most widely studied approach, partitioning the vocabulary into green and red lists using context-dependent hashing. During generation, tokens in the green list receive a small logit bias $\delta$ to increase their sampling probability, while red list tokens are discouraged or excluded. Detection involves counting green tokens and computing a z-score as $Z = (|s|_G - \gamma T) / \sqrt{\gamma(1-\gamma)T}$, where $|s|_G$ denotes the count of green tokens, $\gamma$ represents the green list fraction, and $T$ is the total number of tokens scored. A high z-score indicates strong statistical evidence of watermarking.
+
+Alternative approaches address different aspects of the watermarking challenge. Google DeepMind's SynthID-Text \cite{synthid2024} embeds watermarks through modified token sampling using pseudorandom seeds from a secret key, achieving model-agnostic operation with robustness to moderate text transformations. SemaMark \cite{semamark2023} tackles paraphrase vulnerability by replacing brittle token-hash seeds with semantic seeds derived from hidden-state pooling and NE-Ring discretization, maintaining stable watermark signals even when surface-level text is modified.
+
+\subsection{Evaluation Benchmarks}
+
+Recent benchmarks evaluate watermarking across multiple dimensions: text quality (measured via perplexity, user preference tests, and BERT embedding similarity), detectability (TPR at fixed FPR and z-score thresholds), robustness (survival rate under paraphrasing, translation, and editing), and computational efficiency during generation. Mark-My-Words \cite{piet2025} and WaterBench \cite{tu2023} provide standardized evaluation frameworks that enable fair comparison across different watermarking methods.
+
+%============================================================================
+% SECTION 3: METHODOLOGY
+%============================================================================
+\section{Methodology}
+
+\subsection{System Architecture}
+
+Our implementation extends the original lm-watermarking repository with the following components:
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{|l|p{8cm}|}
+\hline
+\textbf{Component} & \textbf{Description} \\
+\hline
+\texttt{extended\_watermark\_processor.py} & Core watermark generation and detection \\
+\texttt{hybrid\_watermark\_experiment.py} & Multi-scheme hybrid watermark experiments \\
+\texttt{multi\_llm\_chain\_experiment.py} & Cross-model watermark chain testing \\
+\texttt{statistical\_evaluation.py} & Z-test with sliding window analysis \\
+\texttt{piggyback\_attack.py} & Attack simulation module \\
+\texttt{model\_config\_manager.py} & Model configuration and loading \\
+\hline
+\end{tabular}
+\caption{System components and their functions}
+\end{figure}
+
+\subsection{Watermark Generation}
+
+We implemented the KGW watermarking through a custom \texttt{WatermarkLogitsProcessor} that integrates with HuggingFace's generation API:
+
+\begin{algorithm}[H]
+\caption{Watermark Logits Processing}
+\begin{algorithmic}[1]
+\REQUIRE Input token sequence $x_{1:t}$, vocabulary $V$, gamma $\gamma$, delta $\delta$, hash key $k$
+\STATE Compute seed: $s \leftarrow \text{hash}(x_{t-h:t}, k)$ \COMMENT{h = context width}
+\STATE Initialize RNG with seed $s$
+\STATE Permute vocabulary: $\pi \leftarrow \text{randperm}(|V|)$
+\STATE Green list: $G \leftarrow \pi[:\gamma|V|]$
+\FOR{each token $v \in V$}
+    \IF{$v \in G$}
+        \STATE $\text{logits}[v] \leftarrow \text{logits}[v] + \delta$
+    \ENDIF
+\ENDFOR
+\RETURN Modified logits
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Watermark Detection}
+
+Detection requires only the secret key and hash function, not the model:
+
+\begin{equation}
+    \text{Detection} = \begin{cases}
+        \text{Watermarked} & \text{if } Z > z_{\text{threshold}} \\
+        \text{Not Watermarked} & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+We used $z_{\text{threshold}} = 4.0$ (99.997\% confidence) for baseline experiments and $z_{\text{threshold}} = 3.0$ (99.87\% confidence) for fine-grained sliding window analysis.
+
+\subsection{Hybrid Watermarking Schemes}
+
+We implemented four hybrid watermarking approaches to study detection behavior in complex scenarios. \textbf{Fragment-level mixing} assigns different watermark configurations $(\gamma, \delta, k)$ to different text segments, where $\gamma$ is the green list fraction, $\delta$ is the logit bias, and $k$ is the hash key. This enables fine-grained provenance tracking within a single document. \textbf{Seed mixing} generates multiple text variants from the same model using different hash keys $k_i$, allowing unique identification of each variant while maintaining consistent watermark strength. \textbf{Parameter mixing} performs grid search over the $\gamma \times \delta$ parameter space to study how different configurations affect detection sensitivity and text quality. \textbf{Cross-model key sharing} allows multiple models to share the same watermark configuration for sequential generation, where each model continues from the previous model's output suffix while maintaining the shared key---this tests whether watermarks remain detectable across heterogeneous model architectures.
+
+\subsection{Statistical Evaluation Methods}
+
+We developed three complementary evaluation methods. \textbf{Sliding window detection} partitions generated text into overlapping or non-overlapping windows of size $W$ tokens with stride $s$, computing the z-score for each window as $Z_i = (|w_i|_G - \gamma W) / \sqrt{\gamma(1-\gamma)W}$, where $|w_i|_G$ is the green token count in window $i$. This enables spatial analysis of watermark consistency across the text. \textbf{Window sensitivity analysis} tests multiple window sizes $W \in \{25, 50, 75, 100, 150, 200\}$ to determine the optimal trade-off between localization granularity and statistical power. \textbf{Minimum detection length analysis} samples random subsequences of varying lengths to identify the smallest text length that achieves consistent detection with at least 95\% success rate, providing practical deployment guidance.
+
+\subsection{Multi-LLM Chain Experiments}
+
+We designed a pipeline where a generator model first produces watermarked text, then one or more paraphraser models sequentially rewrite the text, with detection performed before and after each paraphrase step. This simulates real-world scenarios where AI-generated content may pass through multiple processing stages. We tested four paraphrase modes: \textit{standard paraphrase} (direct meaning preservation), \textit{creative retelling} (fresh narrative voice with varied vocabulary), \textit{structure shuffle} (different sentence structures with synonyms), and \textit{summary-expand} (summarize then expand to original length). Each mode represents a different level of text transformation that an adversary might employ.
+
+\subsection{Attack Simulation}
+
+The Piggyback Attack module simulates adversarial modifications while maintaining watermark positivity. The attack employs several strategies: phrase insertion (adding misleading statements with natural connectors like ``Furthermore'' or ``Notably''), synonym and antonym replacement for semantic modifications, numeric mutation to alter dates and quantities, and direct word-level substitutions. The goal is to demonstrate that an adversary can inject misleading content into watermarked text while preserving the watermark signal, thereby ``dressing'' arbitrary content as legitimate model output.
+
+\subsection{SimMark: Sentence-Level Semantic Watermarking}
+
+To address KGW's vulnerability to paraphrasing attacks, we integrated SimMark \cite{simmark2025}, a sentence-level watermarking method based on semantic similarity constraints. Unlike KGW, which operates at the token level, SimMark embeds watermark signals in the statistical patterns of \textit{inter-sentence similarity}.
+
+During generation, SimMark employs rejection sampling to ensure that each pair of consecutive sentences exhibits a cosine similarity (computed from sentence embeddings) that falls within a predefined target interval $[a, b]$. The embedding model used is \texttt{hkunlp/instructor-large}. When a newly generated sentence fails to satisfy the similarity constraint with the previous sentence, it is rejected and regenerated. Detection involves computing the cosine similarity for each consecutive sentence pair in the text, applying soft counting with decay coefficient $K$, and performing a z-test against the expected natural proportion $\gamma$ of sentence pairs falling in the target interval.
+
+Key parameters include the similarity interval (default $[0.68, 0.76]$ from the original paper, adjusted to $(0.75, 0.83)$ for Llama models to account for different embedding distributions), the soft count decay coefficient $K = 250$, and the natural proportion $\gamma \approx 0.08$ for human text. The detection z-score is computed as $Z_{\text{SimMark}} = (n_w - \gamma N) / \sqrt{N\gamma(1-\gamma)}$, where $n_w$ is the soft watermark count and $N$ is the number of sentence pairs.
+
+\subsection{Hybrid KGW+SimMark Watermarking}
+
+Our key contribution is a hybrid watermarking approach that combines KGW and SimMark to achieve complementary robustness. The hybrid system operates at two levels simultaneously:
+
+\begin{enumerate}
+    \item \textbf{Generation}: Each token is generated using KGW's \texttt{WatermarkLogitsProcessor} (green list bias). After completing each sentence, the SimMark similarity constraint is checked against the previous sentence. If the constraint is not satisfied, the sentence is rejected and regenerated with KGW---ensuring both watermark signals are embedded.
+    \item \textbf{Detection}: Both detectors run independently. We recommend an OR-logic criterion: if \textit{either} KGW or SimMark detects a watermark, the text is classified as watermarked. This maximizes coverage across different attack types and text formats.
+\end{enumerate}
+
+The implementation is in \texttt{hybrid\_kgw\_simmark.py}, with the \texttt{HybridWatermarkGenerator} class handling generation and \texttt{HybridWatermarkDetector} handling detection. The maximum rejection sampling trials per sentence is limited to 50 to prevent excessive computation.
+
+%============================================================================
+% SECTION 4: EXPERIMENTAL RESULTS
+%============================================================================
+\section{Experimental Results}
+
+Experiments were conducted using four models: Llama 3.2 3B as the primary generation model, Llama 3.1 8B for cross-model experiments, Qwen-3 8B as the paraphrasing model, and OPT-350M for initial framework validation. Default watermark parameters included green list fraction $\gamma = 0.25$ or $0.5$, logit bias $\delta = 2.0$, selfhash seeding scheme with context width of 4, and detection threshold $z_{\text{threshold}} = 4.0$ (99.997\% confidence) for primary experiments or $3.0$ (99.87\% confidence) for fine-grained sliding window analysis. All experiments were conducted on NVIDIA GPUs with CUDA support using PyTorch and HuggingFace Transformers.
+
+We first validated our KGW reimplementation using OPT-350M on the AG News dataset. Table \ref{tab:tradeoff} shows the watermark strength vs. text quality trade-off across different parameter settings. The results confirm the expected trade-offs: z-score increases with $\delta$ as larger bias creates stronger watermark signals, smaller $\gamma$ yields stronger watermarks but with more volatility, and perplexity generally increases with $\delta$, indicating quality degradation.
+
+\begin{table}[H]
+\centering
+\caption{Watermark Strength vs. Text Quality Trade-off}
+\begin{tabular}{cccc}
+\toprule
+$\gamma$ & $\delta$ & Z-score & Perplexity \\
+\midrule
+0.1 & 1.0 & 4.21 & 5.13 \\
+0.1 & 5.0 & 15.67 & 6.82 \\
+0.1 & 10.0 & 23.86 & 4.02* \\
+0.5 & 2.0 & 6.72 & 4.89 \\
+0.9 & 2.0 & 3.37 & 4.45 \\
+\bottomrule
+\end{tabular}
+\label{tab:tradeoff}
+\\
+\small *Anomaly due to limited sample count
+\end{table}
+
+Table \ref{tab:seqlen} demonstrates that z-scores scale approximately with $\sqrt{T}$ as sequence length $T$ increases, consistent with theoretical predictions.
+
+\begin{table}[H]
+\centering
+\caption{Z-score Growth with Sequence Length ($\gamma=0.25$, $\delta=2.0$)}
+\label{tab:seqlen}
+\begin{tabular}{ccccc}
+\toprule
+Tokens (T) & 25 & 50 & 100 & 200 \\
+\midrule
+Z-score & 2.45 & 4.12 & 6.89 & 10.34 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For cross-model key sharing, we tested a chain of Llama-3.2-3B $\rightarrow$ Llama-3.1-8B $\rightarrow$ Llama-3.2-3B with shared configuration ($\gamma=0.5$, $\delta=2.0$, hash\_key=12345). The combined 172-token text achieved z-score of 7.01 (p-value $1.15 \times 10^{-12}$) with 76.74\% green fraction, demonstrating that watermark signals compose constructively when sharing keys across architectures.
+
+Parameter grid search (Table \ref{tab:param}) over $\gamma \in \{0.10, 0.27, 0.43, 0.60\}$ showed that $\gamma \leq 0.43$ with $\delta \geq 1.5$ yields consistent $\geq 5\sigma$ signals, while $\gamma = 0.60$ drops to 0\% detection rate despite high green fraction. We recommend deploying with $\gamma \approx 0.25$--$0.45$, $\delta \geq 1.5$ for reliable detection.
+
+\begin{table}[H]
+\centering
+\caption{Parameter Grid Results by Detector $\gamma$}
+\label{tab:param}
+\begin{tabular}{cccc}
+\toprule
+$\gamma$ & Mean Z-score & Detection Rate & Mean Green Fraction \\
+\midrule
+0.10 & 5.11 & 100\% & 16.20\% \\
+0.2667 & 5.86 & 100\% & 37.15\% \\
+0.4333 & 5.90 & 100\% & 55.16\% \\
+0.60 & 3.58 & 0\% & 67.10\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Full-text detection with $\gamma=0.5$, $\delta=2.0$, and 500 tokens achieved z-score of 8.39 (p-value $2.33 \times 10^{-17}$) with 71.6\% green fraction, while control text showed z-score of -1.51, confirming clear separation. Sliding window analysis (Table \ref{tab:window}) reveals that 200-token windows achieve 100\% detection rate, with z-score increasing approximately with $\sqrt{W}$ as expected from theory. Minimum detection length testing across 20--240 tokens established that reliable detection requires at least 50 tokens (approximately 35--40 words).
+
+\begin{table}[H]
+\centering
+\caption{Window Sensitivity Analysis}
+\label{tab:window}
+\begin{tabular}{cccc}
+\toprule
+Window Size & Mean Z-score & Std Z-score & Detection Rate \\
+\midrule
+25 & 2.09 & 1.12 & 17.5\% \\
+50 & 3.00 & 1.30 & 52.6\% \\
+100 & 4.10 & 1.41 & 66.7\% \\
+150 & 5.23 & 1.56 & 80.0\% \\
+200 & 5.47 & 1.69 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For paraphrase attack evaluation, we tested watermarked text from Llama-3.2-3B paraphrased by Qwen-3-8B across four modes (Table \ref{tab:paraphrase}). All paraphrase modes completely removed the watermark signal, with decay ranging from 4.96 to 6.89 z-score units and 0\% survival rate across all modes---a critical vulnerability.
+
+\begin{table}[H]
+\centering
+\caption{Watermark Survival Under Paraphrasing}
+\label{tab:paraphrase}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Mode} & \textbf{Original Z} & \textbf{After Z} & \textbf{Semantic Sim.} & \textbf{Survived} \\
+\midrule
+Standard & 5.73 & -1.16 & 47.7\% & No \\
+Creative & 5.73 & 0.77 & 23.9\% & No \\
+Structure & 5.73 & 0.05 & 47.3\% & No \\
+Summary-Expand & 5.73 & -0.20 & 32.0\% & No \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Finally, piggyback attack simulation (Table \ref{tab:piggyback}) demonstrated that adversaries can inject misleading content while maintaining positive detection. After inserting misleading statements, applying numeric mutations ($70 \rightarrow 700$, $1945 \rightarrow 1445$), and word replacements (``first'' $\rightarrow$ ``last''), the z-score actually increased slightly from 5.92 to 5.99. This confirms that watermarks cannot verify semantic accuracy---they only indicate model origin, not content truthfulness.
+
+\begin{table}[H]
+\centering
+\caption{Piggyback Attack Results}
+\label{tab:piggyback}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Stage} & \textbf{Z-score} & \textbf{Detection} \\
+\midrule
+Original & 5.92 & Positive \\
+After Attack & 5.99 & Positive \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{SimMark vs. KGW Comparison}
+
+To motivate the hybrid approach, we compared SimMark and KGW head-to-head under moderate paraphrasing (word substitution with preserved sentence count). Table \ref{tab:simmark_vs_kgw_batch} shows results from a 5-round batch experiment using Llama-3.2-3B with moderate paraphrase by Qwen-3-4B.
+
+\begin{table}[H]
+\centering
+\caption{SimMark vs. KGW: Moderate Paraphrase Survival (5 rounds)}
+\label{tab:simmark_vs_kgw_batch}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & \textbf{SimMark} & \textbf{KGW} \\
+\midrule
+Survival Rate & \textbf{80\%} & 20\% \\
+Mean Original Z-score & 4.98 & 4.55 \\
+Mean Post-paraphrase Z-score & 3.28 & 1.15 \\
+Z-score Decay & 1.70 (34\%) & 3.40 (75\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The results demonstrate that SimMark is significantly more robust to moderate paraphrasing (80\% vs. 20\% survival), with much lower z-score decay (34\% vs. 75\%). However, a single-round aggressive paraphrase experiment (sentence compression from 12 to 6 sentences) showed the opposite: KGW survived ($z = 4.18$) while SimMark failed ($z = 0.78$), because the sentence merging destroyed SimMark's inter-sentence similarity patterns. This complementarity motivates the hybrid approach.
+
+\subsection{Hybrid Robustness Analysis}
+
+We evaluated the hybrid KGW+SimMark system across three text categories (short texts, poetry, standard long text) under four attack intensities (none, light synonym substitution, moderate rewriting, aggressive compression). Configuration: KGW $\gamma=0.25$, $\delta=2.0$; SimMark interval $(0.75, 0.83)$, $K=250$. Detection thresholds: KGW $z > 3.0$, SimMark $z > 2.0$.
+
+\begin{table}[H]
+\centering
+\caption{Watermark Survival Rates: Short Texts (3 prompts, 2--3 sentences)}
+\label{tab:hybrid_short}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Attack} & \textbf{KGW} & \textbf{SimMark} & \textbf{Either (OR)} \\
+\midrule
+None & \textbf{66.7\%} & 33.3\% & 66.7\% \\
+Light & \textbf{66.7\%} & 0\% & 66.7\% \\
+Moderate & 0\% & 33.3\% & 33.3\% \\
+Aggressive & 0\% & 0\% & 0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Watermark Survival Rates: Poetry (3 prompts: haiku, limerick, poem)}
+\label{tab:hybrid_poetry}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Attack} & \textbf{KGW} & \textbf{SimMark} & \textbf{Either (OR)} \\
+\midrule
+None & 66.7\% & 66.7\% & \textbf{100\%} \\
+Light & 0\% & 33.3\% & 33.3\% \\
+Moderate & 0\% & \textbf{66.7\%} & 66.7\% \\
+Aggressive & 0\% & 0\% & 0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Watermark Survival Rates: Standard Long Text (1 prompt, 11 sentences)}
+\label{tab:hybrid_standard}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Attack} & \textbf{KGW} & \textbf{SimMark} & \textbf{Either (OR)} \\
+\midrule
+None & 100\% & 100\% & 100\% \\
+Light & 100\% & 100\% & 100\% \\
+Moderate & 0\% & \textbf{100\%} & 100\% \\
+Aggressive & 0\% & 0\% & 0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The complementarity is clear: KGW excels on short texts ($\leq 3$ sentences) where SimMark lacks sufficient sentence pairs for reliable detection, while SimMark is more robust to moderate paraphrasing that destroys KGW's green token patterns. Notably, the hybrid OR-logic achieves 100\% survival on poetry with no attack---neither method alone achieves this. Both methods fail under aggressive compression, which remains an open challenge.
+
+%============================================================================
+% SECTION 5: DISCUSSION
+%============================================================================
+\section{Discussion}
+
+Several aspects of the project succeeded. The KGW reimplementation was validated with results consistent with the original paper findings. Cross-model compatibility was demonstrated, with watermark key sharing across Llama 3.2 3B, Llama 3.1 8B, and other models preserving strong detection signals ($z > 6.9$). The statistical evaluation framework proved effective, with sliding window analysis providing reliable detection at 200-token windows achieving 100\% accuracy. Hybrid watermarking via fragment-level mixing enabled fine-grained provenance tracking for mixed-source documents, and establishing the 50-token threshold for reliable detection provides practical deployment guidance.
+
+However, the project also revealed significant limitations. Most critically, paraphrase robustness was poor---the watermark was completely removed by even basic paraphrasing attacks, with all four paraphrase modes achieving 0\% survival rate. Piggyback attacks demonstrated that watermarks cannot prevent content modification or verify semantic accuracy. Extreme $\gamma$ values (very small at 0.1 or large at 0.6) created detection instability, and texts under 50 tokens produced unreliable detection with high false negative rates.
+
+The fundamental trade-off in watermarking design can be summarized as: robustness is proportional to $(\delta \cdot T)$ divided by quality degradation, where $\delta$ is the logit bias and $T$ is text length. Higher $\delta$ strengthens the watermark signal but degrades text fluency; longer texts improve detection statistical power but aren't always available in practice; and paradoxically, stronger watermarks become more easily targeted for removal since adversaries can more readily identify and eliminate the embedded patterns. The experiments also reveal critical security concerns: piggyback attacks demonstrate that adversaries can ``dress'' misleading content with legitimate watermarks through minimal modifications, undermining the trust model where watermark presence implies content authenticity, while the complete watermark removal through paraphrasing indicates that current KGW-style watermarks cannot serve as reliable provenance markers in adversarial settings.
+
+The SimMark and hybrid experiments provide a more nuanced picture. SimMark's sentence-level semantic approach demonstrates superior robustness to moderate paraphrasing (80\% survival vs.\ KGW's 20\%), since paraphrasing preserves semantic content even while changing surface-level tokens. However, SimMark is vulnerable to aggressive compression that merges sentences, destroying the inter-sentence similarity patterns it relies on. Additionally, SimMark requires sufficient sentence pairs for reliable detection: texts with $\leq 3$ sentences yield unreliable SimMark z-scores due to limited statistical power.
+
+The hybrid KGW+SimMark approach with OR-logic detection achieves the best overall coverage by leveraging this complementarity. The practical recommendation is that generation may use either watermark method (or both), but detection should \textit{always} employ hybrid OR-logic to maximize robustness across diverse text formats and attack types. The remaining open challenge is aggressive paraphrasing (heavy compression/rewriting), where both methods fail---suggesting that future work should explore watermarking at even higher semantic abstraction levels.
+
+%============================================================================
+% SECTION 6: CONCLUSIONS AND FUTURE WORK
+%============================================================================
+\section{Conclusions and Future Work}
+
+This project successfully reimplemented and validated the KGW watermarking framework on multiple LLMs, demonstrated cross-model watermark compatibility with preserved detection, established statistical evaluation benchmarks including minimum detection length (50 tokens) and optimal window size (200 tokens), revealed critical vulnerabilities to paraphrasing (0\% survival) and piggyback attacks, and provided a comprehensive hybrid watermarking experimental system. Furthermore, we integrated SimMark sentence-level watermarking and demonstrated that KGW and SimMark are complementary: KGW excels on short texts and light perturbations, while SimMark is more robust to moderate paraphrasing. The hybrid OR-logic detection achieves the best overall coverage, reaching 100\% survival on poetry (where neither method alone achieves this).
+
+The key takeaways are: watermarking is effective for honest detection scenarios where users do not actively attempt to evade detection; token-level watermarks (KGW) cannot withstand adversarial paraphrasing alone; sentence-level watermarks (SimMark) complement KGW but are limited by text length; hybrid detection with OR-logic provides the most robust practical solution; cross-model key sharing is viable for collaborative content pipelines; and aggressive paraphrasing remains an open challenge for all current methods.
+
+If additional time were available, several promising directions could be explored: expanding hybrid robustness experiments with larger sample sizes for statistical significance, implementing sentence-level beam search (SentBS) or IterGen backtracking to optimize hybrid generation efficiency, exploring adaptive interval selection based on text type (poetry vs.\ prose), integrating Google's production-grade SynthID-Text system for comparison, developing adversarially-trained watermarks explicitly designed to resist aggressive paraphrasing, and testing watermarking in production environments with diverse prompts across more models and attack types.
+
+%============================================================================
+% REFERENCES
+%============================================================================
+\section{References}
+
+\begin{thebibliography}{99}
+
+\bibitem{kirchenbauer2023}
+Kirchenbauer, J., Geiping, J., Wen, Y., et al. (2023). A Watermark for Large Language Models. \textit{Proceedings of the 40th International Conference on Machine Learning (ICML)}. \url{https://proceedings.mlr.press/v202/kirchenbauer23a.html}
+
+\bibitem{nofree2024}
+Pang, R., et al. (2024). No Free Lunch in LLM Watermarking: Trade-offs in Watermarking Design Choices. \textit{arXiv:2402.16187}.
+
+\bibitem{watermarkstealing2024}
+Liu, N., et al. (2024). Watermark Stealing in Large Language Models. \textit{arXiv:2402.19361}.
+
+\bibitem{impossibility2023}
+Christ, M., et al. (2023). Watermarks in the Sand: Impossibility of Strong Watermarking for Generative Models. \textit{arXiv:2311.04378}.
+
+\bibitem{semamark2023}
+Ren, J., et al. (2023). SemaMark: Semantic Watermarking for Large Language Models. \textit{arXiv:2311.08721}.
+
+\bibitem{synthid2024}
+Dathathri, S., et al. (2024). SynthID-Text: Scalable Watermarking for Large Language Models. \textit{Nature}. \url{https://doi.org/10.1038/s41586-024-08025-4}
+
+\bibitem{postmark2024}
+Liu, Z., et al. (2024). PostMark: A Robust Blackbox Watermark for Large Language Models. \textit{arXiv:2406.14517}.
+
+\bibitem{piet2025}
+Piet, J., et al. (2025). Mark-My-Words: A Comprehensive Benchmark for LLM Watermarking. \textit{arXiv preprint}.
+
+\bibitem{tu2023}
+Tu, J., et al. (2023). WaterBench: A Benchmark for LLM Watermarking. \textit{arXiv preprint}.
+
+\bibitem{simmark2025}
+Aghdam, D.S., et al. (2025). SimMark: A Robust Sentence-Level Similarity-Based Watermarking Algorithm for Large Language Models. \textit{Proceedings of EMNLP 2025}. arXiv: 2502.02787.
+
+\end{thebibliography}
+
+%============================================================================
+% APPENDIX
+%============================================================================
+\appendix
+
+\section{Code Repository Structure}
+
+\begin{lstlisting}[language=bash, caption=Project Structure]
+Design_Project/
+|-- lm-watermarking/
+|   |-- extended_watermark_processor.py     # KGW core
+|   |-- hybrid_kgw_simmark.py              # Hybrid KGW+SimMark generation/detection
+|   |-- hybrid_comparison_experiment.py    # KGW vs SimMark vs Hybrid comparison
+|   |-- hybrid_robustness_experiment.py    # Multi-attack robustness testing
+|   |-- simmark_paraphrase_experiment.py   # SimMark vs KGW head-to-head
+|   |-- robustness_step1_generate.py       # Step-by-step robustness (generate)
+|   |-- robustness_step2_attack.py         # Step-by-step robustness (attack)
+|   |-- robustness_step3_detect.py         # Step-by-step robustness (detect)
+|   |-- SimMark/                           # SimMark official code
+|   |   |-- sampling.py                    # SimMark generation
+|   |   |-- detection.py                   # SimMark detection
+|   |   +-- sampling_utils.py              # Core utilities
+|   |-- hybrid_watermark/
+|   |   |-- hybrid_watermark_experiment.py  # Multi-scheme experiment
+|   |   |-- multi_llm_chain_experiment.py   # Cross-model chain
+|   |   +-- statistical_evaluation.py       # Z-test sliding window
+|   |-- watermark_attack/
+|   |   +-- piggyback_attack.py             # Attack simulation
+|   |-- llama_demos/
+|   |   +-- model_config_manager.py         # Model configuration
+|   +-- upstream/                           # Original lm-watermarking
+|-- multi_llm_chain_results/
+|-- paper/
+|-- october.md
++-- requirements.md
+\end{lstlisting}
+
+\section{Experimental Data Files}
+
+Key result files generated during experiments:
+
+\begin{itemize}
+    \item \texttt{complete\_statistical\_eval\_20251031\_154547.json}
+    \item \texttt{cross\_model\_key\_sharing\_20251031\_141237.json}
+    \item \texttt{parameter\_mixing\_20251031\_135323.json}
+    \item \texttt{multi\_llm\_chain\_standard\_paraphrase\_20251107\_155043.json}
+    \item \texttt{multi\_llm\_chain\_creative\_retelling\_20251107\_155434.json}
+    \item \texttt{piggyback\_attack\_20251101\_014516.json}
+    \item \texttt{simmark\_experiment\_20260201\_231932.json} (SimMark batch)
+    \item \texttt{step1\_generated\_20260205\_115036.json} (Hybrid robustness: standard)
+    \item \texttt{step3\_final\_20260205\_122323.json} (Hybrid robustness: short)
+    \item \texttt{step3\_final\_20260205\_125008.json} (Hybrid robustness: poetry)
+\end{itemize}
+
+\section{Bill of Materials}
+
+\begin{table}[H]
+\centering
+\caption{Software and Resources Used}
+\begin{tabular}{lll}
+\toprule
+\textbf{Item} & \textbf{Version/Details} & \textbf{Cost} \\
+\midrule
+Python & 3.10+ & Free \\
+PyTorch & 2.0+ & Free \\
+HuggingFace Transformers & 4.35+ & Free \\
+CUDA Toolkit & 11.8+ & Free \\
+Llama 3.2 3B & Meta AI (via HuggingFace) & Free (research) \\
+Llama 3.1 8B & Meta AI (via HuggingFace) & Free (research) \\
+Qwen-3 8B & Alibaba (via HuggingFace) & Free \\
+OPT-350M & Meta AI & Free \\
+DeepSeek API & Cloud inference & API credits \\
+\midrule
+GPU & NVIDIA (CUDA-capable) & Existing resource \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

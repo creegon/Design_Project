@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# PyTorch models (too large for git)
+*.bin
+*.safetensors
+*.pt
+*.pth
+
+# Upstream repo figures (not our work, many PDFs)
+lm-watermarking/upstream/lm_watermarking/watermark_reliability_release/figure_notebooks/
+lm-watermarking/upstream/lm_watermarking/watermark_reliability_release/notebooks/
+
+# Antigravity / Gemini
+.gemini/
+.antigravityignore
+
+# Large data files (>50MB) — use git-lfs if needed
+# *.pdf  # Uncomment if you don't want papers in repo

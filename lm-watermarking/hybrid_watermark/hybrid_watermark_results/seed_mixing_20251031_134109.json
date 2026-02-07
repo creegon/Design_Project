@@ -1,0 +1,196 @@
+{
+  "experiment_type": "seed_mixing",
+  "prompt": "Write a short story about robots:",
+  "variations": [
+    {
+      "variation_id": 1,
+      "hash_key": 15485863,
+      "text": " The future is here.\nWe have to write a short story about a robot that takes care of us (like a babysitter). I have no idea where to go from here, it's not a prompt I've ever written before and I think it's going to take some work.\nI think you need a better idea of what you are trying to accomplish before you can begin to write. You will not find an answer here.\nI would suggest reading some good science fiction works and try to emulate the"
+    },
+    {
+      "variation_id": 2,
+      "hash_key": 16485863,
+      "text": " The future\nWrite a short story about robots: The future\nThe future is now, we have robots everywhere, and we don’t even know it.\nIn my world, we know robots, and we know where they’re from. In my world, we know robots, and we know where they’re from. But we don’t know where they’re from, because they’re everywhere.\nBut we do know robots, and we know where they’re from, because they’re everywhere. They’re everywhere"
+    },
+    {
+      "variation_id": 3,
+      "hash_key": 17485863,
+      "text": " A Brief History of Time\nby Peter | Jan 24, 2016 | Creativity, Fiction, Science Fiction, Writing | 3 comments\nWrite a short story about robots: A Brief History of Time\nA Brief History of Time by Stephen Hawking\n“Write a short story about robots.” That’s what I asked myself last week after I read Stephen Hawking’s Autobiography. Stephen Hawking’s Autobiography is an amazing book. It’s full of personal stories about"
+    },
+    {
+      "variation_id": 4,
+      "hash_key": 18485863,
+      "text": " a group of them is being tested and sent into space to repair a space station in trouble. But something goes wrong and the robots are lost. What happens when the robots reach the space station and find themselves in trouble? What will they do? What are the obstacles they encounter? What are the dangers they face?\nThe story should be about robots and their adventures in space.\nThe story should be about robots and their adventures in space. The robots are sent into space to repair a space station in trouble"
+    },
+    {
+      "variation_id": 5,
+      "hash_key": 19485863,
+      "text": " a man and a woman fight a war against robots\nThis is an exciting task. You have to describe a man and a woman who fight a war against robots in a short story. The story must be written in the form of an essay. You must include at least 500 words. The story should have a clear beginning, middle, and end. The characters should be well-developed and believable. The plot should be engaging and suspenseful. The writing should be concise and to the point."
+    }
+  ],
+  "mixed_text": " The future is here.\nWe have to write a short story about a robot that takes care of us (like a babysitter). I have no idea where to go from here, it's not a prompt I've ever written before and I think it's going to take some work.\nI think you need a better idea of what you are trying to accomplish before you can begin to write. You will not find an answer here.\nI would suggest reading some good science fiction works and try to emulate the  The future\nWrite a short story about robots: The future\nThe future is now, we have robots everywhere, and we don’t even know it.\nIn my world, we know robots, and we know where they’re from. In my world, we know robots, and we know where they’re from. But we don’t know where they’re from, because they’re everywhere.\nBut we do know robots, and we know where they’re from, because they’re everywhere. They’re everywhere  A Brief History of Time\nby Peter | Jan 24, 2016 | Creativity, Fiction, Science Fiction, Writing | 3 comments\nWrite a short story about robots: A Brief History of Time\nA Brief History of Time by Stephen Hawking\n“Write a short story about robots.” That’s what I asked myself last week after I read Stephen Hawking’s Autobiography. Stephen Hawking’s Autobiography is an amazing book. It’s full of personal stories about  a group of them is being tested and sent into space to repair a space station in trouble. But something goes wrong and the robots are lost. What happens when the robots reach the space station and find themselves in trouble? What will they do? What are the obstacles they encounter? What are the dangers they face?\nThe story should be about robots and their adventures in space.\nThe story should be about robots and their adventures in space. The robots are sent into space to repair a space station in trouble  a man and a woman fight a war against robots\nThis is an exciting task. You have to describe a man and a woman who fight a war against robots in a short story. The story must be written in the form of an essay. You must include at least 500 words. The story should have a clear beginning, middle, and end. The characters should be well-developed and believable. The plot should be engaging and suspenseful. The writing should be concise and to the point.",
+  "cross_detection": [
+    {
+      "text_id": 1,
+      "text_key": 15485863,
+      "detections": [
+        {
+          "detector_key": 15485863,
+          "z_score": 10.493165833513832,
+          "prediction": true
+        },
+        {
+          "detector_key": 16485863,
+          "z_score": -0.5275893435844943,
+          "prediction": false
+        },
+        {
+          "detector_key": 17485863,
+          "z_score": 0.41034726723238446,
+          "prediction": false
+        },
+        {
+          "detector_key": 18485863,
+          "z_score": -0.2931051908802746,
+          "prediction": false
+        },
+        {
+          "detector_key": 19485863,
+          "z_score": 1.5827680307534828,
+          "prediction": false
+        }
+      ]
+    },
+    {
+      "text_id": 2,
+      "text_key": 16485863,
+      "detections": [
+        {
+          "detector_key": 15485863,
+          "z_score": -1.8500095165343355,
+          "prediction": false
+        },
+        {
+          "detector_key": 16485863,
+          "z_score": 7.194481453189082,
+          "prediction": true
+        },
+        {
+          "detector_key": 17485863,
+          "z_score": 1.4388962906378164,
+          "prediction": false
+        },
+        {
+          "detector_key": 18485863,
+          "z_score": -1.5759340326033229,
+          "prediction": false
+        },
+        {
+          "detector_key": 19485863,
+          "z_score": 3.357424678154905,
+          "prediction": false
+        }
+      ]
+    },
+    {
+      "text_id": 3,
+      "text_key": 17485863,
+      "detections": [
+        {
+          "detector_key": 15485863,
+          "z_score": -0.12451456127293807,
+          "prediction": false
+        },
+        {
+          "detector_key": 16485863,
+          "z_score": -0.3735436838188142,
+          "prediction": false
+        },
+        {
+          "detector_key": 17485863,
+          "z_score": 3.8599513994610803,
+          "prediction": false
+        },
+        {
+          "detector_key": 18485863,
+          "z_score": 1.867718419094071,
+          "prediction": false
+        },
+        {
+          "detector_key": 19485863,
+          "z_score": 0.6225728063646904,
+          "prediction": false
+        }
+      ]
+    },
+    {
+      "text_id": 4,
+      "text_key": 18485863,
+      "detections": [
+        {
+          "detector_key": 15485863,
+          "z_score": -0.5773502691896257,
+          "prediction": false
+        },
+        {
+          "detector_key": 16485863,
+          "z_score": 0.9622504486493763,
+          "prediction": false
+        },
+        {
+          "detector_key": 17485863,
+          "z_score": -1.3471506281091268,
+          "prediction": false
+        },
+        {
+          "detector_key": 18485863,
+          "z_score": 7.890453678924885,
+          "prediction": true
+        },
+        {
+          "detector_key": 19485863,
+          "z_score": -0.3207501495497921,
+          "prediction": false
+        }
+      ]
+    },
+    {
+      "text_id": 5,
+      "text_key": 19485863,
+      "detections": [
+        {
+          "detector_key": 15485863,
+          "z_score": -1.7361845862588239,
+          "prediction": false
+        },
+        {
+          "detector_key": 16485863,
+          "z_score": -0.5388159060803247,
+          "prediction": false
+        },
+        {
+          "detector_key": 17485863,
+          "z_score": -1.2572371141874241,
+          "prediction": false
+        },
+        {
+          "detector_key": 18485863,
+          "z_score": 1.8559214542766738,
+          "prediction": false
+        },
+        {
+          "detector_key": 19485863,
+          "z_score": 7.84276485516917,
+          "prediction": true
+        }
+      ]
+    }
+  ],
+  "hash_keys": [
+    15485863,
+    16485863,
+    17485863,
+    18485863,
+    19485863
+  ]
+}

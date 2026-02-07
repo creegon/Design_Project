@@ -1,0 +1,133 @@
+{
+  "experiment_type": "cross_model_distinct_keys",
+  "initial_prompt": "The future of artificial intelligence",
+  "continuation_tokens": 20,
+  "max_new_tokens": 120,
+  "models": [
+    "llama-3.2-3b",
+    "llama-3.1-8b",
+    "llama-3.2-1b"
+  ],
+  "model_keys": [
+    13579,
+    24680,
+    97531
+  ],
+  "gamma": 0.5,
+  "delta": 2.0,
+  "fragments": [
+    {
+      "fragment_id": 1,
+      "model": "llama-3.2-3b",
+      "hash_key": 13579,
+      "prompt": "The future of artificial intelligence",
+      "new_tokens": " is here\nThe future of artificial intelligence is here\nArtificial Intelligence (AI) has been in the news a lot lately. From self-driving cars, to AI powered apps that make our lives easier, to robots taking on jobs that humans once did, AI has been on a rise.\nWhile AI is still a long way from taking over the world, it is already becoming an essential part of our lives. But what is AI, exactly? And how does it work? In this article, we’ll answer these questions and more.\nAI is the technology that makes computers and machines capable of doing tasks"
+    },
+    {
+      "fragment_id": 2,
+      "model": "llama-3.1-8b",
+      "hash_key": 24680,
+      "prompt": "article, we’ll answer these questions and more. AI is the technology that makes computers and machines capable of doing tasks",
+      "new_tokens": " that normally require human intelligence. This includes things like speech recognition, visual perception, decision-making, and language understanding.\nThe goal of AI is to create systems that can think and act like humans in order to solve complex problems and automate certain tasks. AI systems have become increasingly sophisticated in recent years, and are now being used in a variety of applications such as customer service, healthcare, finance, transportation, and more.\nAI algorithms are designed to learn from data and make predictions or decisions based on that data. They can be trained on vast amounts of data to recognize patterns and make accurate predictions. For example"
+    },
+    {
+      "fragment_id": 3,
+      "model": "llama-3.2-1b",
+      "hash_key": 97531,
+      "prompt": "that data. They can be trained on vast amounts of data to recognize patterns and make accurate predictions. For example",
+      "new_tokens": ", AI software can classify images of faces into different categories. It can also be used to analyze medical data to predict the likelihood of a disease and its progression."
+    }
+  ],
+  "combined_text": "The future of artificial intelligence  is here\nThe future of artificial intelligence is here\nArtificial Intelligence (AI) has been in the news a lot lately. From self-driving cars, to AI powered apps that make our lives easier, to robots taking on jobs that humans once did, AI has been on a rise.\nWhile AI is still a long way from taking over the world, it is already becoming an essential part of our lives. But what is AI, exactly? And how does it work? In this article, we’ll answer these questions and more.\nAI is the technology that makes computers and machines capable of doing tasks  that normally require human intelligence. This includes things like speech recognition, visual perception, decision-making, and language understanding.\nThe goal of AI is to create systems that can think and act like humans in order to solve complex problems and automate certain tasks. AI systems have become increasingly sophisticated in recent years, and are now being used in a variety of applications such as customer service, healthcare, finance, transportation, and more.\nAI algorithms are designed to learn from data and make predictions or decisions based on that data. They can be trained on vast amounts of data to recognize patterns and make accurate predictions. For example , AI software can classify images of faces into different categories. It can also be used to analyze medical data to predict the likelihood of a disease and its progression.",
+  "combined_detections": [
+    {
+      "hash_key": 13579,
+      "z_score": 3.449796936212174,
+      "prediction": false,
+      "green_fraction": 0.6043956043956044
+    },
+    {
+      "hash_key": 24680,
+      "z_score": 1.1499323120707248,
+      "prediction": false,
+      "green_fraction": 0.5347985347985348
+    },
+    {
+      "hash_key": 97531,
+      "z_score": 0.5447047794019222,
+      "prediction": false,
+      "green_fraction": 0.5164835164835165
+    }
+  ],
+  "cross_detections": [
+    {
+      "fragment_id": 1,
+      "model": "llama-3.2-3b",
+      "hash_key": 13579,
+      "text_length": 552,
+      "detections": [
+        {
+          "hash_key": 13579,
+          "z_score": 5.084751798731267,
+          "prediction": true
+        },
+        {
+          "hash_key": 24680,
+          "z_score": -1.9414506867883017,
+          "prediction": false
+        },
+        {
+          "hash_key": 97531,
+          "z_score": 0.8320502943378436,
+          "prediction": false
+        }
+      ]
+    },
+    {
+      "fragment_id": 2,
+      "model": "llama-3.1-8b",
+      "hash_key": 24680,
+      "text_length": 687,
+      "detections": [
+        {
+          "hash_key": 13579,
+          "z_score": 0.09245003270420485,
+          "prediction": false
+        },
+        {
+          "hash_key": 24680,
+          "z_score": 3.23575114464717,
+          "prediction": false
+        },
+        {
+          "hash_key": 97531,
+          "z_score": -1.9414506867883017,
+          "prediction": false
+        }
+      ]
+    },
+    {
+      "fragment_id": 3,
+      "model": "llama-3.2-1b",
+      "hash_key": 97531,
+      "text_length": 173,
+      "detections": [
+        {
+          "hash_key": 13579,
+          "z_score": -0.9284766908852594,
+          "prediction": false
+        },
+        {
+          "hash_key": 24680,
+          "z_score": 0.18569533817705186,
+          "prediction": false
+        },
+        {
+          "hash_key": 97531,
+          "z_score": 3.156820749009882,
+          "prediction": false
+        }
+      ]
+    }
+  ]
+}

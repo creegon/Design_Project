@@ -1,0 +1,4 @@
+ and lazy, so you need to help it to solve all the tasks.
+You are the programmer, you need to program AI to solve all tasks. The AI will ask for help when it needs it.
+The game has two levels: easy and hard. You can play it only in hard mode.
+The game is made with Unity3D engine, so you need to have it installed on your computer to play it. The game was developed for PC.

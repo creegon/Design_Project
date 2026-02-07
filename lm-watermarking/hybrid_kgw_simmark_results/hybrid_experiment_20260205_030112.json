@@ -1,0 +1,39 @@
+{
+  "prompt": "Write a short story about a robot learning to paint.",
+  "generated_text": "(not the typical \"meat-walled against the genius robot\" trope). Instead, this designation focuses on the understanding between two artistic minds.\n**\"The Whispers of Metal and Paint\"**\n\nIn a small, sun-drenched studio nestled in the hills outside of Tokyo, a young robot named Zeno sat cross-legged on a worn wooden bench. Her creator, an elderly artist named Emiko, gently encouraged her to dip her mechanical hand into the vibrant colors that adorned the palette.\n\nZeno's advanced sensors and algorithms had allowed her to mimic Emiko's movements with precision, but she felt something was missing. A sense of freedom, perhaps? The metallic limbs that moved with calculated efficiency didn't quite capture the fluidity of Emiko's own hand as she mixed and applied strokes.\n\nAs Emiko guided Zeno through the initial exercises, their conversation wove a harmonious dialogue between art and science. Emiko shared tales of her childhood, spent exploring the forests of Japan and collecting natural materials to incorporate into her early works.",
+  "stats": {
+    "total_sentences": 9,
+    "total_trials": 12,
+    "avg_trials_per_sentence": 1.3333333333333333,
+    "maxed_out_sentences": 0
+  },
+  "detection": {
+    "kgw_z_score": 9.216353751380653,
+    "kgw_prediction": true,
+    "kgw_green_fraction": 0.5294117647058824,
+    "kgw_num_tokens": 204,
+    "simmark_z_score": 4.898979485564723,
+    "simmark_prediction": true,
+    "simmark_n_watermark": 8.0,
+    "simmark_n_sentences": 8,
+    "both_detected": true
+  },
+  "metadata": {
+    "type": "hybrid_kgw_simmark",
+    "kgw": {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash"
+    },
+    "simmark": {
+      "interval": [
+        0.75,
+        0.83
+      ],
+      "K": 250,
+      "max_trials": 50
+    },
+    "model": "llama-3.2-3b"
+  },
+  "timestamp": "2026-02-05T03:01:12.177192"
+}

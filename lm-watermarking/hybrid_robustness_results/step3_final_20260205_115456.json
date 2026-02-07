@@ -1,0 +1,110 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "attack_types": [
+    "none",
+    "light",
+    "moderate",
+    "aggressive"
+  ],
+  "detection_results": [
+    {
+      "prompt": "Write a short story about a robot learning to paint.",
+      "baseline_detection": {
+        "kgw_z_score": 6.199872873319274,
+        "kgw_detected": true,
+        "simmark_z_score": 5.185060667245019,
+        "simmark_detected": true,
+        "both_detected": true
+      },
+      "attack_results": [
+        {
+          "attack_type": "none",
+          "original_sentences": 11,
+          "attacked_sentences": 11,
+          "kgw_z_score": 6.199872873319274,
+          "kgw_detected": true,
+          "simmark_z_score": 5.185060667245019,
+          "simmark_detected": true,
+          "both_detected": true
+        },
+        {
+          "attack_type": "light",
+          "original_sentences": 11,
+          "attacked_sentences": 12,
+          "kgw_z_score": 4.5737932785166855,
+          "kgw_detected": true,
+          "simmark_z_score": 5.063041123192821,
+          "simmark_detected": true,
+          "both_detected": true
+        },
+        {
+          "attack_type": "moderate",
+          "original_sentences": 11,
+          "attacked_sentences": 6,
+          "kgw_z_score": 1.6554578039142345,
+          "kgw_detected": false,
+          "simmark_z_score": 3.872983346205351,
+          "simmark_detected": true,
+          "both_detected": false
+        },
+        {
+          "attack_type": "aggressive",
+          "original_sentences": 11,
+          "attacked_sentences": 4,
+          "kgw_z_score": 2.32379000772445,
+          "kgw_detected": false,
+          "simmark_z_score": 0.39086966713234805,
+          "simmark_detected": false,
+          "both_detected": false
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "none": {
+      "total": 1,
+      "kgw_survival_rate": 1.0,
+      "simmark_survival_rate": 1.0,
+      "both_survival_rate": 1.0,
+      "any_survival_rate": 1.0,
+      "kgw_avg_z": 6.199872873319274,
+      "simmark_avg_z": 5.185060667245019
+    },
+    "light": {
+      "total": 1,
+      "kgw_survival_rate": 1.0,
+      "simmark_survival_rate": 1.0,
+      "both_survival_rate": 1.0,
+      "any_survival_rate": 1.0,
+      "kgw_avg_z": 4.5737932785166855,
+      "simmark_avg_z": 5.063041123192821
+    },
+    "moderate": {
+      "total": 1,
+      "kgw_survival_rate": 0.0,
+      "simmark_survival_rate": 1.0,
+      "both_survival_rate": 0.0,
+      "any_survival_rate": 1.0,
+      "kgw_avg_z": 1.6554578039142345,
+      "simmark_avg_z": 3.872983346205351
+    },
+    "aggressive": {
+      "total": 1,
+      "kgw_survival_rate": 0.0,
+      "simmark_survival_rate": 0.0,
+      "both_survival_rate": 0.0,
+      "any_survival_rate": 0.0,
+      "kgw_avg_z": 2.32379000772445,
+      "simmark_avg_z": 0.39086966713234805
+    }
+  },
+  "timestamp": "2026-02-05T11:55:10.854322"
+}

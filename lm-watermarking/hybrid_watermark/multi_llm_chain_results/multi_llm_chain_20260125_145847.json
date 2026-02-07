@@ -1,0 +1,89 @@
+{
+  "prompt": "Write a poem about the ocean",
+  "generator_model": "llama-3.2-3b",
+  "paraphraser_models": [
+    "qwen-3-4b"
+  ],
+  "watermark_config": {
+    "gamma": 0.25,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863
+  },
+  "z_threshold": 3.0,
+  "generated_text": "'s dark side\nThe dark side of the ocean, a mystery untold\nA world beneath the waves, where the light does not hold\nA realm of darkness and shadow, where few dare to roam\nA place where the lost souls go, to forever be at home\n\nThe deep-sea trenches, a desolate land\nWhere the pressure's crushing and the darkness is grand\nThe hydrothermal vents, a strange and eerie sight\nWhere the hot water and minerals, ignite in the night",
+  "generation_metadata": {
+    "model": "llama-3.2-3b",
+    "model_identifier": "meta-llama/Llama-3.2-3B-Instruct",
+    "prompt": "Write a poem about the ocean",
+    "watermark_config": {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "generation_config": {
+      "max_new_tokens": 100,
+      "temperature": 0.7,
+      "do_sample": true,
+      "top_p": null,
+      "top_k": null
+    },
+    "generated_at": "2026-01-25T14:58:29.103686",
+    "token_usage": {
+      "prompt_tokens": 7,
+      "completion_tokens": 100,
+      "total_tokens": 107
+    },
+    "api_mode": true
+  },
+  "original_detection": {
+    "z_score": 5.334514474020998,
+    "p_value": 4.790027323609041e-08,
+    "prediction": true,
+    "num_green_tokens": 47,
+    "num_tokens_scored": 97,
+    "green_fraction": 0.4845360824742268,
+    "z_threshold": 3.0,
+    "confidence": 0.9999999520997268
+  },
+  "paraphraser_results": [
+    {
+      "paraphraser": "qwen-3-4b",
+      "paraphrased_text": "The shadowy depths of the ocean, a forgotten mystery  \nA hidden world beneath the surface, where sunlight fades away  \nA domain of darkness and shadow, where few venture  \nA sanctuary for lost souls, where they find eternal peace  \n\nThe deepest ocean trenches, a barren expanse  \nWhere immense pressure dominates and the void is vast  \nHydrothermal vents, an otherworldly and haunting scene  \nWhere scalding water and minerals burst to life in the nightHumanity's journey through the cosmos\nA story of exploration, of dreams and of courage  \nFrom Earth to the stars, a path that stretches far  \nA journey that spans time and space, beyond our grasp  \n\nA voyage of discovery, of wonder and of awe  \nA path of light and darkness, of hope and of fear  \nA journey that binds us all, a shared human experience  \nA testament to our curiosity, and our endless desire to explore  \n\nOutput:  \nHumanity's quest across the universe  \nA tale",
+      "metadata": {
+        "model": "qwen-3-4b",
+        "model_identifier": "Qwen/Qwen3-4B-Instruct-2507-FP8",
+        "instruction": "Paraphrase the following text to preserve its meaning.\nIMPORTANT: Output ONLY the rewritten text. Do not include any notes, explanations, labels, or introductory phrases like \"Here is the paraphrased version\".",
+        "original_text": "'s dark side\nThe dark side of the ocean, a mystery untold\nA world beneath the waves, where the light does not hold\nA realm of darkness and shadow, where few dare to roam\nA place where the lost souls go, to forever be at home\n\nThe deep-sea trenches, a desolate land\nWhere the pressure's crushing and the darkness is grand\nThe hydrothermal vents, a strange and eerie sight\nWhere the hot water and minerals, ignite in the night",
+        "paraphrase_watermark_config": null,
+        "paraphrased_at": "2026-01-25T14:58:47.236361",
+        "token_usage": {
+          "prompt_tokens": 147,
+          "completion_tokens": 200
+        },
+        "api_mode": true
+      },
+      "detection": {
+        "z_score": -1.0777346739765818,
+        "p_value": 0.8594239100756464,
+        "prediction": false,
+        "num_green_tokens": 42,
+        "num_tokens_scored": 194,
+        "green_fraction": 0.21649484536082475,
+        "z_threshold": 3.0,
+        "confidence": null
+      },
+      "semantic_similarity": 0.16030534351145037,
+      "watermark_decay": 6.41224914799758,
+      "z_score_retention": -0.20203050891044214
+    }
+  ],
+  "summary": {
+    "watermark_survival_rate": 0.0,
+    "watermark_survived_count": 0,
+    "average_similarity": 0.16030534351145037,
+    "average_decay": 6.41224914799758
+  },
+  "timestamp": "2026-01-25T14:58:47.390356"
+}

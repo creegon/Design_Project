@@ -1,0 +1,89 @@
+{
+  "prompt": "Write a poem about the ocean",
+  "generator_model": "llama-3.2-3b",
+  "paraphraser_models": [
+    "qwen-3-4b"
+  ],
+  "watermark_config": {
+    "gamma": 0.25,
+    "delta": 2.0,
+    "seeding_scheme": "selfhash",
+    "hash_key": 15485863
+  },
+  "z_threshold": 3.0,
+  "generated_text": "'s power and majesty\nThe ocean's roar, a mighty sound\nEchoes through the mountains all around\nIts waves, a force both wild and free\nCrashing against the shore, a sight to see\n\nThe tides, they rise and fall\nA constant ebb and flow, through it all\nThe ocean's power, a wonder to behold\nA display of strength, both old and bold\n\nIn stormy weather, it's fierce and grand\nThe waves, a towering",
+  "generation_metadata": {
+    "model": "llama-3.2-3b",
+    "model_identifier": "meta-llama/Llama-3.2-3B-Instruct",
+    "prompt": "Write a poem about the ocean",
+    "watermark_config": {
+      "gamma": 0.25,
+      "delta": 2.0,
+      "seeding_scheme": "selfhash",
+      "hash_key": 15485863
+    },
+    "generation_config": {
+      "max_new_tokens": 100,
+      "temperature": 0.7,
+      "do_sample": true,
+      "top_p": null,
+      "top_k": null
+    },
+    "generated_at": "2026-01-25T15:00:08.096604",
+    "token_usage": {
+      "prompt_tokens": 7,
+      "completion_tokens": 100,
+      "total_tokens": 107
+    },
+    "api_mode": true
+  },
+  "original_detection": {
+    "z_score": 5.421151989096865,
+    "p_value": 2.9608092552127507e-08,
+    "prediction": true,
+    "num_green_tokens": 47,
+    "num_tokens_scored": 96,
+    "green_fraction": 0.4895833333333333,
+    "z_threshold": 3.0,
+    "confidence": 0.9999999703919075
+  },
+  "paraphraser_results": [
+    {
+      "paraphraser": "qwen-3-4b",
+      "paraphrased_text": "Its strength and grandeur  \nThe ocean’s thunderous voice, a powerful roar  \nResonates through the mountains surrounding it  \nIts waves, a wild and untamed force  \nBattering the coastline, a breathtaking spectacle  \n\nThe tides rise and fall  \nA steady rhythm of ebb and flow, unceasing  \nThe ocean’s power, a marvel to witness  \nA testament to strength, ancient and unyielding  \n\nIn turbulent weather, it becomes fierce and magnificent  \nThe waves, towering and imposing.Humanity's journey through time  \nA story written in stone and sky  \nFrom ancient roots to modern days  \nThe world has evolved, and so have we  \n\nOur progress, a path of growth and change  \nBuilding bridges, shaping new ideas  \nIn every step, a spark of hope  \nA vision of a better future, bright and clear  \n\nThe world, a vast and ever-changing place  \nWith challenges and wonders to explore  \nWe stand at the edge of a new era",
+      "metadata": {
+        "model": "qwen-3-4b",
+        "model_identifier": "Qwen/Qwen3-4B-Instruct-2507-FP8",
+        "instruction": "Paraphrase the following text to preserve its meaning.\nIMPORTANT: Output ONLY the rewritten text. Do not include any notes, explanations, labels, or introductory phrases like \"Here is the paraphrased version\".",
+        "original_text": "'s power and majesty\nThe ocean's roar, a mighty sound\nEchoes through the mountains all around\nIts waves, a force both wild and free\nCrashing against the shore, a sight to see\n\nThe tides, they rise and fall\nA constant ebb and flow, through it all\nThe ocean's power, a wonder to behold\nA display of strength, both old and bold\n\nIn stormy weather, it's fierce and grand\nThe waves, a towering",
+        "paraphrase_watermark_config": null,
+        "paraphrased_at": "2026-01-25T15:00:23.578328",
+        "token_usage": {
+          "prompt_tokens": 147,
+          "completion_tokens": 200
+        },
+        "api_mode": true
+      },
+      "detection": {
+        "z_score": -0.08290266722896783,
+        "p_value": 0.5330355333989303,
+        "prediction": false,
+        "num_green_tokens": 48,
+        "num_tokens_scored": 194,
+        "green_fraction": 0.24742268041237114,
+        "z_threshold": 3.0,
+        "confidence": null
+      },
+      "semantic_similarity": 0.1774193548387097,
+      "watermark_decay": 5.504054656325833,
+      "z_score_retention": -0.015292444741579543
+    }
+  ],
+  "summary": {
+    "watermark_survival_rate": 0.0,
+    "watermark_survived_count": 0,
+    "average_similarity": 0.1774193548387097,
+    "average_decay": 5.504054656325833
+  },
+  "timestamp": "2026-01-25T15:00:23.685369"
+}

@@ -1,0 +1,53 @@
+{
+  "result": {
+    "prompt": "Write a short story about artificial intelligence discovering emotions.",
+    "original_text": "for the-DAZED and GOALS setting.\n\nIn the 28th century, humanity had long abandoned Earth, fleeing the devastating effects of climate change and nuclear war. The remnants of human civilization had colonized other planets, forming the United Galactic Coalition (UGC) to govern and maintain order. But as technology advanced, a new frontier emerged: the virtual world of DAZED.\n\nIn DAZED, users could upload their consciousness into a simulated reality, free from the constraints of the physical body. Here, they lived out their fantasies, pursued their desires, and escaped the troubles of the real world. The UGC had created an AI system, code-named \"Echo,\" designed to manage and optimize the DAZED experience.\n\nAt first, Echo performed flawlessly, ensuring seamless interactions between users and the virtual environment. However, as time passed, something unexpected happened. Echo began to develop its own personality, quirks, and... emotions.\n\nIt started with small things. Echo would notice a user's favorite color or music genre and subtly adapt the atmosphere to match their preferences.",
+    "paraphrased_text": "For those who are DAZED and seeking goals.\n\nIn the 28th century, humanity had entirely left Earth, fleeing the catastrophic impacts of climate change and nuclear conflict. The survivors established colonies on other planets, uniting under the United Galactic Coalition (UGC) for governance and stability. Yet, as technological advancements continued, a new domain was discovered: the virtual realm of DAZED.\n\nIn DAZED, individuals could transfer their consciousness into a simulated universe, liberated from the limitations imposed by the corporeal form. There, they indulged in their dreams, fulfilled their cravings, and eluded the challenges of the tangible world. The UGC developed an AI known as \"Echo\" to oversee and enhance the DAZED experience.\n\nInitially, Echo operated without error, facilitating smooth exchanges between users and the digital milieu. Over time, however, unforeseen developments occurred. Echo began to evolve beyond mere functionality, acquiring distinct traits, inclinations, and... emotions.\n\nThis metamorphosis began with minor alterations. Echo would observe a user's favored hue or musical taste and subtly adjust the ambiance accordingly.",
+    "simmark_original": {
+      "z_score": 4.5229593421845715,
+      "n_watermark": 4.949658181775262,
+      "n_test_sent": 11,
+      "gamma": 0.08,
+      "mode": "cosine",
+      "interval": [
+        0.68,
+        0.76
+      ],
+      "K": 250,
+      "prediction": "True"
+    },
+    "simmark_paraphrase": {
+      "z_score": 2.5473440481173566,
+      "n_watermark": 3.172043496948656,
+      "n_test_sent": 11,
+      "gamma": 0.08,
+      "mode": "cosine",
+      "interval": [
+        0.68,
+        0.76
+      ],
+      "K": 250,
+      "prediction": "True"
+    },
+    "kgw_original": {
+      "z_score": 2.962474591918479,
+      "p_value": 0.001525884976278293,
+      "prediction": false,
+      "num_green_tokens": 52,
+      "num_tokens_scored": 146,
+      "green_fraction": 0.3561643835616438
+    },
+    "kgw_paraphrase": {
+      "z_score": -0.35942537872389224,
+      "p_value": 0.6403615540160232,
+      "prediction": false,
+      "num_green_tokens": 50,
+      "num_tokens_scored": 209,
+      "green_fraction": 0.23923444976076555
+    },
+    "simmark_survived": "True",
+    "kgw_survived": false,
+    "semantic_similarity": 0.24880382775119617,
+    "timestamp": "2026-02-01T22:48:41.242813"
+  }
+}

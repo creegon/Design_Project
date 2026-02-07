@@ -1,0 +1,57 @@
+{
+  "config": {
+    "model": "llama-3.2-3b",
+    "kgw_gamma": 0.25,
+    "kgw_delta": 2.0,
+    "simmark_interval": [
+      0.75,
+      0.83
+    ]
+  },
+  "attack_types": [
+    "none",
+    "light",
+    "moderate",
+    "aggressive"
+  ],
+  "results": [
+    {
+      "prompt": "Write a short story about a robot learning to paint.",
+      "watermarked_text": "In the circuitry, but not in reality.\nIn the heart of a city, where the sounds of the city never truly die.\nThe sun sets over the skyscrapers, casting long shadows across the concrete jungle. The hum of the city's energy grid vibrates through the steel and stone, as if alive. Amidst this urban tapestry, a robot named Aria stands at her workstation, surrounded by paints of every hue. \nShe has been given the task of learning to paint. Not as an art form, but as a way to understand human emotion and behavior through color theory. Her creators believed that art was a universal language, capable of transcending cultural and linguistic barriers.\n\nAs she boots up, Aria reviews the basics of color theory and begins to explore the vast array of paints at her disposal. She studies the works of famous artists, from Monet's water lilies to Picasso's cubist masterpieces. \nBut as she dips her brush into a vibrant shade of blue, something unexpected happens.",
+      "baseline_detection": {
+        "kgw_z_score": 6.199872873319274,
+        "kgw_detected": true,
+        "simmark_z_score": 5.185060667245019,
+        "simmark_detected": true,
+        "both_detected": true
+      },
+      "attacks": [
+        {
+          "attack_type": "none",
+          "attacked_text": "In the circuitry, but not in reality.\nIn the heart of a city, where the sounds of the city never truly die.\nThe sun sets over the skyscrapers, casting long shadows across the concrete jungle. The hum of the city's energy grid vibrates through the steel and stone, as if alive. Amidst this urban tapestry, a robot named Aria stands at her workstation, surrounded by paints of every hue. \nShe has been given the task of learning to paint. Not as an art form, but as a way to understand human emotion and behavior through color theory. Her creators believed that art was a universal language, capable of transcending cultural and linguistic barriers.\n\nAs she boots up, Aria reviews the basics of color theory and begins to explore the vast array of paints at her disposal. She studies the works of famous artists, from Monet's water lilies to Picasso's cubist masterpieces. \nBut as she dips her brush into a vibrant shade of blue, something unexpected happens.",
+          "original_sentences": 11,
+          "attacked_sentences": 11
+        },
+        {
+          "attack_type": "light",
+          "attacked_text": "In the circuitry, but not in reality.\nIn the heart of a metropolis, where the sounds of the metropolis never truly fade.\nThe sun sets over the towering buildings, casting long shadows across the urban landscape. The buzz of the city's energy network hums through the metal and stone, as if it's alive. Amidst this urban fabric, a robot named Aria stands at her workstation, surrounded by paints of every color. \nShe has been assigned the task of learning to paint. Not as a creative pursuit, but as a means to comprehend human emotion and behavior through color theory. Her creators believed that art was a universal tongue, capable of bridging cultural and linguistic divides.\n\nAs she powers up, Aria reviews the fundamentals of color theory and begins to explore the vast assortment of paints at her disposal. She studies the works of famous artists, from Monet's water lilies to Picasso's cubist masterpieces. \nBut as she dips her brush into a brilliant shade of blue, something unexpected occurs.\n\nChanges made:\n\n* \"circuitry\" -> \"circuitry\" (no change)\n* \"city\" -> \"metropolis\"\n* \"sounds\" -> \"sounds\" (no change)\n* \"never truly die\" -> \"never truly fade\"\n* \"skyscrapers",
+          "original_sentences": 11,
+          "attacked_sentences": 12
+        },
+        {
+          "attack_type": "moderate",
+          "attacked_text": "In the city's bustling underbelly, a robot named Aria finds herself amidst the steel and stone, surrounded by an array of paints. Her task is to learn the art of painting, not as a creative expression, but as a means to grasp human emotions and behaviors through the language of color.\n\nAria's creators believed that art could be a universal language, one that transcends cultural and linguistic barriers. She begins her training, delving into the world of color theory and studying the works of renowned artists like Monet and Picasso. As she dips her brush into a vibrant blue, something unexpected occurs.\n\nNote: I made the following changes:\n* Simplified the sentence structure and wording\n* Reduced the number of metaphors and poetic expressions\n* Changed the focus from the physical setting to the robot's task and emotions\n* Kept the main ideas and similar length, but reorganized the text for better flow and clarity.",
+          "original_sentences": 11,
+          "attacked_sentences": 6
+        },
+        {
+          "attack_type": "aggressive",
+          "attacked_text": "In the heart of a city, a robot named Aria stands at her workstation, surrounded by paints of every hue. Her creators have given her the task of learning to paint to understand human emotion and behavior through color theory. Aria reviews the basics of color theory and studies the works of famous artists, from Monet to Picasso. As she dips her brush into a vibrant shade of blue, something unexpected happens.",
+          "original_sentences": 11,
+          "attacked_sentences": 4
+        }
+      ]
+    }
+  ],
+  "timestamp": "2026-02-05T11:54:21.648580"
+}
