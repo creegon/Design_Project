@@ -6,330 +6,347 @@
 <style>
   @page { size: 48in 36in; margin: 0; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 48in; height: 36in; font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: #3a3a5c; overflow: hidden; }
 
-  :root {
-    --cornell: #B31B1B;
-    --cornell-dark: #8C1515;
-    --blue: #1565C0;
-    --blue-light: #e3f2fd;
-    --pink: #880E4F;
-    --pink-light: #fce4ec;
-    --green: #1B5E20;
-    --green-light: #e8f5e9;
-    --gray-bg: #f5f6f7;
-    --text: #212121;
-    --text2: #444;
-    --border: #ddd;
-  }
-
-  html, body { width: 48in; height: 36in; font-family: 'Segoe UI', system-ui, Arial, sans-serif; color: var(--text); background: #fff; }
-
-  /* ============ HEADER ============ */
-  .header {
-    background: linear-gradient(135deg, var(--cornell) 0%, var(--cornell-dark) 100%);
-    color: #fff;
-    padding: 0.45in 0.6in;
-    display: flex;
-    align-items: center;
-    gap: 0.5in;
-  }
-  .header-text { flex: 1; }
-  .header h1 { font-size: 60pt; font-weight: 800; line-height: 1.15; letter-spacing: -0.5pt; }
-  .header h1 .accent { color: #ffcdd2; }
-  .header .authors { font-size: 22pt; margin-top: 0.12in; opacity: 0.92; }
-  .header .affil { font-size: 17pt; margin-top: 0.06in; opacity: 0.75; }
-  .header .logo-block { text-align: right; }
-  .header .logo-block .cornell-text { font-family: Georgia, serif; font-size: 42pt; font-weight: bold; }
-  .header .logo-block .ece-text { font-family: Georgia, serif; font-size: 28pt; opacity: 0.8; }
-  .header .logo-block .course { font-size: 16pt; opacity: 0.7; margin-top: 4pt; }
-
-  /* ============ BODY ============ */
-  .poster-body {
+  /* ========== POSTER GRID ========== */
+  .poster {
+    width: 48in; height: 36in;
     display: grid;
-    grid-template-columns: 1fr 1.3fr 1fr;
-    gap: 0.3in;
-    padding: 0.35in 0.5in 0.4in;
-    height: calc(36in - 2.1in);
+    grid-template-rows: 2in 1fr;
+    gap: 0;
+    background: #3a3a5c;
+    padding: 0.12in;
   }
 
-  .col { display: flex; flex-direction: column; gap: 0.25in; }
-
-  /* ============ CARDS ============ */
-  .card {
-    background: #fff;
-    border: 2pt solid var(--border);
-    border-radius: 12pt;
-    padding: 0.25in 0.3in;
-    flex-shrink: 0;
+  /* ========== HEADER ========== */
+  .header {
+    background: linear-gradient(135deg, #B31B1B 0%, #8C1515 100%);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 0.5in;
+    color: white;
   }
-  .card-grow { flex: 1; }
-  .card h2 {
-    font-size: 26pt;
-    font-weight: 700;
-    margin-bottom: 0.12in;
-    padding-bottom: 0.06in;
-    border-bottom: 3pt solid var(--cornell);
-    color: var(--cornell-dark);
+  .header h1 { font-size: 72pt; font-weight: 800; line-height: 1.1; }
+  .header .meta { font-size: 26pt; margin-top: 6pt; opacity: 0.9; }
+  .header .meta2 { font-size: 21pt; margin-top: 4pt; opacity: 0.7; }
+  .header .logo { text-align: right; font-family: Georgia, serif; }
+  .header .logo .c1 { font-size: 48pt; font-weight: bold; }
+  .header .logo .c2 { font-size: 30pt; opacity: 0.7; }
+
+  /* ========== BODY: 3 columns ========== */
+  .body {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr 1fr;
+    gap: 0.1in;
+    margin-top: 0.1in;
   }
-  .card h3 { font-size: 20pt; font-weight: 600; color: var(--text); margin: 0.1in 0 0.06in; }
-  .card p, .card li { font-size: 16pt; line-height: 1.45; color: var(--text2); }
-  .card ul, .card ol { padding-left: 0.3in; }
-  .card li { margin-bottom: 0.04in; }
+  .col { display: flex; flex-direction: column; gap: 0.1in; }
 
-  .card.highlight { border-color: var(--cornell); border-width: 3pt; background: #fff9f9; }
-
-  /* ============ TABLES ============ */
-  table { width: 100%; border-collapse: collapse; font-size: 15pt; margin: 0.08in 0; }
-  th { background: var(--gray-bg); font-weight: 600; text-align: left; padding: 6pt 10pt; border-bottom: 2pt solid var(--border); }
-  td { padding: 5pt 10pt; border-bottom: 1pt solid #eee; }
-  .num { text-align: center; font-family: 'Consolas', 'Fira Code', monospace; }
-  .good { color: var(--green); font-weight: 700; }
-  .bad { color: #c62828; font-weight: 700; }
-  .best { background: #e8f5e9; font-weight: 700; }
-  tr.hl { background: #fffde7; }
-
-  /* ============ STAT BOXES ============ */
-  .stats { display: flex; gap: 0.15in; margin: 0.1in 0; }
-  .stat { flex: 1; text-align: center; background: var(--gray-bg); border-radius: 8pt; padding: 0.12in 0.08in; }
-  .stat .num-big { font-size: 32pt; font-weight: 800; color: var(--cornell); }
-  .stat .label { font-size: 12pt; color: var(--text2); margin-top: 2pt; }
-
-  /* ============ FINDING BADGE ============ */
-  .finding-badge {
-    display: inline-block;
-    background: var(--cornell);
-    color: #fff;
-    font-size: 13pt;
-    font-weight: 700;
-    padding: 3pt 10pt;
-    border-radius: 20pt;
-    margin-right: 6pt;
-    vertical-align: middle;
+  /* ========== BOX (baposter-style) ========== */
+  .box {
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
   }
-  .finding-badge.blue { background: var(--blue); }
-  .finding-badge.pink { background: var(--pink); }
-  .finding-badge.green { background: var(--green); }
+  .box.grow { flex: 1; }
+  .box-hdr {
+    padding: 0.1in 0.18in;
+    font-size: 30pt; font-weight: 700; color: white;
+    display: flex; align-items: center; gap: 0.12in;
+  }
+  .box-hdr .badge {
+    background: rgba(255,255,255,0.3);
+    border-radius: 14pt;
+    padding: 2pt 12pt;
+    font-size: 17pt; font-weight: 800;
+  }
+  .hdr-red { background: #B31B1B; }
+  .hdr-blue { background: #1565C0; }
+  .hdr-pink { background: #880E4F; }
+  .hdr-green { background: #2E7D32; }
+  .hdr-dark { background: #37474F; }
+  .hdr-purple { background: #4A148C; }
 
-  /* ============ COMPARISON BOX ============ */
-  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.12in; margin: 0.08in 0; }
-  .compare-box { border-radius: 8pt; padding: 0.12in 0.15in; }
-  .compare-box.kgw { background: var(--blue-light); border-left: 4pt solid var(--blue); }
-  .compare-box.sim { background: var(--pink-light); border-left: 4pt solid var(--pink); }
-  .compare-box.hyb { background: var(--green-light); border-left: 4pt solid var(--green); }
-  .compare-box h4 { font-size: 17pt; margin-bottom: 0.04in; }
-  .compare-box p, .compare-box li { font-size: 14pt; line-height: 1.4; }
-  .compare-box ul { padding-left: 0.2in; }
+  .box-body {
+    padding: 0.14in 0.18in;
+    font-size: 24pt; line-height: 1.4; color: #222;
+    flex: 1;
+  }
+  .box-body p { margin-bottom: 0.06in; }
+  .box-body strong { color: #111; }
 
-  /* ============ FOOTER ============ */
-  .footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--gray-bg);
-    border-top: 2pt solid var(--border);
-    padding: 0.1in 0.5in;
-    font-size: 13pt;
-    color: var(--text2);
-    display: flex;
-    justify-content: space-between;
+  /* ========== COMPARE ROW ========== */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 0.08in; margin: 0.06in 0; }
+  .cmp {
+    border-radius: 5px; padding: 0.08in 0.12in;
+    border-left: 4pt solid;
+  }
+  .cmp h4 { font-size: 24pt; margin-bottom: 0.04in; }
+  .cmp ul { padding-left: 0.22in; font-size: 21pt; line-height: 1.4; }
+  .cmp-blue { background: #E3F2FD; border-color: #1565C0; }
+  .cmp-blue h4 { color: #1565C0; }
+  .cmp-pink { background: #FCE4EC; border-color: #880E4F; }
+  .cmp-pink h4 { color: #880E4F; }
+
+  /* ========== TABLE ========== */
+  table { width: 100%; border-collapse: collapse; margin: 0.06in 0; font-size: 22pt; }
+  th { background: #F0F1F3; font-weight: 700; text-align: left; padding: 7pt 10pt; border-bottom: 2pt solid #ccc; font-size: 21pt; }
+  td { padding: 6pt 10pt; border-bottom: 1pt solid #eee; }
+  .n { font-family: 'Consolas', 'Fira Code', monospace; }
+  .g { color: #1B5E20; font-weight: 700; }
+  .r { color: #C62828; font-weight: 700; }
+  .b { color: #1565C0; font-weight: 600; }
+  .pk { color: #880E4F; font-weight: 700; }
+  tr.hl { background: #FFFDE7; }
+  tr.hl td { font-weight: 600; }
+
+  /* ========== STAT BOXES ========== */
+  .stats { display: flex; gap: 0.08in; margin: 0.06in 0; }
+  .st {
+    flex: 1; text-align: center;
+    background: #F5F6F8; border-radius: 6px; padding: 0.08in 0.04in;
+    border: 1pt solid #ddd;
+  }
+  .st .num { font-size: 44pt; font-weight: 800; }
+  .st .lab { font-size: 16pt; color: #666; margin-top: 3pt; }
+
+  /* ========== EQUATION BOX ========== */
+  .eq {
+    background: #F5F6F8; border-radius: 5px; padding: 0.06in;
+    text-align: center; font-family: 'Cambria Math', 'Times New Roman', serif;
+    font-size: 26pt; font-style: italic; margin: 0.05in 0;
   }
 
-  /* ============ EQUATION ============ */
-  .eq { font-family: 'Cambria Math', 'Times New Roman', serif; font-style: italic; font-size: 17pt; text-align: center; margin: 0.06in 0; background: var(--gray-bg); padding: 6pt; border-radius: 6pt; }
+  /* ========== OL / UL ========== */
+  .box-body ol, .box-body ul { padding-left: 0.25in; margin: 0.04in 0; }
+  .box-body li { margin-bottom: 0.03in; font-size: 22pt; }
 
-  .small { font-size: 13pt; }
-  strong { color: var(--text); }
+  /* ========== REFS ========== */
+  .refs { font-size: 19pt; color: #555; line-height: 1.4; }
+  .refs p { margin-bottom: 4pt; }
+  .url { font-family: 'Consolas', monospace; color: #B31B1B; font-size: 20pt; }
+
+  /* ========== SMALL ========== */
+  .sm { font-size: 20pt; color: #555; }
+  .params { font-family: 'Consolas', monospace; font-size: 20pt; margin: 0.04in 0; color: #333; }
 </style>
 </head>
 <body>
+<div class="poster">
 
-<!-- ========== HEADER ========== -->
+<!-- ===== HEADER ===== -->
 <div class="header">
-  <div class="header-text">
-    <h1>Source Attribution of <span class="accent">Watermarked Text</span></h1>
-    <div class="authors">Han Li (hl2595) &nbsp;&middot;&nbsp; Kangbo Hao (kh873) &nbsp;&middot;&nbsp; Ruoxuan Cao (rc986)</div>
-    <div class="affil">M.Eng. Design Project &nbsp;&middot;&nbsp; School of Electrical and Computer Engineering &nbsp;&middot;&nbsp; Advisor: Prof. Vikram Krishnamurthy</div>
+  <div>
+    <h1>Source Attribution of Watermarked Text</h1>
+    <div class="meta">Han Li (hl2595) &nbsp;&middot;&nbsp; Kangbo Hao (kh873) &nbsp;&middot;&nbsp; Ruoxuan Cao (rc986)</div>
+    <div class="meta2">M.Eng. Design Project &nbsp;&middot;&nbsp; ECE, Cornell University &nbsp;&middot;&nbsp; Advisor: Prof. Vikram Krishnamurthy &nbsp;&middot;&nbsp; ECE 5995/5996 &nbsp;&middot;&nbsp; 2025&ndash;2026</div>
   </div>
-  <div class="logo-block">
-    <div class="cornell-text">CORNELL</div>
-    <div class="ece-text">ECE</div>
-    <div class="course">ECE 5995 / 5996 &middot; 2025&ndash;2026</div>
+  <div class="logo">
+    <div class="c1">CORNELL</div>
+    <div class="c2">ECE</div>
   </div>
 </div>
 
-<!-- ========== 3-COLUMN BODY ========== -->
-<div class="poster-body">
+<!-- ===== BODY ===== -->
+<div class="body">
 
-<!-- ==================== COLUMN 1 ==================== -->
+<!-- ────── COLUMN 1 ────── -->
 <div class="col">
 
-  <div class="card">
-    <h2>Motivation &amp; Problem</h2>
-    <p>Multiple LLMs now embed cryptographic watermarks for provenance. When an observer receives text, <strong>which model produced it?</strong></p>
-    <h3>Two Attribution Paradigms</h3>
-    <div class="compare-grid">
-      <div class="compare-box kgw">
-        <h4 style="color:var(--blue)">Watermark (Active)</h4>
-        <ul>
-          <li>Per-model KGW key</li>
-          <li>z-test against each key</li>
-          <li>Strong on clean text</li>
-        </ul>
+  <div class="box">
+    <div class="box-hdr hdr-red">Motivation &amp; Problem</div>
+    <div class="box-body">
+      <p>Multiple LLMs now embed cryptographic watermarks for provenance. When an observer receives a piece of text, <strong>which model produced it?</strong> This is the <em>source-attribution problem</em>. Two paradigms exist in isolation:</p>
+      <div class="compare">
+        <div class="cmp cmp-blue">
+          <h4>Watermark (Active)</h4>
+          <ul>
+            <li>Per-model KGW key</li>
+            <li>z-test against each key</li>
+            <li>Strong on clean text</li>
+            <li>Brittle under attack</li>
+          </ul>
+        </div>
+        <div class="cmp cmp-pink">
+          <h4>Fingerprint (Passive)</h4>
+          <ul>
+            <li>TF-IDF n-gram features</li>
+            <li>4-way classifier</li>
+            <li>No key needed</li>
+            <li>Graceful degradation</li>
+          </ul>
+        </div>
       </div>
-      <div class="compare-box sim">
-        <h4 style="color:var(--pink)">Fingerprint (Passive)</h4>
-        <ul>
-          <li>TF-IDF n-gram features</li>
-          <li>4-way classifier</li>
-          <li>No key needed</li>
-        </ul>
-      </div>
+      <p><strong>Research Gaps:</strong></p>
+      <ol>
+        <li>Does watermarking compress inter-model distributional differences?</li>
+        <li>Head-to-head watermark vs. fingerprint attribution under attack?</li>
+        <li>Can sentence-level watermarks (SimMark) complement token-level (KGW)?</li>
+      </ol>
     </div>
-    <h3>Research Gaps</h3>
-    <ol>
-      <li>Does watermarking compress inter-model distributional differences?</li>
-      <li>Head-to-head watermark vs. fingerprint attribution under attack?</li>
-      <li>Can sentence-level watermarks (SimMark) complement KGW?</li>
-    </ol>
   </div>
 
-  <div class="card">
-    <h2>Method &mdash; KGW Watermarking</h2>
-    <p>Kirchenbauer et al., ICML 2023. Token-level green/red list partition with logit bias.</p>
-    <div class="eq">Z = (|s|<sub>G</sub> &minus; &gamma;T) / &radic;(&gamma;(1&minus;&gamma;)T)</div>
-    <p class="small"><strong>Parameters:</strong> &gamma; = 0.25, &delta; = 2.0, z-threshold = 3.0, selfhash context = 4</p>
-    <p class="small"><strong>Models:</strong> LLaMA-3.2-1B, LLaMA-3.2-3B, Gemma-2B, Phi-2</p>
-    <p class="small"><strong>Attacks:</strong> Synonym substitution 10&ndash;70%, Insert/Delete 10&ndash;30%, Sentence reorder, Neural paraphrase (Qwen-3)</p>
+  <div class="box">
+    <div class="box-hdr hdr-dark">Method &mdash; KGW Watermarking</div>
+    <div class="box-body">
+      <p>Kirchenbauer et al., ICML 2023. Token-level green/red list partition with logit bias. Detection via z-test on green token count.</p>
+      <div class="eq">Z = (|s|<sub>G</sub> &minus; &gamma;T) / &radic;(&gamma;(1&minus;&gamma;)T)</div>
+      <p class="params"><strong>Parameters:</strong> &gamma; = 0.25 &middot; &delta; = 2.0 &middot; z-threshold = 3.0</p>
+      <p class="params"><strong>Models:</strong> LLaMA-3.2-1B, LLaMA-3.2-3B, Gemma-2B, Phi-2</p>
+      <p class="params"><strong>Attacks:</strong> Synonym sub. 10&ndash;70%, Ins/Del 10&ndash;30%, Sentence reorder, Neural paraphrase (Qwen-3)</p>
+    </div>
   </div>
 
-  <div class="card">
-    <h2><span class="finding-badge">F1</span> Distributional Compression</h2>
-    <p>Watermarking <strong>shrinks</strong> inter-model differences to &frac13; of the clean baseline (Gemma-2B vs Phi-2).</p>
-    <table>
-      <tr><th>Setting</th><th class="num">Weighted Diff</th><th class="num">Entropy Diff</th></tr>
-      <tr><td>Independent WM keys</td><td class="num">0.24</td><td class="num">0.76</td></tr>
-      <tr><td>No WM (clean)</td><td class="num good">0.76</td><td class="num good">2.30</td></tr>
-      <tr><td>No WM, shared green list</td><td class="num good">1.56</td><td class="num good">4.48</td></tr>
-    </table>
-    <p class="small">Green-list bias dominates each model's natural signature &mdash; a headwind for passive attribution.</p>
+  <div class="box grow">
+    <div class="box-hdr hdr-red"><span class="badge">F1</span> Distributional Compression</div>
+    <div class="box-body">
+      <p>Watermarking <strong>shrinks</strong> inter-model distributional differences to &frac13; of the clean baseline. Controlled experiment: Gemma-2B vs. Phi-2.</p>
+      <table>
+        <tr><th>Setting</th><th>Weighted Diff</th><th>Entropy Diff</th></tr>
+        <tr><td>Independent WM keys</td><td class="n">0.24</td><td class="n">0.76</td></tr>
+        <tr><td><strong>No WM (clean)</strong></td><td class="n g">0.76</td><td class="n g">2.30</td></tr>
+        <tr><td><strong>No WM, shared green</strong></td><td class="n g">1.56</td><td class="n g">4.48</td></tr>
+      </table>
+      <p class="sm">Green-list bias dominates each model&rsquo;s natural signature &mdash; watermarked Gemma and watermarked Phi look more alike. This is a direct headwind for passive fingerprint attribution.</p>
+    </div>
   </div>
 
 </div><!-- end col 1 -->
 
-<!-- ==================== COLUMN 2 ==================== -->
+<!-- ────── COLUMN 2 ────── -->
 <div class="col">
 
-  <div class="card highlight">
-    <h2><span class="finding-badge blue">F2</span> Robustness Crossover &mdash; Watermark vs. Fingerprint</h2>
-    <p>The two paradigms fail in <strong>non-overlapping regimes</strong>. Watermark is cliff-like; fingerprint degrades gracefully.</p>
-    <table>
-      <tr><th>Synonym %</th><th class="num">Watermark</th><th class="num">Fingerprint</th><th>Winner</th></tr>
-      <tr><td>0% (clean)</td><td class="num good">96.7%</td><td class="num">76.7%</td><td style="color:var(--blue)">Watermark</td></tr>
-      <tr><td>10&ndash;30%</td><td class="num good">93&ndash;97%</td><td class="num">70&ndash;77%</td><td style="color:var(--blue)">Watermark</td></tr>
-      <tr><td>50%</td><td class="num">73.3%</td><td class="num">66.7%</td><td style="color:var(--blue)">Watermark</td></tr>
-      <tr class="hl"><td><strong>70%</strong></td><td class="num bad">13.3%</td><td class="num good">63.3%</td><td style="color:var(--pink)"><strong>Fingerprint</strong></td></tr>
-    </table>
-    <div class="stats">
-      <div class="stat"><div class="num-big">96.7%</div><div class="label">WM clean accuracy</div></div>
-      <div class="stat"><div class="num-big" style="color:#c62828">13.3%</div><div class="label">WM at 70% synonym</div></div>
-      <div class="stat"><div class="num-big" style="color:var(--pink)">63.3%</div><div class="label">FP at 70% synonym</div></div>
+  <div class="box">
+    <div class="box-hdr hdr-blue"><span class="badge">F2</span> Robustness Crossover &mdash; Watermark vs. Fingerprint</div>
+    <div class="box-body">
+      <p>The two paradigms fail in <strong>non-overlapping regimes</strong>. Watermark accuracy collapses cliff-like; fingerprint accuracy degrades gracefully. The curves <strong>cross between 50&ndash;70%</strong> synonym substitution.</p>
+      <table>
+        <tr><th>Synonym %</th><th>Watermark</th><th>Fingerprint</th><th>Winner</th></tr>
+        <tr><td>0% (clean)</td><td class="n g">96.7%</td><td class="n">76.7%</td><td class="b">Watermark</td></tr>
+        <tr><td>10&ndash;30%</td><td class="n g">93&ndash;97%</td><td class="n">70&ndash;77%</td><td class="b">Watermark</td></tr>
+        <tr><td>50%</td><td class="n">73.3%</td><td class="n">66.7%</td><td class="b">Watermark</td></tr>
+        <tr class="hl"><td><strong>70%</strong></td><td class="n r">13.3%</td><td class="n g">63.3%</td><td class="pk">Fingerprint</td></tr>
+      </table>
+      <div class="stats">
+        <div class="st"><div class="num" style="color:#1B5E20">96.7%</div><div class="lab">WM clean accuracy</div></div>
+        <div class="st"><div class="num" style="color:#C62828">13.3%</div><div class="lab">WM @ 70% synonym</div></div>
+        <div class="st"><div class="num" style="color:#880E4F">63.3%</div><div class="lab">FP @ 70% synonym</div></div>
+      </div>
+      <p><strong>Takeaway:</strong> A production attribution pipeline should combine both paradigms &mdash; their failure modes are non-overlapping.</p>
     </div>
-    <p><strong>Takeaway:</strong> A production pipeline should combine both paradigms.</p>
   </div>
 
-  <div class="card highlight">
-    <h2><span class="finding-badge green">F3</span> Hybrid KGW + SimMark Watermarking</h2>
-    <p>SimMark (EMNLP 2025) embeds watermarks in <em>inter-sentence cosine similarity</em> patterns. We combine it with KGW: each token uses KGW bias, each sentence checked against SimMark constraint via rejection sampling.</p>
+  <div class="box grow">
+    <div class="box-hdr hdr-green"><span class="badge">F3</span> Hybrid KGW + SimMark Watermarking</div>
+    <div class="box-body">
+      <p><strong>SimMark</strong> (Aghdam et al., EMNLP 2025): sentence-level watermark via inter-sentence cosine similarity. Combined with KGW: each token gets green-list bias, each sentence checked for SimMark constraint via rejection sampling. <strong>Detection: OR logic</strong> &mdash; either detector positive &rarr; watermarked.</p>
 
-    <h3>SimMark vs KGW &mdash; Moderate Paraphrase (5 rounds)</h3>
-    <table>
-      <tr><th>Metric</th><th class="num">SimMark</th><th class="num">KGW</th></tr>
-      <tr><td>Survival Rate</td><td class="num good">80%</td><td class="num bad">20%</td></tr>
-      <tr><td>z-score Decay</td><td class="num">34%</td><td class="num bad">75%</td></tr>
-    </table>
+      <p><strong>SimMark vs KGW &mdash; Moderate Paraphrase (5 rounds, Llama-3.2-3B):</strong></p>
+      <table>
+        <tr><th>Metric</th><th>SimMark</th><th>KGW</th></tr>
+        <tr><td>Survival Rate</td><td class="n g">80%</td><td class="n r">20%</td></tr>
+        <tr><td>z-score Decay</td><td class="n">34%</td><td class="n r">75%</td></tr>
+      </table>
 
-    <h3>Hybrid Robustness (OR-logic detection)</h3>
-    <table>
-      <tr><th>Scenario</th><th class="num">KGW</th><th class="num">SimMark</th><th class="num">Hybrid OR</th></tr>
-      <tr><td>Short, no attack</td><td class="num good">66.7%</td><td class="num">33.3%</td><td class="num">66.7%</td></tr>
-      <tr class="hl"><td><strong>Poetry, no attack</strong></td><td class="num">66.7%</td><td class="num">66.7%</td><td class="num best">100%</td></tr>
-      <tr><td>Long, moderate attack</td><td class="num bad">0%</td><td class="num good">100%</td><td class="num best">100%</td></tr>
-      <tr><td>Any, aggressive attack</td><td class="num bad">0%</td><td class="num bad">0%</td><td class="num bad">0%</td></tr>
-    </table>
+      <p><strong>Hybrid Robustness (OR-logic detection):</strong></p>
+      <table>
+        <tr><th>Scenario</th><th>KGW</th><th>SimMark</th><th>Hybrid OR</th></tr>
+        <tr><td>Short, no attack</td><td class="n g">66.7%</td><td class="n">33.3%</td><td class="n">66.7%</td></tr>
+        <tr class="hl"><td><strong>Poetry, no attack</strong></td><td class="n">66.7%</td><td class="n">66.7%</td><td class="n g">100% &starf;</td></tr>
+        <tr><td>Long, moderate atk</td><td class="n r">0%</td><td class="n g">100%</td><td class="n g">100%</td></tr>
+        <tr><td>Any, aggressive</td><td class="n r">0%</td><td class="n r">0%</td><td class="n r">0%</td></tr>
+      </table>
 
-    <div class="compare-grid" style="margin-top:0.1in">
-      <div class="compare-box kgw">
-        <h4 style="color:var(--blue)">KGW Rescues</h4>
-        <p>Short text (&le;3 sent.): SimMark lacks statistical power. KGW z = 5.89 on haiku where SimMark z = &minus;0.58</p>
-      </div>
-      <div class="compare-box sim">
-        <h4 style="color:var(--pink)">SimMark Rescues</h4>
-        <p>Moderate rewrite: token patterns destroyed but sentence semantics preserved. SimMark z = 3.87 where KGW z = 1.66</p>
+      <div class="compare">
+        <div class="cmp cmp-blue">
+          <h4>KGW Rescues SimMark</h4>
+          <ul>
+            <li>Short text (&le;3 sent.): SimMark lacks statistical power</li>
+            <li>Haiku: KGW z=5.89, SimMark z=&minus;0.58</li>
+            <li>Pattern: few sentences &rarr; KGW dominates</li>
+          </ul>
+        </div>
+        <div class="cmp cmp-pink">
+          <h4>SimMark Rescues KGW</h4>
+          <ul>
+            <li>Moderate rewrite: token patterns destroyed, semantics preserved</li>
+            <li>Long text: SimMark z=3.87, KGW z=1.66</li>
+            <li>Pattern: paraphrase &rarr; SimMark dominates</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 
 </div><!-- end col 2 -->
 
-<!-- ==================== COLUMN 3 ==================== -->
+<!-- ────── COLUMN 3 ────── -->
 <div class="col">
 
-  <div class="card">
-    <h2><span class="finding-badge pink">F4</span> Multi-LLM Chain Paraphrase</h2>
-    <p>17 experiments: Llama-3.2-3B &rarr; Qwen-3 paraphraser. KGW watermarks do <strong>not</strong> survive neural paraphrase.</p>
-    <div class="stats">
-      <div class="stat"><div class="num-big">17</div><div class="label">chain experiments</div></div>
-      <div class="stat"><div class="num-big" style="color:#c62828">6%</div><div class="label">survival (1/17)</div></div>
-      <div class="stat"><div class="num-big">5.07</div><div class="label">avg z-score decay</div></div>
+  <div class="box">
+    <div class="box-hdr hdr-pink"><span class="badge">F4</span> Multi-LLM Chain Paraphrase</div>
+    <div class="box-body">
+      <p>17 experiments: <strong>Llama-3.2-3B &rarr; Qwen-3</strong> paraphraser. KGW watermarks do <strong>not</strong> survive neural paraphrase.</p>
+      <div class="stats">
+        <div class="st"><div class="num" style="color:#222">17</div><div class="lab">chain experiments</div></div>
+        <div class="st"><div class="num" style="color:#C62828">6%</div><div class="lab">survival (1/17)</div></div>
+        <div class="st"><div class="num" style="color:#880E4F">5.07</div><div class="lab">avg z-score decay</div></div>
+      </div>
+      <table>
+        <tr><th>Paraphrase Mode</th><th>Orig z</th><th>After z</th><th>Survived</th></tr>
+        <tr><td>Standard</td><td class="n">5.73</td><td class="n r">&minus;1.16</td><td class="r">No</td></tr>
+        <tr><td>Creative retelling</td><td class="n">5.73</td><td class="n">0.77</td><td class="r">No</td></tr>
+        <tr><td>Structure shuffle</td><td class="n">5.73</td><td class="n">0.05</td><td class="r">No</td></tr>
+        <tr><td>Summary-expand</td><td class="n">5.73</td><td class="n r">&minus;0.20</td><td class="r">No</td></tr>
+      </table>
+      <p class="sm">A real neural paraphraser is <em>dramatically</em> more destructive than symbolic synonym substitution &mdash; z-score inverts sign in 10/17 cases.</p>
     </div>
-    <table>
-      <tr><th>Paraphrase Mode</th><th class="num">Orig z</th><th class="num">After z</th><th class="num">Survived</th></tr>
-      <tr><td>Standard</td><td class="num">5.73</td><td class="num bad">&minus;1.16</td><td class="num bad">No</td></tr>
-      <tr><td>Creative retelling</td><td class="num">5.73</td><td class="num">0.77</td><td class="num bad">No</td></tr>
-      <tr><td>Structure shuffle</td><td class="num">5.73</td><td class="num">0.05</td><td class="num bad">No</td></tr>
-      <tr><td>Summary-expand</td><td class="num">5.73</td><td class="num bad">&minus;0.20</td><td class="num bad">No</td></tr>
-    </table>
-    <p class="small">A real neural paraphraser is far more destructive than symbolic synonym substitution.</p>
   </div>
 
-  <div class="card">
-    <h2>Conclusions</h2>
-    <ol>
-      <li><strong>Watermarking compresses distributions</strong> &mdash; makes different models look more alike (Finding 1).</li>
-      <li><strong>Watermark &amp; fingerprint have non-overlapping failure modes</strong> &mdash; crossover at 50&ndash;70% perturbation (Finding 2).</li>
-      <li><strong>KGW + SimMark are complementary</strong> &mdash; Hybrid OR achieves 100% on poetry where neither alone does (Finding 3).</li>
-      <li><strong>Neural paraphrase defeats KGW alone</strong> &mdash; only 1/17 survived (Finding 4).</li>
-      <li><strong>Aggressive attack remains open</strong> &mdash; both KGW and SimMark fail under heavy compression.</li>
-    </ol>
+  <div class="box">
+    <div class="box-hdr hdr-dark">Conclusions</div>
+    <div class="box-body">
+      <ol>
+        <li><strong>Watermarking compresses distributions</strong> &mdash; makes different models look more alike (Finding 1).</li>
+        <li><strong>Watermark &amp; fingerprint: non-overlapping failure modes</strong> &mdash; crossover at 50&ndash;70% perturbation (Finding 2).</li>
+        <li><strong>KGW + SimMark are complementary</strong> &mdash; Hybrid OR achieves 100% on poetry where neither alone does (Finding 3).</li>
+        <li><strong>Neural paraphrase defeats KGW alone</strong> &mdash; only 1/17 survived (Finding 4).</li>
+        <li><strong>Aggressive attack remains open</strong> for all current methods.</li>
+      </ol>
+    </div>
   </div>
 
-  <div class="card card-grow">
-    <h2>Future Work</h2>
-    <ul>
-      <li><strong>Hybrid attribution classifier:</strong> combine KGW z-scores + TF-IDF features in one model</li>
-      <li><strong>Neural paraphrase attacks:</strong> extend attack suite with GPT/Claude rewrite</li>
-      <li><strong>Efficient hybrid generation:</strong> sentence-level beam search (SentBS) or IterGen backtracking to replace rejection sampling</li>
-      <li><strong>Adaptive intervals:</strong> auto-tune SimMark interval per text type</li>
-    </ul>
-    <h2 style="margin-top:0.15in">References</h2>
-    <p class="small">[1] Kirchenbauer et al. <em>A Watermark for Large Language Models.</em> ICML 2023. arXiv:2301.10226</p>
-    <p class="small">[2] Aghdam et al. <em>SimMark: Sentence-Level Similarity-Based Watermarking.</em> EMNLP 2025. arXiv:2502.02787</p>
-    <p class="small">[3] Pang et al. <em>No Free Lunch in LLM Watermarking.</em> 2024. arXiv:2402.16187</p>
-    <p class="small">[4] Liu et al. <em>Watermark Stealing in LLMs.</em> 2024. arXiv:2402.19361</p>
-    <p class="small">[5] Dathathri et al. <em>SynthID-Text.</em> Nature, 2024.</p>
-    <p class="small" style="margin-top:0.08in; color:var(--cornell)"><strong>Website:</strong> creegon.github.io/Design_Project &nbsp;&middot;&nbsp; <strong>Code:</strong> github.com/creegon/Design_Project</p>
+  <div class="box">
+    <div class="box-hdr hdr-purple">Future Work</div>
+    <div class="box-body">
+      <ul>
+        <li><strong>Hybrid attribution classifier:</strong> feed both KGW z-scores and TF-IDF features into a single model, exploiting non-overlapping failure modes</li>
+        <li><strong>Neural paraphrase attacks:</strong> extend attack suite with GPT-4 / Claude rewrite, back-translation</li>
+        <li><strong>Efficient hybrid generation:</strong> sentence-level beam search (SentBS) or IterGen backtracking to replace rejection sampling</li>
+        <li><strong>Adaptive intervals:</strong> auto-tune SimMark similarity interval per text type (poetry vs. prose)</li>
+        <li><strong>More model families:</strong> Mistral-7B, Qwen-2.5, closed-source proxy</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box grow">
+    <div class="box-hdr hdr-dark">References</div>
+    <div class="box-body refs">
+      <p>[1] Kirchenbauer, J. et al. <em>A Watermark for Large Language Models.</em> ICML 2023. arXiv:2301.10226</p>
+      <p>[2] Aghdam, D.S. et al. <em>SimMark: A Robust Sentence-Level Similarity-Based Watermarking Algorithm for LLMs.</em> EMNLP 2025. arXiv:2502.02787</p>
+      <p>[3] Pang, R. et al. <em>No Free Lunch in LLM Watermarking.</em> 2024. arXiv:2402.16187</p>
+      <p>[4] Liu, N. et al. <em>Watermark Stealing in Large Language Models.</em> 2024. arXiv:2402.19361</p>
+      <p>[5] Dathathri, S. et al. <em>SynthID-Text: Scalable Watermarking for LLMs.</em> Nature, 2024.</p>
+      <p>[6] Christ, M. et al. <em>Watermarks in the Sand: Impossibility of Strong Watermarking.</em> 2023. arXiv:2311.04378</p>
+      <p style="margin-top:0.06in"><span class="url">Website: creegon.github.io/Design_Project</span></p>
+      <p><span class="url">Code: github.com/creegon/Design_Project</span></p>
+    </div>
   </div>
 
 </div><!-- end col 3 -->
 
-</div><!-- end poster-body -->
-
-<!-- ========== FOOTER ========== -->
-<div class="footer">
-  <span>Cornell ECE 5995/5996 M.Eng. Design Project &middot; Fall 2025 &ndash; Spring 2026</span>
-  <span>Contact: hl2595@cornell.edu &nbsp;&middot;&nbsp; creegon.github.io/Design_Project</span>
-</div>
-
+</div><!-- end body -->
+</div><!-- end poster -->
 </body>
 </html>
