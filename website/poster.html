@@ -195,10 +195,20 @@
       <p class="params"><strong>Parameters:</strong> &gamma; = 0.25 &middot; &delta; = 2.0 &middot; z-threshold = 3.0</p>
       <p class="params"><strong>Models:</strong> LLaMA-3.2-1B, LLaMA-3.2-3B, Gemma-2B, Phi-2</p>
       <p class="params"><strong>Attacks:</strong> Synonym sub. 10&ndash;70%, Ins/Del 10&ndash;30%, Sentence reorder, Neural paraphrase (Qwen-3)</p>
+
+      <p><strong>Key validation results:</strong></p>
+      <table>
+        <tr><th>&gamma;</th><th>&delta;</th><th>Z-score</th><th>Perplexity</th></tr>
+        <tr><td>0.1</td><td>1.0</td><td class="n">4.21</td><td class="n">5.13</td></tr>
+        <tr><td>0.1</td><td>5.0</td><td class="n g">15.67</td><td class="n">6.82</td></tr>
+        <tr><td>0.5</td><td>2.0</td><td class="n">6.72</td><td class="n">4.89</td></tr>
+        <tr><td>0.9</td><td>2.0</td><td class="n r">3.37</td><td class="n">4.45</td></tr>
+      </table>
+      <p class="sm">z-score increases with &delta;; smaller &gamma; yields stronger but more volatile watermarks. Reliable detection requires &ge;50 tokens (~35&ndash;40 words).</p>
     </div>
   </div>
 
-  <div class="box grow">
+  <div class="box">
     <div class="box-hdr hdr-red"><span class="badge">F1</span> Distributional Compression</div>
     <div class="box-body">
       <p>Watermarking <strong>shrinks</strong> inter-model distributional differences to &frac13; of the clean baseline. Controlled experiment: Gemma-2B vs. Phi-2.</p>
@@ -212,7 +222,7 @@
     </div>
   </div>
 
-  <div class="box grow">
+  <div class="box">
     <div class="box-hdr hdr-dark">Experimental Setup</div>
     <div class="box-body">
       <table>
@@ -330,6 +340,20 @@
         <tr class="hl"><td><strong>Sole survivor (poem)</strong></td><td class="n g">8.00</td><td class="n g">4.17</td><td class="g">Yes</td></tr>
       </table>
       <p class="sm">A real neural paraphraser is <em>dramatically</em> more destructive than symbolic synonym substitution &mdash; z-score inverts sign in 10/17 cases. Only an extreme initial z-score of 8.0 survived. Average semantic similarity post-paraphrase: 0.29.</p>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="box-hdr hdr-dark">Additional Experiments</div>
+    <div class="box-body">
+      <p><strong>Sliding Window Detection:</strong> z-score scales with &radic;W as predicted.</p>
+      <table>
+        <tr><th>Window (tokens)</th><th>25</th><th>50</th><th>100</th><th>200</th></tr>
+        <tr><td><strong>Detection Rate</strong></td><td class="n r">17.5%</td><td class="n">52.6%</td><td class="n">66.7%</td><td class="n g">100%</td></tr>
+        <tr><td><strong>Mean Z-score</strong></td><td class="n">2.09</td><td class="n">3.00</td><td class="n">4.10</td><td class="n g">5.47</td></tr>
+      </table>
+      <p><strong>Cross-Model Key Sharing:</strong> Llama-3.2-3B &rarr; Llama-3.1-8B &rarr; Llama-3.2-3B with shared key achieved <strong class="g">z = 7.01</strong> (p = 1.15&times;10<sup>&minus;12</sup>), 76.7% green fraction. Watermark signals compose constructively across architectures.</p>
+      <p><strong>Piggyback Attack:</strong> Adversaries can inject misleading content (numeric mutations, word replacements) while <em>preserving</em> positive detection &mdash; z-score went from 5.92 to <strong>5.99 after attack</strong>. Watermarks verify origin, not content truthfulness.</p>
     </div>
   </div>
 
