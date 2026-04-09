@@ -69,8 +69,8 @@
   .hdr-purple { background: #4A148C; }
 
   .box-body {
-    padding: 0.14in 0.18in;
-    font-size: 24pt; line-height: 1.4; color: #222;
+    padding: 0.15in 0.2in;
+    font-size: 24pt; line-height: 1.45; color: #222;
     flex: 1;
   }
   .box-body p { margin-bottom: 0.06in; }
@@ -212,6 +212,23 @@
     </div>
   </div>
 
+  <div class="box grow">
+    <div class="box-hdr hdr-dark">Experimental Setup</div>
+    <div class="box-body">
+      <table>
+        <tr><th>Component</th><th>Details</th></tr>
+        <tr><td><strong>Generation models</strong></td><td>LLaMA-3.2-1B, LLaMA-3.2-3B, Gemma-2B, Phi-2</td></tr>
+        <tr><td><strong>Paraphrase model</strong></td><td>Qwen-3-4B / Qwen-3-8B (via HuggingFace)</td></tr>
+        <tr><td><strong>SimMark embedder</strong></td><td>hkunlp/instructor-large (cosine mode)</td></tr>
+        <tr><td><strong>Samples per model</strong></td><td>n = 30 &middot; max_new_tokens = 150</td></tr>
+        <tr><td><strong>KGW config</strong></td><td>&gamma;=0.25, &delta;=2.0, selfhash ctx=4, z&gt;3.0</td></tr>
+        <tr><td><strong>SimMark config</strong></td><td>interval=(0.75, 0.83), K=250, z&gt;2.0</td></tr>
+        <tr><td><strong>Attack suite</strong></td><td>Synonym 10&ndash;70%, Ins/Del 10&ndash;30%, Reorder, Neural (4 modes)</td></tr>
+        <tr><td><strong>Hardware</strong></td><td>NVIDIA GPU + CUDA &middot; PyTorch + HuggingFace</td></tr>
+      </table>
+    </div>
+  </div>
+
 </div><!-- end col 1 -->
 
 <!-- ────── COLUMN 2 ────── -->
@@ -241,6 +258,16 @@
     <div class="box-hdr hdr-green"><span class="badge">F3</span> Hybrid KGW + SimMark Watermarking</div>
     <div class="box-body">
       <p><strong>SimMark</strong> (Aghdam et al., EMNLP 2025): sentence-level watermark via inter-sentence cosine similarity. Combined with KGW: each token gets green-list bias, each sentence checked for SimMark constraint via rejection sampling. <strong>Detection: OR logic</strong> &mdash; either detector positive &rarr; watermarked.</p>
+
+      <div style="background:#F0F7F0; border-radius:6px; padding:0.1in 0.15in; margin:0.06in 0; border-left:4pt solid #2E7D32;">
+        <p style="font-size:20pt; line-height:1.35; margin:0;">
+          <strong>Hybrid Generation Pipeline:</strong><br/>
+          &nbsp;&nbsp;Token &rarr; KGW LogitsProcessor (green-list bias &delta;=2.0)<br/>
+          &nbsp;&nbsp;Sentence complete &rarr; Check SimMark constraint (cos_sim &isin; [0.75, 0.83])<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;&check; Accept &nbsp;|&nbsp; &cross; Reject &amp; regenerate with KGW (max 50 retries)<br/>
+          <strong>Hybrid Detection:</strong> KGW z &gt; 3.0 <strong>OR</strong> SimMark z &gt; 2.0 &rarr; watermarked
+        </p>
+      </div>
 
       <p><strong>SimMark vs KGW &mdash; Moderate Paraphrase (5 rounds, Llama-3.2-3B):</strong></p>
       <table>
@@ -299,8 +326,10 @@
         <tr><td>Creative retelling</td><td class="n">5.73</td><td class="n">0.77</td><td class="r">No</td></tr>
         <tr><td>Structure shuffle</td><td class="n">5.73</td><td class="n">0.05</td><td class="r">No</td></tr>
         <tr><td>Summary-expand</td><td class="n">5.73</td><td class="n r">&minus;0.20</td><td class="r">No</td></tr>
+        <tr><td>Dual-key (gen+para)</td><td class="n">4.67</td><td class="n r">&minus;0.84</td><td class="r">No</td></tr>
+        <tr class="hl"><td><strong>Sole survivor (poem)</strong></td><td class="n g">8.00</td><td class="n g">4.17</td><td class="g">Yes</td></tr>
       </table>
-      <p class="sm">A real neural paraphraser is <em>dramatically</em> more destructive than symbolic synonym substitution &mdash; z-score inverts sign in 10/17 cases.</p>
+      <p class="sm">A real neural paraphraser is <em>dramatically</em> more destructive than symbolic synonym substitution &mdash; z-score inverts sign in 10/17 cases. Only an extreme initial z-score of 8.0 survived. Average semantic similarity post-paraphrase: 0.29.</p>
     </div>
   </div>
 
@@ -308,12 +337,13 @@
     <div class="box-hdr hdr-dark">Conclusions</div>
     <div class="box-body">
       <ol>
-        <li><strong>Watermarking compresses distributions</strong> &mdash; makes different models look more alike (Finding 1).</li>
-        <li><strong>Watermark &amp; fingerprint: non-overlapping failure modes</strong> &mdash; crossover at 50&ndash;70% perturbation (Finding 2).</li>
-        <li><strong>KGW + SimMark are complementary</strong> &mdash; Hybrid OR achieves 100% on poetry where neither alone does (Finding 3).</li>
-        <li><strong>Neural paraphrase defeats KGW alone</strong> &mdash; only 1/17 survived (Finding 4).</li>
-        <li><strong>Aggressive attack remains open</strong> for all current methods.</li>
+        <li><strong>Watermarking compresses distributions</strong> &mdash; inter-model weighted diff drops from 0.76 to 0.24 (Finding 1).</li>
+        <li><strong>Watermark &amp; fingerprint: non-overlapping failure modes</strong> &mdash; watermark collapses cliff-like at 70% synonym; fingerprint degrades gracefully from 77% to 63% (Finding 2).</li>
+        <li><strong>KGW + SimMark are complementary</strong> &mdash; Hybrid OR reaches 100% on poetry; neither alone exceeds 67% (Finding 3).</li>
+        <li><strong>Neural paraphrase defeats KGW alone</strong> &mdash; only 1/17 survived, average z-decay of 5.07 (Finding 4).</li>
+        <li><strong>Aggressive attack remains open</strong> &mdash; sentence compression/merging defeats both KGW and SimMark.</li>
       </ol>
+      <p><strong>Practical recommendation:</strong> Generation may use either watermark; detection should <em>always</em> use hybrid OR-logic to maximize coverage across text types and attack intensities.</p>
     </div>
   </div>
 
