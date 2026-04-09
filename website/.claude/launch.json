@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "website",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-X", "utf8", "-m", "http.server", "8765", "--directory", "C:/Users/creegon/Desktop/Design_Project/website"],
+      "port": 8765
+    }
+  ]
+}
